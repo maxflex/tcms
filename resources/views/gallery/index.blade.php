@@ -19,10 +19,13 @@
                 <img src='@{{ model.photos[0].cropped_url }}' style='height: 50px' />
             </td>
             <td>
-                @{{ model.id }}
+                @{{ model.photos[0].image_size }}
             </td>
             <td>
-                @{{ model.id }}
+                @{{ model.photos[0].file_size }}
+            </td>
+            <td>
+                <a href='gallery/@{{ model.id }}/edit'>редактировать</a>
             </td>
         </tr>
     </table>

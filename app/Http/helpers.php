@@ -228,3 +228,12 @@
     {
         return explode("\n", $s)[0];
     }
+
+    function getSize($file, $precision = 1)
+    {
+        // $size = filesize('public/' . $file);
+        $size = filesize($file);
+        $base = log($size, 1024);
+        $suffixes = array('байт', 'Кб', 'Мб', 'Гб', 'Тб');
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
+    }

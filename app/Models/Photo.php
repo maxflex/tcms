@@ -18,7 +18,8 @@ class Photo extends Model
     protected $appends = [
         'original_url',
         'cropped_url',
-        'size'
+        'file_size',
+        'image_size',
     ];
 
     public $timestamps = false;
@@ -42,10 +43,18 @@ class Photo extends Model
         }
     }
 
-    public function getSizeAttribute()
+    public function getFileSizeAttribute()
     {
         if (@$this->attributes['cropped']) {
-            return  self::UPLOAD_DIR . 'cropped/' . $this->attributes['cropped'];
+            return getSize(self::getDir('cropped') . $this->attributes['cropped']);
+        }
+    }
+
+    public function getImageSizeAttribute()
+    {
+        if (@$this->attributes['cropped']) {
+            list($width, $height) = getimagesize(self::getDir('cropped') . $this->attributes['cropped']);
+            return "{$width}x{$height}";
         }
     }
 }
