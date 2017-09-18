@@ -14,6 +14,12 @@
                   @{{ model.last_name }} @{{ model.first_name[0] }}. @{{ model.middle_name[0] }}.
                 </a>
             </td>
+            <td width='100'>
+                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+            </td>
+            <td width='100' style='text-align: right'>
+                <a class="pointer" ng-click="IndexService.delete(model.id, 'мастера')">удалить</a>
+            </td>
         </tr>
     </table>
     @include('modules.pagination')

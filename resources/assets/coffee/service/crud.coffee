@@ -27,6 +27,11 @@ angular.module 'Egecms'
             this.loadPage()
             this.changeUrl()
 
+        this.delete = (id, text) ->
+            bootbox.confirm "Вы уверены, что хотите удалить #{text} ##{id}?", (result) =>
+                if result is true
+                    @Resource.delete {id: id}, -> location.reload()
+
         # change browser user / history push
         this.changeUrl = ->
             window.history.pushState('', '', this.controller + '?page=' + this.current_page)
@@ -96,7 +101,7 @@ angular.module 'Egecms'
         this.create = ->
             return if not beforeSave()
             this.model.$save().then (response) =>
-                redirect modelName() + "/#{response.id}/edit"
+                redirect @redirect_url || modelName() + "/#{response.id}/edit"
             , (response) =>
                 notifyError response.data.message
                 this.saving = false

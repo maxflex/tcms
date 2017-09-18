@@ -19,6 +19,12 @@ angular.module('Egecms')
     .factory 'Equipment', ($resource) ->
         $resource apiPath('equipment'), {id: '@id'}, updatable()
 
+    .factory 'PriceSection', ($resource) ->
+        $resource apiPath('prices'), {id: '@id'}, updatable()
+
+    .factory 'PricePosition', ($resource) ->
+        $resource apiPath('prices/positions'), {id: '@id'}, updatable()
+
     .factory 'Gallery', ($resource) ->
         $resource apiPath('gallery'), {id: '@id'}, updatable()
 

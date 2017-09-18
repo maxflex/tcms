@@ -12,6 +12,12 @@
             <td>
                 <a href='equipment/@{{ model.id }}/edit'>@{{ model.name }}</a>
             </td>
+            <td width='100'>
+                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+            </td>
+            <td width='100' style='text-align: right'>
+                <a class="pointer" ng-click="IndexService.delete(model.id, 'оборудование')">удалить</a>
+            </td>
         </tr>
     </table>
     @include('modules.pagination')

@@ -6,7 +6,7 @@
 <a href="tags" class="list-group-item">Теги</a>
 <a href="reviews" class="list-group-item">Отзывы</a>
 <a href="gallery" class="list-group-item">Галерея</a>
-<a href="price" class="list-group-item">Прайс лист</a>
+<a href="prices" class="list-group-item">Прайс лист</a>
 <a class="list-group-item active">Сайт</a>
 <a href="variables" class="list-group-item">Переменные</a>
 <a href="pages" class="list-group-item">Страницы</a>

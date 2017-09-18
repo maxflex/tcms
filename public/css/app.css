@@ -20241,6 +20241,26 @@ select[multiple] {
   width: 250px;
 }
 
+.price-list ul {
+  list-style-type: none;
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+.price-list > ul {
+  padding: 0;
+}
+
+.price-list .price-section {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.price-list .price-position > div {
+  width: 300px;
+  display: inline-block;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }

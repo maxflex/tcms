@@ -1,6 +1,8 @@
 <div class="row mb">
     <div class="col-sm-3">
-        @include('modules.input', ['title' => 'название фото', 'model' => 'name'])
+        @include('modules.input', ['title' => 'название работы', 'model' => 'name', 'attributes' => [
+            'maxlength' => 35
+        ]])
     </div>
     <div class="col-sm-3">
         @include('modules.input', ['title' => 'срок выполнения, дней', 'model' => 'days_to_complete'])

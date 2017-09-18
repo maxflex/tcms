@@ -20,6 +20,7 @@
             'textarea' => true,
             'attributes' => [
                 'ng-counter' => true,
+                'maxlength' => 1000
             ]
         ])
     </div>

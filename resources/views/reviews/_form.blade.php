@@ -6,13 +6,17 @@
             'textarea' => true,
             'attributes' => [
                 'ng-counter' => true,
+                'maxlength' => 500
             ]
         ])
     </div>
 </div>
 <div class="row mb">
     <div class="col-sm-4">
-        @include('modules.input', ['title' => 'подпись', 'model' => 'signature'])
+        @include('modules.input', ['title' => 'подпись', 'model' => 'signature', 'attributes' => [
+            'maxlength' => 35
+        ]
+    ])
     </div>
     <div class="col-sm-4">
         @include('modules.input', [

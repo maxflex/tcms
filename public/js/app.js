@@ -858,6 +858,51 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, IndexService, PriceSection) {
+    var clearChangePrice;
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      return IndexService.init(PriceSection, $scope.current_page, $attrs);
+    });
+    clearChangePrice = function(section_id) {
+      $scope.change_price = {
+        type: '1',
+        unit: '1',
+        section_id: section_id,
+        value: null
+      };
+      return $timeout(function() {
+        return $('.selectpicker').selectpicker('refresh');
+      });
+    };
+    $scope.changePriceDialog = function(section_id) {
+      clearChangePrice(section_id);
+      return $('#change-price-modal').modal('show');
+    };
+    return $scope.changePrice = function() {
+      ajaxStart();
+      $scope.changing_price = true;
+      return $http.post('api/prices/change', $scope.change_price).then(function() {
+        return location.reload();
+      });
+    };
+  }).controller('PricesForm', function($scope, $attrs, $timeout, $http, FormService, PriceSection) {
+    bindArguments($scope, arguments);
+    return angular.element(document).ready(function() {
+      FormService.init(PriceSection, $scope.id, $scope.model);
+      return FormService.redirect_url = 'prices';
+    });
+  }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition) {
+    bindArguments($scope, arguments);
+    return angular.element(document).ready(function() {
+      FormService.init(PricePosition, $scope.id, $scope.model);
+      return FormService.redirect_url = 'prices';
+    });
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').controller('ReviewsIndex', function($scope, $attrs, IndexService, Review) {
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
@@ -1304,133 +1349,15 @@
 }).call(this);
 
 (function() {
-  var TAB;
-
-  TAB = 9;
-
-  angular.module('Egecms').directive('programItem', function() {
+  angular.module('Egecms').directive('priceItem', function() {
     return {
       restrict: 'E',
-      templateUrl: 'directives/program-item',
+      templateUrl: 'directives/price-item',
       scope: {
-        item: '=',
-        level: '=?',
-        levelstring: '=',
-        "delete": '&delete'
+        item: '='
       },
-      controller: function($timeout, $element, $scope) {
-        var resetNewItem;
-        $scope.edit = function() {
-          return $scope.editing = true;
-        };
-        $scope.fake_id = 0;
-        $scope.onEdit = function(field, event) {
-          var elem, value;
-          elem = $(event.target);
-          value = elem.text().trim();
-          return $scope.$apply(function() {
-            return $scope.item[field] = value;
-          });
-        };
-        $scope.editKeydown = function(event) {
-          var elem, ref;
-          elem = $(event.target);
-          if ((ref = event != null ? event.keyCode : void 0) === 13 || ref === 27) {
-            event.preventDefault();
-            elem.blur();
-          }
-          if (elem.data('input-digits-only')) {
-            if (!(event.keyCode < 57)) {
-              return event.preventDefault();
-            }
-          }
-        };
-        $scope.addChild = function(event) {
-          $scope.is_adding = true;
-          return $timeout(function() {
-            return $(event.target).parents('li').first().find('input.add-item-title').last().focus();
-          });
-        };
-        $scope.createChild = function(event) {
-          if ((event != null ? event.keyCode : void 0) === 13) {
-            event.preventDefault();
-            if ($scope.new_item.title) {
-              if (!$scope.item.content) {
-                $scope.item.content = [];
-              }
-              if ($scope.new_item.title.length) {
-                $scope.item.content.push($scope.new_item);
-                resetNewItem(event);
-                $scope.addChild(event);
-              }
-            }
-          }
-          if (event.keyCode === 27) {
-            event.preventDefault();
-            $(event.target).blur();
-          }
-          if (event.keyCode === TAB) {
-            if ($(event.target).is(':not(.add-item-lesson-count)')) {
-              return $scope.is_tabbing = true;
-            }
-          }
-        };
-        $scope.deleteChild = function(child) {
-          return $scope.item.content = _.without($scope.item.content, child);
-        };
-        $scope.blur = function(event) {
-          if ($scope.is_tabbing) {
-            $scope.is_tabbing = false;
-            return event.preventDefault();
-          }
-          $scope.is_adding = false;
-          return $scope.is_editing = false;
-        };
-        $scope.focus = function() {
-          return $scope.is_adding = true;
-        };
-        $scope.getChildLevelString = function(child_index) {
-          var str;
-          str = $scope.levelstring ? $scope.levelstring : '';
-          return str + (child_index + 1) + '.';
-        };
-        $scope.getLessonCount = function() {
-          return $scope.item.lesson_count;
-        };
-        $scope.childLessonSum = function(item) {
-          if (!(item && item.content)) {
-            return 0;
-          }
-          if (!item.content.length) {
-            return +item.lesson_count || 0;
-          }
-          return _.reduce(item.content, function(sum, value) {
-            return sum + parseInt($scope.childLessonSum(value));
-          }, 0);
-        };
-        resetNewItem = function(event) {
-          $scope.new_item = {
-            title: '',
-            lesson_count: '',
-            child_lesson_sum: '',
-            content: [],
-            fake_id: $scope.fake_id
-          };
-          return $scope.fake_id++;
-        };
-        if (!$scope.level) {
-          $scope.level = 1;
-        }
-        if (!$scope.lesson_count) {
-          $scope.lesson_count = 0;
-        }
-        resetNewItem();
-        $scope.editBlur = function() {
-          return $scope.editing = false;
-        };
-        return $scope.editFocus = function() {
-          return $scope.editing = true;
-        };
+      controller: function($scope) {
+        return $scope.controller_scope = scope;
       }
     };
   });
@@ -1751,6 +1678,14 @@
     return $resource(apiPath('equipment'), {
       id: '@id'
     }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
   }).factory('Gallery', function($resource) {
     return $resource(apiPath('gallery'), {
       id: '@id'
@@ -1910,6 +1845,19 @@
       this.loadPage();
       return this.changeUrl();
     };
+    this["delete"] = function(id, text) {
+      return bootbox.confirm("Вы уверены, что хотите удалить " + text + " #" + id + "?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            return _this.Resource["delete"]({
+              id: id
+            }, function() {
+              return location.reload();
+            });
+          }
+        };
+      })(this));
+    };
     this.changeUrl = function() {
       return window.history.pushState('', '', this.controller + '?page=' + this.current_page);
     };
@@ -2011,7 +1959,7 @@
       }
       return this.model.$save().then((function(_this) {
         return function(response) {
-          return redirect(modelName() + ("/" + response.id + "/edit"));
+          return redirect(_this.redirect_url || modelName() + ("/" + response.id + "/edit"));
         };
       })(this), (function(_this) {
         return function(response) {

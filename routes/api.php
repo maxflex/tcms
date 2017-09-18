@@ -38,6 +38,9 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('photos/updateAll', 'PhotosController@updateAll');
     Route::resource('photos', 'PhotosController');
     Route::resource('masters', 'MastersController');
+    Route::post('prices/change', 'PricesController@change');
+    Route::resource('prices', 'PricesController');
+    Route::resource('prices/positions', 'PricePositionsController');
     Route::resource('gallery', 'GalleryController');
 
     Route::get('tags/autocomplete', 'TagsController@autocomplete');

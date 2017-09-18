@@ -4201,3 +4201,24 @@ select[multiple] {
     height: 100%;
     width: 250px;
 }
+
+.price-list {
+    & ul {
+      list-style-type: none;
+      padding-left: 15px;
+      margin-bottom: 15px;
+    }
+    & > ul {
+        padding: 0;
+    }
+    & .price-section {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    & .price-position {
+        & > div {
+            width: 300px;
+            display: inline-block;
+        }
+    }
+}
