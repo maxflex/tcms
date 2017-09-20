@@ -2,14 +2,15 @@
 @section('title', 'Прайс лист')
 @section('controller', 'PricesIndex')
 
+@section('title-right')
+    {{ link_to_route('prices.create', '+ раздел') }}
+@endsection
+
 @section('content')
     <div class="price-list">
         <ul>
             <li ng-repeat="model in IndexService.page.data">
                 <price-item item='model'></price-item>
-            </li>
-            <li>
-                {{ link_to_route('prices.create', 'добавить раздел') }}
             </li>
         </ul>
     </div>

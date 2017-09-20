@@ -15,7 +15,7 @@
                 </a>
             </td>
             <td width='100'>
-                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+                <a href='masters/@{{ model.id }}/edit'>редактировать</a>
             </td>
             <td width='100' style='text-align: right'>
                 <a class="pointer" ng-click="IndexService.delete(model.id, 'мастера')">удалить</a>

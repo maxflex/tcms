@@ -3,27 +3,28 @@
 namespace App\Models;
 
 use \Shared\Model;
+use App\Service\Rights;
 use App\Service\Sms;
+use App\Traits\HasPhotos;
 use Illuminate\Support\Facades\Redis;
 
 class User extends Model
 {
-    protected $connection = 'egecrm';
+    use HasPhotos;
 
     protected $fillable = [
         'login',
-        'password',
-        'color',
-        'type',
-        'id_entity',
+        'new_password',
+        'first_name',
+        'last_name',
+        'middle_name',
+        'phone',
+        'rights'
     ];
 
+    protected $hidden = ['password'];
+
     protected $commaSeparated = ['rights'];
-
-    public $timestamps = false;
-
-    const USER_TYPE    = 'USER';
-    const DEFAULT_COLOR = 'black';
 
     # Fake system user
     const SYSTEM_USER = [
@@ -31,21 +32,15 @@ class User extends Model
         'login' => 'system',
     ];
 
-    public function setPasswordAttribute($value)
+    public function setNewPasswordAttribute($value)
     {
         $this->attributes['password'] = static::_password($value);
+        unset($this->new_password);
     }
 
-    /**
-     * Если пользователь заблокирован,то его цвет должен быть черным
-     */
-    public function getColorAttribute()
+    public function setPhoneAttribute($value)
     {
-        if ($this->allowed(\Shared\Rights::ECC_BANNED)) {
-            return static::DEFAULT_COLOR;
-        } else {
-            return $this->attributes['color'];
-        }
+        $this->attributes['phone'] = cleanNumber($value);
     }
 
     /**
@@ -60,28 +55,24 @@ class User extends Model
 
         if ($User->exists()) {
             $user = $User->first();
-            if ($user->allowed(\Shared\Rights::WORLDWIDE_ACCESS) || User::fromOffice()) {
-
-                // Дополнительная СМС-проверка, если пользователь логинится если не из офиса
-                if (! User::fromOffice() && $user->type == User::USER_TYPE) {
-                    $sent_code = Redis::get("eccms:codes:{$user->id}");
-                    // если уже был отправлен – проверяем
-                    if (! empty($sent_code)) {
-                        if (@$data['code'] != $sent_code) {
-                            return false;
-                        } else {
-                            Redis::del("eccms:codes:{$user->id}");
-                        }
+            // Дополнительная СМС-проверка, если пользователь логинится если не из офиса
+            if (! User::fromOffice()) {
+                $sent_code = Redis::get("tcms:codes:{$user->id}");
+                // если уже был отправлен – проверяем
+                if (! empty($sent_code)) {
+                    if (@$data['code'] != $sent_code) {
+                        return false;
                     } else {
-                    // иначе отправляем код
-                        Sms::verify($user);
-                        return 'sms';
+                        Redis::del("tcms:codes:{$user->id}");
                     }
+                } else {
+                    // иначе отправляем код
+                    Sms::verify($user);
+                    return 'sms';
                 }
-
-                $_SESSION['user'] = $user;
-                return true;
             }
+            $_SESSION['user'] = $user;
+            return true;
         }
         return false;
     }
@@ -98,7 +89,6 @@ class User extends Model
 	{
 		return isset($_SESSION["user"]) // пользователь залогинен
             && ! User::isBlocked()      // и не заблокирован
-            && User::worldwideAccess()  // и можно входить
             && User::notChanged();      // и данные не изменились
 	}
 
@@ -108,7 +98,7 @@ class User extends Model
      */
     public static function notChanged()
     {
-        return User::fromSession()->updated_at == dbEgecrm('users')->whereId(User::fromSession()->id)->value('updated_at');
+        return User::fromSession()->updated_at == self::whereId(User::fromSession()->id)->value('updated_at');
     }
 
     /*
@@ -163,24 +153,15 @@ class User extends Model
      * Get real users
      *
      */
-    public static function scopeReal($query)
-    {
-        return $query->where('type', static::USER_TYPE);
-    }
-
-    /**
-     * Get real users
-     *
-     */
     public static function scopeActive($query)
     {
-        return $query->real()->whereRaw('NOT FIND_IN_SET(' . \Shared\Rights::ECC_BANNED . ', rights)');
+        return $query->whereRaw('NOT FIND_IN_SET(' . Rights::BANNED . ', rights)');
     }
 
     public static function isBlocked()
     {
         return User::whereId(User::fromSession()->id)
-                ->whereRaw('FIND_IN_SET(' . \Shared\Rights::ECC_BANNED . ', rights)')
+                ->whereRaw('FIND_IN_SET(' . Rights::BANNED . ', rights)')
                 ->exists();
     }
 
@@ -199,16 +180,6 @@ class User extends Model
             }
         }
         return false;
-    }
-
-    /**
-     * Вход из офиса или включена настройка «доступ отовсюду»
-     */
-    public static function worldwideAccess()
-    {
-        return User::fromOffice() || User::whereId(User::fromSession()->id)
-                ->whereRaw('FIND_IN_SET(' . \Shared\Rights::WORLDWIDE_ACCESS . ', rights)')
-                ->exists();
     }
 
     /**

@@ -7931,6 +7931,84 @@ ui-cropper .loading .fixed-height {
   position: absolute;
 }
 
+/* ============================================================
+  COMMON
+============================================================ */
+.cmn-toggle {
+  position: absolute;
+  margin-left: -9999px;
+  visibility: hidden;
+}
+
+.cmn-toggle + label {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ============================================================
+  SWITCH 2 - ROUND FLAT
+============================================================ */
+input.cmn-toggle-round-flat + label {
+  padding: 2px;
+  width: 45px;
+  height: 25px;
+  background-color: #dddddd;
+  border-radius: 60px;
+  -webkit-transition: background 0.4s;
+  transition: background 0.4s;
+}
+
+input.cmn-toggle-round-flat + label:before, input.cmn-toggle-round-flat + label:after {
+  display: block;
+  position: absolute;
+  content: "";
+}
+
+input.cmn-toggle-round-flat + label:before {
+  top: 2px;
+  left: 2px;
+  bottom: 2px;
+  right: 2px;
+  background-color: #fff;
+  border-radius: 60px;
+  -webkit-transition: background 0.4s;
+  transition: background 0.4s;
+}
+
+input.cmn-toggle-round-flat + label:after {
+  top: 4px;
+  left: 4px;
+  bottom: 4px;
+  width: 17px;
+  background-color: #dddddd;
+  border-radius: 52px;
+  -webkit-transition: margin 0.4s, background 0.4s;
+  transition: margin 0.4s, background 0.4s;
+}
+
+input.cmn-toggle-round-flat:checked + label {
+  background-color: #8ce196;
+}
+
+input.cmn-toggle-round-flat:checked + label:after {
+  margin-left: 20px;
+  background-color: #8ce196;
+}
+
+input.cmn-toggle-round-flat.red:checked + label {
+  background-color: #ce171f;
+}
+
+input.cmn-toggle-round-flat.red:checked + label:after {
+  background-color: #ce171f;
+}
+
 tags-input {
   display: block;
 }
@@ -16316,6 +16394,10 @@ a:hover {
   margin-bottom: 10px;
 }
 
+.mbl {
+  margin-bottom: 30px;
+}
+
 .drop-delete {
   display: inline-block;
   color: #A94442;
@@ -20241,10 +20323,13 @@ select[multiple] {
   width: 250px;
 }
 
+.price-list {
+  overflow: hidden;
+}
+
 .price-list ul {
   list-style-type: none;
   padding-left: 15px;
-  margin-bottom: 15px;
 }
 
 .price-list > ul {
@@ -20256,9 +20341,53 @@ select[multiple] {
   font-weight: bold;
 }
 
-.price-list .price-position > div {
-  width: 300px;
+.price-list .price-divider {
+  background-color: rgba(0, 0, 0, 0.1);
+  height: 1px;
+  margin: 4px 0 4px -100px;
+}
+
+.flex-items {
+  display: -webkit-box;
+  display: flex;
+}
+
+.gallery-fullscreen .modal-dialog {
+  width: 98% !important;
+}
+
+.gallery-fullscreen .img-preview-wrapper {
+  width: 20%;
+  padding: 20px;
+}
+
+.btn.active-group-btn {
+  background-color: #54ad5f !important;
+  border-color: #54ad5f !important;
+}
+
+.gallery-preview-full {
+  overflow: hidden;
+  width: 100%;
+  -webkit-box-pack: center;
+  justify-content: center;
+  border-top: 1px solid #ce171f;
+  position: relative;
+}
+
+.gallery-preview-full center {
+  padding: 15px 0;
+  width: 100%;
+  clear: both;
+}
+
+.gallery-preview-full > * {
+  float: left;
   display: inline-block;
+}
+
+.empty-line-fix {
+  margin-left: -1px;
 }
 
 .program-container h2 {

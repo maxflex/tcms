@@ -1,7 +1,7 @@
 (function() {
   var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  angular.module("Egecms", ['ngSanitize', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'angular-ladda', 'angularFileUpload', 'angucomplete-alt', 'ngDrag', 'ngAnimate', 'thatisuday.ng-image-gallery', 'ng-sortable', 'uiCropper', 'ngTagsInput']).config([
+  angular.module("Egecms", ['ngSanitize', 'ngResource', 'ngAnimate', 'ui.bootstrap', 'angular-ladda', 'angularFileUpload', 'angucomplete-alt', 'ngDrag', 'ngAnimate', 'thatisuday.ng-image-gallery', 'ng-sortable', 'uiCropper', 'ngTagsInput', 'ui.sortable']).config([
     '$compileProvider', function($compileProvider) {
       return $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|sip):/);
     }
@@ -514,11 +514,19 @@
       FormService.init(Gallery, $scope.id, $scope.model);
       return PhotoService.init(FormService, 'Gallery', $scope.id);
     });
-    return $scope.loadTags = function(text) {
+    $scope.loadTags = function(text) {
       return Tag.autocomplete({
         text: text
       }).$promise;
     };
+    return $scope.$watch('FormService.model.count', function(newVal, oldVal) {
+      $scope.size = {
+        w: 2200,
+        h: 1100
+      };
+      $scope.size.w = $scope.size.w / newVal;
+      return $scope.ratio = $scope.size.w / $scope.size.h;
+    });
   });
 
 }).call(this);
@@ -951,6 +959,35 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').controller('UsersIndex', function($scope, $attrs, IndexService, User) {
+    bindArguments($scope, arguments);
+    return angular.element(document).ready(function() {
+      return IndexService.init(User, $scope.current_page, $attrs);
+    });
+  }).controller('UsersForm', function($scope, $attrs, $timeout, FormService, User, PhotoService) {
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      FormService.init(User, $scope.id, $scope.model);
+      return PhotoService.init(FormService, 'Master', $scope.id);
+    });
+    $scope.toggleRights = function(right) {
+      right = parseInt(right);
+      if ($scope.allowed(right)) {
+        return FormService.model.rights = _.reject(FormService.model.rights, function(val) {
+          return val === right;
+        });
+      } else {
+        return FormService.model.rights.push(right);
+      }
+    };
+    return $scope.allowed = function(right) {
+      return FormService.model.rights.indexOf(parseInt(right)) !== -1;
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').controller('VariablesIndex', function($scope, $attrs, $rootScope, $timeout, IndexService, Variable, VariableGroup) {
     var dragEnd, l, moveToGroup, updatePositions;
     l = function(e) {
@@ -1264,6 +1301,22 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').directive('ngPhone', function($timeout) {
+    return {
+      restrict: 'A',
+      controller: function($scope, $element, $attrs, $timeout) {
+        return $timeout(function() {
+          return $element.mask("+7 (999) 999-99-99", {
+            autoclear: false
+          });
+        }, 300);
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').directive('orderBy', function() {
     return {
       restrict: 'E',
@@ -1357,9 +1410,21 @@
         item: '='
       },
       controller: function($scope) {
-        return $scope.controller_scope = scope;
+        $scope.controller_scope = scope;
+        return $scope.sortableOptions = {
+          items: '.price-position-' + $scope.$id,
+          axis: 'y',
+          cursor: "move"
+        };
       }
     };
+  });
+
+  ({
+    opacity: 0.9,
+    zIndex: 9999,
+    containment: "parent",
+    tolerance: "pointer"
   });
 
 }).call(this);
@@ -1692,6 +1757,10 @@
     }, updatable());
   }).factory('Photo', function($resource) {
     return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
       id: '@id'
     }, updatable());
   }).factory('Tag', function($resource) {

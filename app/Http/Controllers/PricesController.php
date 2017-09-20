@@ -28,8 +28,10 @@ class PricesController extends Controller
      */
     public function create($id = null)
     {
+        $price_sections = PriceSection::select('id', 'name')->get();
         return view('prices.create')->with(ngInit([
             'model' => new PriceSection(['price_section_id' => $id]),
+            'price_sections' => $price_sections
         ]));
     }
 
@@ -63,7 +65,8 @@ class PricesController extends Controller
      */
     public function edit($id)
     {
-        return view('prices.edit')->with(ngInit(compact('id')));
+        $price_sections = PriceSection::select('id', 'name')->get();
+        return view('prices.edit')->with(ngInit(compact('id', 'price_sections')));
     }
 
     /**

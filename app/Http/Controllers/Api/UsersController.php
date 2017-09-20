@@ -1,31 +1,33 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\PricePosition;
-use App\Models\PriceSection;
+use App\Http\Controllers\Controller;
+use App\Models\User;
 
-class PricePositionsController extends Controller
+class UsersController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return User::paginate(30);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create()
     {
-        $price_sections = PriceSection::select('id', 'name')->get();
-        return view('prices.positions.create')->with(ngInit([
-            'price_sections' => $price_sections,
-            'model' => new PricePosition([
-                'price_section_id' => $id,
-            ]),
-        ]))->with([
-            'section_name' => PriceSection::find($id)->name
-        ]);
+        //
     }
 
     /**
@@ -36,7 +38,7 @@ class PricePositionsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return User::create($request->input())->fresh();
     }
 
     /**
@@ -47,7 +49,7 @@ class PricePositionsController extends Controller
      */
     public function show($id)
     {
-        //
+        return User::with('photos')->find($id);
     }
 
     /**
@@ -58,8 +60,7 @@ class PricePositionsController extends Controller
      */
     public function edit($id)
     {
-        $price_sections = PriceSection::select('id', 'name')->get();
-        return view('prices.positions.edit')->with(ngInit(compact('id', 'price_sections')));
+        //
     }
 
     /**
@@ -71,7 +72,7 @@ class PricePositionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        User::find($id)->update($request->input());
     }
 
     /**
@@ -82,6 +83,6 @@ class PricePositionsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::destroy($id);
     }
 }

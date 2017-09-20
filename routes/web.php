@@ -31,6 +31,7 @@ Route::group(['middleware' => ['login']], function () {
     Route::resource('masters', 'MastersController');
     Route::resource('equipment', 'EquipmentController');
     Route::resource('tags', 'TagsController');
+    Route::resource('users', 'UsersController');
     Route::resource('reviews', 'ReviewsController');
 
     Route::get('prices/{id}/create', 'PricesController@create');

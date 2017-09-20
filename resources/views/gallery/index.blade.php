@@ -25,7 +25,7 @@
                 @{{ model.photos[0].file_size }}
             </td>
             <td width='100'>
-                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+                <a href='gallery/@{{ model.id }}/edit'>редактировать</a>
             </td>
             <td width='100' style='text-align: right'>
                 <a class="pointer" ng-click="IndexService.delete(model.id, 'фото')">удалить</a>

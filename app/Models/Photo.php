@@ -46,15 +46,22 @@ class Photo extends Model
     public function getFileSizeAttribute()
     {
         if (@$this->attributes['cropped']) {
-            return getSize(self::getDir('cropped') . $this->attributes['cropped']);
+            return getSize($this->getFullPath());
         }
     }
 
     public function getImageSizeAttribute()
     {
         if (@$this->attributes['cropped']) {
-            list($width, $height) = getimagesize(self::getDir('cropped') . $this->attributes['cropped']);
+            list($width, $height) = getimagesize($this->getFullPath());
             return "{$width}x{$height}";
+        }
+    }
+
+    public function getFullPath()
+    {
+        if (@$this->attributes['cropped']) {
+            return self::getDir('cropped') . $this->attributes['cropped'];
         }
     }
 }

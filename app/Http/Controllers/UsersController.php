@@ -5,27 +5,39 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\PricePosition;
-use App\Models\PriceSection;
+use App\Models\User;
+use App\Service\Rights;
 
-class PricePositionsController extends Controller
+class UsersController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        if (! allowed(Rights::EDIT_USERS)) {
+            return view('errors.not_allowed');
+        }
+        return view('users.index')->with(ngInit([
+            'current_page' => $request->page
+        ]));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create()
     {
-        $price_sections = PriceSection::select('id', 'name')->get();
-        return view('prices.positions.create')->with(ngInit([
-            'price_sections' => $price_sections,
-            'model' => new PricePosition([
-                'price_section_id' => $id,
-            ]),
-        ]))->with([
-            'section_name' => PriceSection::find($id)->name
-        ]);
+        if (! allowed(Rights::EDIT_USERS)) {
+            return view('errors.not_allowed');
+        }
+        return view('users.create')->with(ngInit([
+            'model' => new User,
+        ]));
     }
 
     /**
@@ -58,8 +70,10 @@ class PricePositionsController extends Controller
      */
     public function edit($id)
     {
-        $price_sections = PriceSection::select('id', 'name')->get();
-        return view('prices.positions.edit')->with(ngInit(compact('id', 'price_sections')));
+        if (! allowed(Rights::EDIT_USERS)) {
+            return view('errors.not_allowed');
+        }
+        return view('users.edit')->with(ngInit(compact('id')));
     }
 
     /**
