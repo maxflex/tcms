@@ -6,6 +6,7 @@ use \Shared\Model;
 use App\Service\Rights;
 use App\Service\Sms;
 use App\Traits\HasPhotos;
+use App\Service\Log;
 use Illuminate\Support\Facades\Redis;
 
 class User extends Model
@@ -61,16 +62,19 @@ class User extends Model
                 // если уже был отправлен – проверяем
                 if (! empty($sent_code)) {
                     if (@$data['code'] != $sent_code) {
+                        self::log($user_id, 'failed_login', 'неверный смс-код');
                         return false;
                     } else {
                         Redis::del("tcms:codes:{$user->id}");
                     }
                 } else {
                     // иначе отправляем код
+                    self::log($user_id, 'sms_code_sent');
                     Sms::verify($user);
                     return 'sms';
                 }
             }
+            self::log($user_id, 'success_login');
             $_SESSION['user'] = $user;
             return true;
         }
@@ -193,5 +197,14 @@ class User extends Model
     public function allowed($right)
     {
         return in_array($right, $this->rights);
+    }
+
+    public static function log($user_id, $type, $message = '', $data = [])
+    {
+        $data = array_merge($data, [
+            $type => $message,
+            'user_agent' => @$_SERVER['HTTP_USER_AGENT']
+        ]);
+        Log::custom('authorization', $user_id, $data);
     }
 }
