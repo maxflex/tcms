@@ -62,19 +62,19 @@ class User extends Model
                 // если уже был отправлен – проверяем
                 if (! empty($sent_code)) {
                     if (@$data['code'] != $sent_code) {
-                        self::log($user_id, 'failed_login', 'неверный смс-код');
+                        self::log($user->id, 'failed_login', 'неверный смс-код');
                         return false;
                     } else {
                         Redis::del("tcms:codes:{$user->id}");
                     }
                 } else {
                     // иначе отправляем код
-                    self::log($user_id, 'sms_code_sent');
+                    self::log($user->id, 'sms_code_sent');
                     Sms::verify($user);
                     return 'sms';
                 }
             }
-            self::log($user_id, 'success_login');
+            self::log($user->id, 'success_login');
             $_SESSION['user'] = $user;
             return true;
         }
