@@ -19,3 +19,9 @@ angular.module('Egecms')
         {id: 1, title: 'вверху'},
         {id: 2, title: 'внизу'},
     ]
+    .value 'LogTypes',
+        create: 'создание'
+        update: 'обновление'
+        delete: 'удаление'
+        authorization: 'авторизация'
+        url: 'просмотр URL'

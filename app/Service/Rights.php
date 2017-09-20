@@ -5,4 +5,5 @@
     {
         const BANNED = 1;
         const EDIT_USERS = 2;
+        const LOGS = 3;
     }

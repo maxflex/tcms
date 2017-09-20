@@ -10,6 +10,7 @@ class PricePosition extends Model
         'name',
         'price',
         'unit',
-        'price_section_id'
+        'price_section_id',
+        'position'
     ];
 }

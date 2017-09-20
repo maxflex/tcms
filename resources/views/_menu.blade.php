@@ -12,5 +12,8 @@
 @if (allowed(\App\Service\Rights::EDIT_USERS))
     <a href="users" class="list-group-item">Пользователи</a>
 @endif
+@if (allowed(\App\Service\Rights::LOGS))
+    <a href="logs" class="list-group-item">Логи</a>
+@endif
 <a href="pages" class="list-group-item">Страницы</a>
 <a href="logout" class="list-group-item">Выход</a>

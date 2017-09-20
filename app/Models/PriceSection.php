@@ -14,7 +14,7 @@ class PriceSection extends Model
 
     public function positions()
     {
-        return $this->hasMany(PricePosition::class);
+        return $this->hasMany(PricePosition::class)->orderBy('position');
     }
 
     public function sections()

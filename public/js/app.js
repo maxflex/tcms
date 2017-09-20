@@ -596,6 +596,67 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').controller('LogsIndex', function($rootScope, $scope, $timeout, $http, LogTypes) {
+    var load;
+    bindArguments($scope, arguments);
+    $rootScope.frontend_loading = true;
+    $scope.$watch('search.table', function(newVal, oldVal) {
+      if ((newVal && oldVal) || (oldVal && !newVal)) {
+        return $scope.search.column = null;
+      }
+    });
+    $scope.toJson = function(data) {
+      return JSON.parse(data);
+    };
+    $scope.refreshCounts = function() {
+      return $timeout(function() {
+        $('.selectpicker option').each(function(index, el) {
+          $(el).data('subtext', $(el).attr('data-subtext'));
+          return $(el).data('content', $(el).attr('data-content'));
+        });
+        return $('.selectpicker').selectpicker('refresh');
+      }, 100);
+    };
+    $scope.filter = function() {
+      $.cookie("logs", JSON.stringify($scope.search), {
+        expires: 365,
+        path: '/'
+      });
+      $scope.current_page = 1;
+      return $scope.pageChanged();
+    };
+    $scope.keyFilter = function(event) {
+      if (event.keyCode === 13) {
+        return $scope.filter();
+      }
+    };
+    $timeout(function() {
+      $scope.search = $.cookie("logs") ? JSON.parse($.cookie("logs")) : {};
+      load($scope.page);
+      return $scope.current_page = $scope.page;
+    });
+    $scope.pageChanged = function() {
+      $rootScope.frontend_loading = true;
+      load($scope.current_page);
+      return paginate('logs', $scope.current_page);
+    };
+    return load = function(page) {
+      var params;
+      params = '?page=' + page;
+      return $http.get("api/logs" + params).then(function(response) {
+        console.log(response);
+        $scope.counts = response.data.counts;
+        $scope.data = response.data.data;
+        $scope.logs = response.data.data.data;
+        $rootScope.frontend_loading = false;
+        return $scope.refreshCounts();
+      });
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').controller('MastersIndex', function($scope, $attrs, IndexService, Master) {
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
@@ -1409,22 +1470,29 @@
       scope: {
         item: '='
       },
-      controller: function($scope) {
+      controller: function($scope, $timeout, PriceSection, PricePosition) {
         $scope.controller_scope = scope;
         return $scope.sortableOptions = {
+          update: function(event, ui) {
+            return $timeout(function() {
+              return $scope.item.positions.forEach(function(position, index) {
+                return PricePosition.update({
+                  id: position.id,
+                  position: index
+                });
+              });
+            });
+          },
           items: '.price-position-' + $scope.$id,
           axis: 'y',
-          cursor: "move"
+          cursor: "move",
+          opacity: 0.9,
+          zIndex: 9999,
+          containment: "parent",
+          tolerance: "pointer"
         };
       }
     };
-  });
-
-  ({
-    opacity: 0.9,
-    zIndex: 9999,
-    containment: "parent",
-    tolerance: "pointer"
   });
 
 }).call(this);
@@ -1708,7 +1776,13 @@
       id: 2,
       title: 'внизу'
     }
-  ]);
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
 
 }).call(this);
 

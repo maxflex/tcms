@@ -37,6 +37,19 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-sm-12 flex-items">
+        <div style='width: 200px'>
+            Страница «Логи»
+        </div>
+        <div>
+            <div class="switch">
+                <input id="cmn-toggle-3" class="cmn-toggle cmn-toggle-round-flat" type="checkbox" ng-click='toggleRights(3)' ng-checked='allowed(3)'>
+                <label for="cmn-toggle-3"></label>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row mb">
     <div class="col-sm-12 flex-items">
         <div style='width: 200px'>

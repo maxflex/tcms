@@ -50,6 +50,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('reviews', 'ReviewsController');
     Route::resource('equipment', 'EquipmentController');
 
+    Route::resource('logs', 'LogsController');
+
     Route::resource('faq', 'FaqController');
     Route::group(['prefix' => 'faq'], function() {
         Route::resource('groups', 'FaqGroupsController');

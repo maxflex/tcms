@@ -1,4 +1,6 @@
 <?php
+use App\Http\Middleware\LogUrlOpen;
+
 URL::forceSchema('https');
 
 # Login
@@ -6,7 +8,7 @@ Route::post('login', 'LoginController@login');
 Route::get('logout', 'LoginController@logout');
 
 
-Route::group(['middleware' => ['login']], function () {
+Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     # Variables
     Route::get('/', 'VariablesController@index');
     Route::resource('variables', 'VariablesController');
@@ -16,6 +18,8 @@ Route::group(['middleware' => ['login']], function () {
     Route::post('pages/import', 'PagesController@import')->name('pages.import');
     Route::resource('pages', 'PagesController');
     Route::get('search', 'PagesController@search');
+
+    Route::resource('logs', 'LogsController');
 
     Route::resource('programs', 'ProgramsController');
 

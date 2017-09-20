@@ -158,6 +158,11 @@ class User extends Model
         return $query->whereRaw('NOT FIND_IN_SET(' . Rights::BANNED . ', rights)');
     }
 
+    public static function scopeBanned($query)
+    {
+        return $query->whereRaw('FIND_IN_SET(' . Rights::BANNED . ', rights)');
+    }
+
     public static function isBlocked()
     {
         return User::whereId(User::fromSession()->id)
