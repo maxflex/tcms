@@ -21,11 +21,8 @@
             <td>
                 @{{ model.published ? 'опубликован' : 'не опубликован' }}
             </td>
-            <td width='100'>
-                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
-            </td>
             <td width='100' style='text-align: right'>
-                <a class="pointer" ng-click="IndexService.delete(model.id, 'отзыв')">удалить</a>
+                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
             </td>
         </tr>
     </table>

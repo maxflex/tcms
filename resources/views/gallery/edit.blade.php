@@ -4,7 +4,8 @@
     <span ng-click="FormService.edit()">сохранить</span>
 @stop
 @section('title-right')
-    <span ng-click="FormService.delete($event)">удалить фото</a>
+    <span ng-click="preview()">предпросмотр</span>
+    <span ng-click="FormService.delete($event)">удалить фото</span>
 @stop
 @section('content')
 @section('controller', 'GalleryForm')

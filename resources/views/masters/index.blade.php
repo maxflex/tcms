@@ -14,11 +14,8 @@
                   @{{ model.last_name }} @{{ model.first_name[0] }}. @{{ model.middle_name[0] }}.
                 </a>
             </td>
-            <td width='100'>
-                <a href='masters/@{{ model.id }}/edit'>редактировать</a>
-            </td>
             <td width='100' style='text-align: right'>
-                <a class="pointer" ng-click="IndexService.delete(model.id, 'мастера')">удалить</a>
+                <a href='masters/@{{ model.id }}/edit'>редактировать</a>
             </td>
         </tr>
     </table>

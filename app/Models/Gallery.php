@@ -17,7 +17,8 @@ class Gallery extends Model
     protected $fillable = [
         'date',
         'days_to_complete',
-        'price',
+        'price_1', 'price_2', 'price_3', 'price_4', 'price_5', 'price_6',
+        'component_1', 'component_2', 'component_3', 'component_4', 'component_5', 'component_6',
         'name',
         'master_id',
         'tags',
@@ -64,9 +65,11 @@ class Gallery extends Model
                 }
             }
 
-            if ($this->before_and_after) {
-                $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 471, 786);
-                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1600, 786);
+            if ($this->before_and_after && $this->count == 2) {
+                // x = 450 | 550 - (200/2)
+                $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 450, 790);
+                // x = 1550 | 1650 - (200/2)
+                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1550, 790);
             }
 
 

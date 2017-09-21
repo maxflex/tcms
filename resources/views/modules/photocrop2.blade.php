@@ -1,6 +1,6 @@
-<div class="row mb" style='margin-top: 30px' ng-show="FormService.model.id">
+<div class="row mb" ng-show="FormService.model.id">
   <div class="col-sm-12">
-      <div style='display: flex'>
+      <div style='display: flex; justify-content: flex-end'>
           <img ng-repeat="photo in FormService.model.photos" class="photo" ng-click="PhotoService.edit($index)"
              ng-show="($index + 1) <= FormService.model.count"
             src="@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}}">
@@ -11,14 +11,6 @@
       </div>
       <input type="file" name="photo" id="fileupload" style='display: none'/ data-url="upload">
   </div>
-</div>
-
-<div class="gallery-preview-full">
-    <center>
-        <a href='/img/gallery/@{{ FormService.model.id }}.png' target="_blank">предпросмотр</a>
-    </center>
-    <img ng-repeat="photo in FormService.model.photos" ng-show="($index + 1) <= FormService.model.count" style='width: @{{ 100 / FormService.model.count }}%'
-      ng-class="{'empty-line-fix': FormService.model.count == 2 && $index == 1}" src="@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}}">
 </div>
 
 <div class="modal modal-fullscreen gallery-fullscreen" tabindex="-1" id='change-photo'>
@@ -35,10 +27,13 @@
                     result-image-quality=".1"></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
-                <div style='margin-bottom: 30px; width: 100%'>
+                <div style='margin-bottom: 15px; width: 100%'>
                     <div class="form-group">
                        <img ng-src="@{{ PhotoService.cropped_image }}" style='height: auto; width: 100%'/>
                     </div>
+                </div>
+                <div style='margin-bottom: 15px'>
+                    @{{ PhotoService.getSelectedPhoto().file_size }}
                 </div>
                 <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box;' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">@{{ PhotoService.cropping ? 'сохранение...' : 'сохранить' }}</button>
                 <button class="btn btn-primary full-width" style='box-sizing: border-box;' ng-click="PhotoService.delete()">удалить</button>

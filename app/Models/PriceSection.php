@@ -23,6 +23,24 @@ class PriceSection extends Model
     }
 
     /**
+     *
+     */
+     public function getItems()
+     {
+         $items = [];
+
+         $top_level_sections = PriceSection::whereNull('price_section_id')->get();
+
+         foreach($top_level_sections as $top_level_section) {
+             $new_item = [
+                 'model'        => $top_level_section,
+                 'is_section'   => true,
+                 'position'     => $top_level_section->position,
+             ];
+         }
+     }
+
+    /**
      * Обновить цену у раздела
      */
     public static function changePrice($data)

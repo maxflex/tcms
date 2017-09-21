@@ -6,7 +6,8 @@
         @include('modules.input', ['title' => 'цена, руб.', 'model' => 'price'])
     </div>
     <div class="col-sm-3">
-        @include('modules.input', ['title' => 'единица измерения', 'model' => 'unit'])
+        <label class="no-margin-bottom label-opacity">единица измерения</label>
+        <ng-select-new model='FormService.model.unit' object="Units" label="title" convert-to-number none-text='не установлено'></ng-select-new>
     </div>
     <div class="col-sm-3">
         <label class="no-margin-bottom label-opacity">родитель</label>

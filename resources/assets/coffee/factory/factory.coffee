@@ -19,6 +19,10 @@ angular.module('Egecms')
         {id: 1, title: 'вверху'},
         {id: 2, title: 'внизу'},
     ]
+    .value 'Units', [
+        {id: 1, title: 'шт'},
+        {id: 2, title: 'см'},
+    ]
     .value 'LogTypes',
         create: 'создание'
         update: 'обновление'

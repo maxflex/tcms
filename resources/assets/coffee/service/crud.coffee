@@ -88,9 +88,10 @@ angular.module 'Egecms'
                     , (response) ->
                         notifyError response.data.message
 
-        this.edit = ->
+        this.edit = (callback = null) ->
             return if not beforeSave()
             this.model.$update().then =>
+                callback() if callback isnt null
                 this.saving = false
                 ajaxEnd()
             , (response) ->

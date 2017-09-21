@@ -514,6 +514,11 @@
       FormService.init(Gallery, $scope.id, $scope.model);
       return PhotoService.init(FormService, 'Gallery', $scope.id);
     });
+    $scope.preview = function() {
+      return FormService.edit(function() {
+        return window.open("/img/gallery/" + FormService.model.id + ".png", '_blank');
+      });
+    };
     $scope.loadTags = function(text) {
       return Tag.autocomplete({
         text: text
@@ -961,7 +966,7 @@
       FormService.init(PriceSection, $scope.id, $scope.model);
       return FormService.redirect_url = 'prices';
     });
-  }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition) {
+  }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition, Units) {
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
       FormService.init(PricePosition, $scope.id, $scope.model);
@@ -1776,6 +1781,14 @@
       id: 2,
       title: 'внизу'
     }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'шт'
+    }, {
+      id: 2,
+      title: 'см'
+    }
   ]).value('LogTypes', {
     create: 'создание',
     update: 'обновление',
@@ -2081,12 +2094,18 @@
         };
       })(this));
     };
-    this.edit = function() {
+    this.edit = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
       if (!beforeSave()) {
         return;
       }
       return this.model.$update().then((function(_this) {
         return function() {
+          if (callback !== null) {
+            callback();
+          }
           _this.saving = false;
           return ajaxEnd();
         };

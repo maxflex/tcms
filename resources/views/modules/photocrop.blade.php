@@ -1,4 +1,4 @@
-<div class="row mb" style='margin-top: 30px' ng-show="FormService.model.id">
+<div class="row mb" ng-show="FormService.model.id">
   <div class="col-sm-12">
       <div style='display: flex'>
           <img ng-repeat="photo in FormService.model.photos" class="photo {{ $type }}" ng-click="PhotoService.edit($index)"
@@ -21,10 +21,13 @@
                     area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="{{ $size }}" result-image-quality="1"></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
-                <div style='margin-bottom: 30px'>
+                <div style='margin-bottom: 15px'>
                     <div class="form-group">
                        <img ng-src="@{{ PhotoService.cropped_image }}" class="img-preview {{ $type }}" />
                     </div>
+                </div>
+                <div style='margin-bottom: 15px'>
+                    @{{ PhotoService.getSelectedPhoto().file_size }}
                 </div>
                 <button class="btn btn-primary" style='margin-bottom: 15px; width: 200px; box-sizing: border-box;' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">@{{ PhotoService.cropping ? 'сохранение...' : 'сохранить' }}</button>
                 <button class="btn btn-primary" style='width: 200px; box-sizing: border-box;' ng-click="PhotoService.delete()">удалить</button>

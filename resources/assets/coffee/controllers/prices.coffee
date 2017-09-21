@@ -31,7 +31,7 @@ angular
         angular.element(document).ready ->
             FormService.init(PriceSection, $scope.id, $scope.model)
             FormService.redirect_url = 'prices'
-    .controller 'PricePositionForm', ($scope, $attrs, $timeout, $http, FormService, PricePosition) ->
+    .controller 'PricePositionForm', ($scope, $attrs, $timeout, $http, FormService, PricePosition, Units) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             FormService.init(PricePosition, $scope.id, $scope.model)
