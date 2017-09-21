@@ -16,13 +16,14 @@
                 @{{ model.name }}
             </td>
             <td>
-                <img src='@{{ model.photos[0].cropped_url }}' style='height: 50px' />
+                <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg' style='height: 50px'>
+                <span ng-show='!model.has_photo'>нет фото</span>
             </td>
             <td>
-                @{{ model.photos[0].image_size }}
+                @{{ model.image_size }}
             </td>
             <td>
-                @{{ model.photos[0].file_size }}
+                @{{ model.file_size }}
             </td>
             <td width='100'>
                 <a href='gallery/@{{ model.id }}/edit'>редактировать</a>
