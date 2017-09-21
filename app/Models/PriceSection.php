@@ -10,7 +10,8 @@ class PriceSection extends Model
         'name',
         'price_section_id'
     ];
-    protected $with = ['positions', 'sections'];
+
+    protected $appends = ['item'];
 
     public function positions()
     {
@@ -25,19 +26,31 @@ class PriceSection extends Model
     /**
      *
      */
-     public function getItems()
+     public function getItemAttribute()
      {
          $items = [];
 
-         $top_level_sections = PriceSection::whereNull('price_section_id')->get();
-
-         foreach($top_level_sections as $top_level_section) {
-             $new_item = [
-                 'model'        => $top_level_section,
+         foreach($this->sections as $section) {
+             $items[] = [
+                 'model'        => $section->item,
                  'is_section'   => true,
-                 'position'     => $top_level_section->position,
+                 'position'     => $section->position,
              ];
          }
+         foreach($this->positions as $position) {
+             $items[] = [
+                 'model'        => $position,
+                 'is_section'   => false,
+                 'position'     => $position->position,
+             ];
+         }
+
+         return [
+             'model' => $this,
+             'is_section' => true,
+             'items' => $items,
+             'position' => $this->position
+         ];
      }
 
     /**
