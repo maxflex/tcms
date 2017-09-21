@@ -110,5 +110,5 @@
         </table>
     </div>
 </div>
-@include('modules.pagination')
+@include('modules.pagination_old')
 @stop
