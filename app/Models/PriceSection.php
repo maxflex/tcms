@@ -11,7 +11,9 @@ class PriceSection extends Model
         'price_section_id'
     ];
 
-    protected $appends = ['item'];
+    protected $with = ['sections', 'positions'];
+
+    // protected $appends = ['item'];
 
     public function positions()
     {

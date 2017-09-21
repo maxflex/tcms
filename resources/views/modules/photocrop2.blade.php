@@ -1,13 +1,19 @@
 <div class="row mb" ng-show="FormService.model.id">
   <div class="col-sm-12">
-      <div style='display: flex; justify-content: flex-end'>
-          <img ng-repeat="photo in FormService.model.photos" class="photo" ng-click="PhotoService.edit($index)"
-             ng-show="($index + 1) <= FormService.model.count"
-            src="@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}}">
-
-        <div class="add-photo" onclick="$('#fileupload').click()" ng-show="FormService.model.photos.length < FormService.model.count">
-            добавить фото
-        </div>
+      <div class="mbs">
+          <a class="pointer" ng-click="editOrUpload(1)">фото 1</a>
+          <span ng-show="FormService.model.photos.length >= 1" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
+      </div>
+      <div class="mbs">
+          <a class="pointer" ng-click="editOrUpload(2)">фото 2</a>
+          <span ng-show="FormService.model.photos.length >= 2" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
+      </div>
+      <div class="mbl">
+          <a class="pointer" ng-click="editOrUpload(3)">фото 3</a>
+          <span ng-show="FormService.model.photos.length >= 3" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
+      </div>
+      <div class="mbl">
+          <a ng-click="edit()" class="pointer">пересобрать фото</a>
       </div>
       <input type="file" name="photo" id="fileupload" style='display: none'/ data-url="upload">
   </div>
