@@ -61,7 +61,7 @@ class Gallery extends Model
                 // $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
                 $positionX = 0;
                 foreach(range(1, 3) as $i) {
-                    $img->overlay(public_path() . '/img/watermark/watermark.png', 'left', .4, $positionX);
+                    $img->overlay(public_path() . '/img/watermark/watermark.png', 'left', .8, $positionX);
                     $positionX += 800;
                 }
             }
