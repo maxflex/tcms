@@ -17,7 +17,7 @@
             </td>
             <td>
                 <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg' style='height: 50px'>
-                <span ng-show='!model.has_photo'>нет фото</span>
+                <div ng-show='!model.has_photo' class="no-photo-small">нет фото</div>
             </td>
             <td>
                 @{{ model.image_size }}

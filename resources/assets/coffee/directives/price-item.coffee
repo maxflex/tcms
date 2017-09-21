@@ -4,7 +4,9 @@ angular.module 'Egecms'
         templateUrl: 'directives/price-item'
         scope:
             item:   '='
-        controller: ($scope, $timeout, PriceSection, PricePosition) ->
+        controller: ($scope, $timeout, $rootScope, PriceSection, PricePosition, Units) ->
+            $scope.Units = Units
+            $scope.findById = $rootScope.findById
             $scope.controller_scope = scope
             $scope.sortableOptions =
                 update: (event, ui) ->
