@@ -4,13 +4,13 @@
           <a class="pointer" ng-click="editOrUpload(1)">фото 1</a>
           <span ng-show="FormService.model.photos.length >= 1" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
       </div>
-      <div class="mbs">
-          <a class="pointer" ng-show="FormService.model.count >= 2" ng-click="editOrUpload(2)">фото 2</a>
-          <span ng-show="FormService.model.count >= 2 && FormService.model.photos.length >= 2" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
+      <div class="mbs" ng-show="FormService.model.count >= 2" >
+          <a class="pointer" ng-click="editOrUpload(2)">фото 2</a>
+          <span ng-show="FormService.model.photos.length >= 2" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
       </div>
-      <div class="mbl">
-          <a class="pointer" ng-show="FormService.model.count >= 3" ng-click="editOrUpload(3)">фото 3</a>
-          <span ng-show="FormService.model.count >= 3 && FormService.model.photos.length >= 3" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
+      <div class="mbl" ng-show="FormService.model.count >= 3">
+          <a class="pointer" ng-click="editOrUpload(3)">фото 3</a>
+          <span ng-show="FormService.model.photos.length >= 3" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
       </div>
       <div class="mbl">
           <a ng-click="edit()" class="pointer">пересобрать фото</a>
