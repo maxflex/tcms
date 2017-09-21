@@ -35,7 +35,7 @@
         <div ng-show='FormService.model.has_photo'>
             <img ng-click="preview()" class="pointer mbb" src='/img/gallery/@{{FormService.model.id}}.png?version=@{{ version }}' style='width: 100%' />
             <center>
-                @{{ FormService.model.file_size }}
+                @{{ FormService.model.file_size }}, 2200×1100
             </center>
         </div>
         <div ng-show='!FormService.model.has_photo' class="no-photo">
