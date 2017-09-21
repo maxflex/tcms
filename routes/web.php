@@ -43,10 +43,9 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
     Route::resource('prices/{id}/positions', 'PricePositionsController');
     Route::resource('gallery', 'GalleryController');
+});
 
-
-    # Templates for angular directives
-    Route::get('directives/{directive}', function($directive) {
-        return view("directives.{$directive}");
-    });
+# Templates for angular directives
+Route::get('directives/{directive}', function($directive) {
+    return view("directives.{$directive}");
 });
