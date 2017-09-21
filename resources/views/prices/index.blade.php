@@ -8,12 +8,11 @@
 
 @section('content')
     <div class="price-list">
-        <ul>
-            <li ng-repeat="model in IndexService.page.data">
-                <price-item item='model'></price-item>
+        <ul ui-sortable='sortableOptions' ng-model="items">
+            <li ng-repeat="item in items" class='price-item-@{{ $parent.$id }}'>
+                <price-item item='item'></price-item>
             </li>
         </ul>
     </div>
-    @include('modules.pagination')
     @include('prices._modals')
 @stop

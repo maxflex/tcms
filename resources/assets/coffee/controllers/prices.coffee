@@ -1,10 +1,11 @@
 angular
     .module 'Egecms'
-    .controller 'PricesIndex', ($scope, $attrs, $timeout, $http, IndexService, PriceSection) ->
+    .controller 'PricesIndex', ($scope, $attrs, $timeout, $http, PriceSection, PricePosition) ->
         bindArguments($scope, arguments)
 
         angular.element(document).ready ->
-            IndexService.init(PriceSection, $scope.current_page, $attrs)
+            $http.get('api/prices').then (response) ->
+                $scope.items = response.data
 
         clearChangePrice = (section_id) ->
             $scope.change_price =
@@ -24,6 +25,18 @@ angular
             $http.post 'api/prices/change', $scope.change_price
             .then ->
                 location.reload()
+
+        $scope.sortableOptions =
+            update: (event, ui) ->
+                $timeout ->
+                    $scope.items.forEach (item, index) ->
+                        Resource = if item.is_section then PriceSection else PricePosition
+                        Resource.update({id: item.model.id, position: index})
+            items: '.price-item-' + $scope.$id
+            axis: 'y'
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
 
 
     .controller 'PricesForm', ($scope, $attrs, $timeout, $http, FormService, PriceSection) ->

@@ -943,11 +943,13 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, IndexService, PriceSection) {
+  angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, PriceSection, PricePosition) {
     var clearChangePrice;
     bindArguments($scope, arguments);
     angular.element(document).ready(function() {
-      return IndexService.init(PriceSection, $scope.current_page, $attrs);
+      return $http.get('api/prices').then(function(response) {
+        return $scope.items = response.data;
+      });
     });
     clearChangePrice = function(section_id) {
       $scope.change_price = {
@@ -964,12 +966,31 @@
       clearChangePrice(section_id);
       return $('#change-price-modal').modal('show');
     };
-    return $scope.changePrice = function() {
+    $scope.changePrice = function() {
       ajaxStart();
       $scope.changing_price = true;
       return $http.post('api/prices/change', $scope.change_price).then(function() {
         return location.reload();
       });
+    };
+    return $scope.sortableOptions = {
+      update: function(event, ui) {
+        return $timeout(function() {
+          return $scope.items.forEach(function(item, index) {
+            var Resource;
+            Resource = item.is_section ? PriceSection : PricePosition;
+            return Resource.update({
+              id: item.model.id,
+              position: index
+            });
+          });
+        });
+      },
+      items: '.price-item-' + $scope.$id,
+      axis: 'y',
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999
     };
   }).controller('PricesForm', function($scope, $attrs, $timeout, $http, FormService, PriceSection) {
     bindArguments($scope, arguments);
@@ -1491,21 +1512,21 @@
         return $scope.sortableOptions = {
           update: function(event, ui) {
             return $timeout(function() {
-              return $scope.item.positions.forEach(function(position, index) {
-                return PricePosition.update({
-                  id: position.id,
+              return $scope.item.items.forEach(function(item, index) {
+                var Resource;
+                Resource = item.is_section ? PriceSection : PricePosition;
+                return Resource.update({
+                  id: item.model.id,
                   position: index
                 });
               });
             });
           },
-          items: '.price-position-' + $scope.$id,
+          items: '.price-item-' + $scope.$id,
           axis: 'y',
           cursor: "move",
           opacity: 0.9,
-          zIndex: 9999,
-          containment: "parent",
-          tolerance: "pointer"
+          zIndex: 9999
         };
       }
     };
@@ -1744,94 +1765,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
   var apiPath, countable, updatable;
 
   angular.module('Egecms').factory('Variable', function($resource) {
@@ -1927,6 +1860,94 @@
       }
     };
   };
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
 
 }).call(this);
 

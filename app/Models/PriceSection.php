@@ -8,10 +8,11 @@ class PriceSection extends Model
 {
     protected $fillable = [
         'name',
-        'price_section_id'
+        'price_section_id',
+        'position'
     ];
 
-    protected $with = ['sections', 'positions'];
+    // protected $with = ['sections', 'positions'];
 
     // protected $appends = ['item'];
 
@@ -34,8 +35,9 @@ class PriceSection extends Model
 
          foreach($this->sections as $section) {
              $items[] = [
-                 'model'        => $section->item,
+                 'model'        => $section,
                  'is_section'   => true,
+                 'items'        => $section->item['items'],
                  'position'     => $section->position,
              ];
          }
@@ -46,6 +48,10 @@ class PriceSection extends Model
                  'position'     => $position->position,
              ];
          }
+
+         usort($items, function($a, $b) {
+             return $a['position'] - $b['position'];
+         });
 
          return [
              'model' => $this,
