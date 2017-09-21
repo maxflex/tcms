@@ -12,7 +12,7 @@ angular
             PhotoService.init(FormService, 'Gallery', $scope.id)
 
         $scope.preview = ->
-            FormService.edit -> window.open("/img/gallery/#{FormService.model.id}.png", '_blank')
+            window.open("/img/gallery/#{FormService.model.id}.png", '_blank')
 
         $scope.loadTags = (text) ->
             Tag.autocomplete({text: text}).$promise
