@@ -20,9 +20,15 @@ angular.module('Egecms')
         {id: 2, title: 'внизу'},
     ]
     .value 'Units', [
-        {id: 1, title: 'шт'},
-        {id: 2, title: 'см'},
-    ]
+        {id: 1, title: 'изделие'},
+        {id: 2, title: 'штука'},
+        {id: 3, title: 'сантиметр'},
+        {id: 4, title: 'пара'},
+        {id: 5, title: 'метр'},
+        {id: 6, title: 'дм²'},
+        {id: 7, title: 'см²'},
+        {id: 8, title: 'мм²'},
+        {id: 9, title: 'элемент'},    ]
     .value 'LogTypes',
         create: 'создание'
         update: 'обновление'
