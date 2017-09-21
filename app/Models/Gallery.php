@@ -12,8 +12,6 @@ class Gallery extends Model
 {
     use HasTags, HasPhotos;
 
-    protected $with = ['photos'];
-
     protected $fillable = [
         'date',
         'days_to_complete',

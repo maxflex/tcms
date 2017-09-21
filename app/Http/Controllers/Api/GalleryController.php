@@ -49,7 +49,7 @@ class GalleryController extends Controller
      */
     public function show($id)
     {
-        return Gallery::find($id)->append('tags');
+        return Gallery::with('photos')->find($id)->append('tags');
     }
 
     /**
@@ -72,7 +72,7 @@ class GalleryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gallery = Gallery::find($id);
+        $gallery = Gallery::with('photos')->find($id);
         $gallery->update($request->input());
         return $gallery;
     }
