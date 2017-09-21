@@ -516,7 +516,7 @@
       return PhotoService.init(FormService, 'Gallery', $scope.id);
     });
     $scope.preview = function() {
-      return window.open("/img/gallery/" + FormService.model.id + ".png", '_blank');
+      return window.open("/img/gallery/" + FormService.model.id + ".jpg", '_blank');
     };
     $scope.edit = function() {
       return FormService.edit(function() {

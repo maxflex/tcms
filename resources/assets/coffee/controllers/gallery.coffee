@@ -14,7 +14,7 @@ angular
             PhotoService.init(FormService, 'Gallery', $scope.id)
 
         $scope.preview = ->
-            window.open("/img/gallery/#{FormService.model.id}.png", '_blank')
+            window.open("/img/gallery/#{FormService.model.id}.jpg", '_blank')
 
         $scope.edit = ->
             FormService.edit ->

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Photo extends Model
 {
     const UPLOAD_DIR = '/photos/';
+    const QUALITY = 60;
 
     protected $fillable = [
         'original',
@@ -54,7 +55,7 @@ class Photo extends Model
     {
         if (@$this->attributes['cropped']) {
             list($width, $height) = getimagesize($this->getFullPath());
-            return "{$width}x{$height}";
+            return "{$width}×{$height}";
         }
     }
 

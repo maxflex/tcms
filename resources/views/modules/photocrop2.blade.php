@@ -30,7 +30,7 @@
                     area-type="rectangle"
                     aspect-ratio="ratio"
                     result-image-size="{h: size.h, w: size.w}"
-                    result-image-quality=".1"></ui-cropper>
+                ></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
                 <div style='margin-bottom: 15px; width: 100%'>

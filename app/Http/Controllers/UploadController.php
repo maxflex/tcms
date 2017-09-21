@@ -26,7 +26,7 @@ class UploadController extends Controller
     {
         $filename = uniqid() . '.png';
         $img = new \claviska\SimpleImage($request->cropped_image);
-        $img->toFile(Photo::getDir('cropped') . $filename);
+        $img->toFile(Photo::getDir('cropped') . $filename, 'image/jpeg', Photo::QUALITY);
         $photo = Photo::find($request->id);
         $photo->update(['cropped' => $filename]);
         return $photo;

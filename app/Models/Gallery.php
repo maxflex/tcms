@@ -27,7 +27,7 @@ class Gallery extends Model
         'before_and_after'
     ];
 
-    protected $appends = ['file_size', 'has_photo'];
+    protected $appends = ['file_size', 'has_photo', 'image_size'];
 
     protected $casts = [
         'watermark' => 'boolean',
@@ -85,19 +85,27 @@ class Gallery extends Model
                 }
             }
 
-            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".png");
+            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".jpg", 'image/jpeg' , Photo::QUALITY);
         }
     }
 
     public function getHasPhotoAttribute()
     {
-        return file_exists(public_path() . '/img/gallery/' . $this->id . ".png");
+        return file_exists(public_path() . '/img/gallery/' . $this->id . ".jpg");
     }
 
     public function getFileSizeAttribute()
     {
         if ($this->has_photo) {
-            return getSize(public_path() . '/img/gallery/' . $this->id . ".png");
+            return getSize(public_path() . '/img/gallery/' . $this->id . ".jpg");
+        }
+    }
+
+    public function getImageSizeAttribute()
+    {
+        if ($this->has_photo) {
+            list($width, $height) = getimagesize(public_path() . '/img/gallery/' . $this->id . ".jpg");
+            return "{$width}×{$height}";
         }
     }
 
