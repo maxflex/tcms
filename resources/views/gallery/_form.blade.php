@@ -32,7 +32,12 @@
         @include('modules.photocrop2')
     </div>
     <div class="col-sm-6">
-        <img ng-click="preview()" class="pointer" src='/img/gallery/@{{FormService.model.id}}.png?version=@{{ version }}' style='width: 100%' />
+        <div ng-show='FormService.model.has_photo'>
+            <img ng-click="preview()" class="pointer" src='/img/gallery/@{{FormService.model.id}}.png?version=@{{ version }}' style='width: 100%' />
+        </div>
+        <div ng-show='!FormService.model.has_photo' class="no-photo">
+            нет фото
+        </div>
     </div>
 </div>
 <div class="row">

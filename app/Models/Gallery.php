@@ -27,9 +27,15 @@ class Gallery extends Model
         'before_and_after'
     ];
 
+    protected $appends = ['file_size', 'has_photo'];
+
     protected $casts = [
         'watermark' => 'boolean',
         'before_and_after' => 'boolean',
+    ];
+
+    protected $attributes = [
+        'count' => 1
     ];
 
     public function setDateAttribute($value)
@@ -84,6 +90,18 @@ class Gallery extends Model
             }
 
             $img->toFile(public_path() . '/img/gallery/' . $this->id . ".png");
+        }
+    }
+
+    public function getHasPhotoAttribute()
+    {
+        return file_exists(public_path() . '/img/gallery/' . $this->id . ".png");
+    }
+
+    public function getFileSizeAttribute()
+    {
+        if ($this->has_photo) {
+            return getSize(public_path() . '/img/gallery/' . $this->id . ".png");
         }
     }
 

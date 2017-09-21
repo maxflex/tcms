@@ -4267,3 +4267,15 @@ select[multiple] {
 .empty-line-fix {
     margin-left: -1px;
 }
+
+.no-photo {
+    display: flex;
+    height: 277px;
+    width: 100%;
+    background: red;
+    justify-content: center;
+    align-items: center;
+    background-color: gainsboro;
+    color: white;
+    font-size: 24px;
+}

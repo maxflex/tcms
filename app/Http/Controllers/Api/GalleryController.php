@@ -72,7 +72,9 @@ class GalleryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Gallery::find($id)->update($request->input());
+        $gallery = Gallery::find($id);
+        $gallery->update($request->input());
+        return $gallery;
     }
 
     /**

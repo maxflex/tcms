@@ -20390,6 +20390,21 @@ select[multiple] {
   margin-left: -1px;
 }
 
+.no-photo {
+  display: -webkit-box;
+  display: flex;
+  height: 277px;
+  width: 100%;
+  background: red;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  background-color: gainsboro;
+  color: white;
+  font-size: 24px;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }
