@@ -33,7 +33,10 @@
     </div>
     <div class="col-sm-6">
         <div ng-show='FormService.model.has_photo'>
-            <img ng-click="preview()" class="pointer" src='/img/gallery/@{{FormService.model.id}}.png?version=@{{ version }}' style='width: 100%' />
+            <img ng-click="preview()" class="pointer mbb" src='/img/gallery/@{{FormService.model.id}}.png?version=@{{ version }}' style='width: 100%' />
+            <center>
+                @{{ FormService.model.file_size }}
+            </center>
         </div>
         <div ng-show='!FormService.model.has_photo' class="no-photo">
             нет фото
