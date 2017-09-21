@@ -1,4 +1,4 @@
-<div class="row mb">
+<div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
         <div class="btn-group btn-group-justified mbl">
           <a class="btn btn-primary" ng-class="{'active-group-btn': FormService.model.count == 1}" ng-click='FormService.model.count = 1'>1 фото</a>

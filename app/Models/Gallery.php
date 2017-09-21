@@ -34,10 +34,6 @@ class Gallery extends Model
         'before_and_after' => 'boolean',
     ];
 
-    protected $attributes = [
-        'count' => 1
-    ];
-
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = fromDotDate($value);
