@@ -20405,6 +20405,10 @@ select[multiple] {
   font-size: 24px;
 }
 
+.ui-sortable-helper {
+  overflow: hidden;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }
