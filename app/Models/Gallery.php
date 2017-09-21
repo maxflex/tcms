@@ -72,10 +72,10 @@ class Gallery extends Model
             }
 
             if ($this->before_and_after && $this->count == 2) {
-                // x = 450 | 550 - (200/2)
-                $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 450, 790);
-                // x = 1550 | 1650 - (200/2)
-                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1550, 790);
+                // x = 450 | 550 - (240/2)
+                $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 430, 790);
+                // x = 1550 | 1650 - (240/2)
+                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1540, 790);
             }
 
 
