@@ -58,12 +58,12 @@ class Gallery extends Model
             $img = new SimpleImage(public_path() . '/img/gallery/' . $this->id . ".png");
 
             if ($this->watermark) {
-                $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
-                // $positionX = 300;
-                // foreach(range(1, 3) as $i) {
-                //     $img->overlay(public_path() . '/img/watermark/watermark.png', 'left', 1, $positionX);
-                //     $positionX += 600;
-                // }
+                // $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
+                $positionX = 0;
+                foreach(range(1, 3) as $i) {
+                    $img->overlay(public_path() . '/img/watermark/watermark.png', 'left', .25, $positionX);
+                    $positionX += 800;
+                }
             }
 
             if ($this->before_and_after && $this->count == 2) {
