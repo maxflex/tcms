@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\PageUseful;
 use DB;
 use App\Service\Api;
 use App\Models\Variable;

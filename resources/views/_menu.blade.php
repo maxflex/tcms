@@ -1,4 +1,4 @@
-<a class="list-group-item active">Основное
+<a class="list-group-item active">Разделы
     <span class="search-icon" id='searchModalOpen'><span class="glyphicon glyphicon-search no-margin-right"></span></span>
 </a>
 <a href="masters" class="list-group-item">Мастера</a>
@@ -9,11 +9,12 @@
 <a href="prices" class="list-group-item">Прайс лист</a>
 <a class="list-group-item active">Сайт</a>
 <a href="variables" class="list-group-item">Переменные</a>
+<a href="pages" class="list-group-item">Страницы</a>
+<a class="list-group-item active">Настройки</a>
 @if (allowed(\App\Service\Rights::EDIT_USERS))
     <a href="users" class="list-group-item">Пользователи</a>
 @endif
 @if (allowed(\App\Service\Rights::LOGS))
     <a href="logs" class="list-group-item">Логи</a>
 @endif
-<a href="pages" class="list-group-item">Страницы</a>
 <a href="logout" class="list-group-item">Выход</a>

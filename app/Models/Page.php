@@ -26,7 +26,6 @@ class Page extends Model
         'html',
         'html_mobile',
         'variable_id',
-        'useful',
         'group_id',
         'position',
         'seo_text'
@@ -48,22 +47,6 @@ class Page extends Model
         'html',
         'html_mobile'
     ];
-
-
-    public function useful()
-    {
-        return $this->hasMany(PageUseful::class);
-    }
-
-    public function setUsefulAttribute($value)
-    {
-        $this->useful()->delete();
-        foreach($value as $v) {
-            if ($v['page_id_field']) {
-                $this->useful()->create($v);
-            }
-        }
-    }
 
     public function setVariableIdAttribute($value)
     {

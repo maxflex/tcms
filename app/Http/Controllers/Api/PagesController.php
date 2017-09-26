@@ -48,7 +48,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        return Page::with(['useful'])->find($id);
+        return Page::find($id);
     }
 
     /**
