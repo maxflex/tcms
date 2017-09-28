@@ -838,8 +838,8 @@
         title: $(event.target).text()
       });
     };
-  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown) {
-    var empty_useful;
+  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem) {
+    var bindFileUpload, empty_useful;
     bindArguments($scope, arguments);
     empty_useful = {
       text: null,
@@ -855,11 +855,17 @@
           return AceService.initEditor(FormService, 15, "editor--" + field);
         });
       });
-      return FormService.beforeSave = function() {
-        return ['html', 'html_mobile', 'seo_text'].forEach(function(field) {
+      FormService.beforeSave = function() {
+        ['html', 'html_mobile', 'seo_text'].forEach(function(field) {
           return FormService.model[field] = AceService.getEditor("editor--" + field).getValue();
         });
+        return FormService.model.items.forEach(function(item) {
+          return PageItem.update({
+            id: item.id
+          }, item);
+        });
       };
+      return bindFileUpload();
     });
     $scope.generateUrl = function(event) {
       return $http.post('/api/translit/to-url', {
@@ -933,11 +939,57 @@
       AceService.editor.session.replace(AceService.editor.selection.getRange(), link);
       return $('#link-manager').modal('hide');
     };
-    return $scope.$watch('FormService.model.station_id', function(newVal, oldVal) {
+    $scope.$watch('FormService.model.station_id', function(newVal, oldVal) {
       return $timeout(function() {
         return $('#sort').selectpicker('refresh');
       });
     });
+    $scope.addService = function() {
+      return PageItem.save({
+        page_id: FormService.model.id
+      }, function(response) {
+        return FormService.model.items.push(response);
+      });
+    };
+    $scope.removeService = function(item) {
+      PageItem["delete"]({
+        id: item.id
+      });
+      return item.deleted = true;
+    };
+    $scope.uploadSvg = function(item) {
+      console.log(item);
+      $scope.selected_item = item;
+      return $timeout(function() {
+        return $('#fileupload').click();
+      });
+    };
+    return bindFileUpload = function() {
+      return $('#fileupload').fileupload({
+        maxFileSize: 10000000,
+        send: function() {
+          return NProgress.configure({
+            showSpinner: true
+          });
+        },
+        progress: function(e, data) {
+          return NProgress.set(data.loaded / data.total);
+        },
+        always: function() {
+          NProgress.configure({
+            showSpinner: false
+          });
+          return ajaxEnd();
+        },
+        done: (function(_this) {
+          return function(i, response) {
+            $scope.selected_item.file = response.result;
+            $scope.$apply();
+            return console.log(response.result);
+          };
+        })(this)
+      });
+    };
   });
 
 }).call(this);
@@ -1899,6 +1951,10 @@
     }, updatable());
   }).factory('Photo', function($resource) {
     return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
       id: '@id'
     }, updatable());
   }).factory('User', function($resource) {

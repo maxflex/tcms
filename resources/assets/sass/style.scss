@@ -4186,6 +4186,14 @@ select[multiple] {
     color: $gray;
 }
 
+.photo-dashed {
+    border: 4px dashed transparent;
+    cursor: pointer;
+    &:hover {
+        border-color: rgba($gray, .25);
+    }
+}
+
 .img-preview {
     &.circle {
         border-radius: 50%;
@@ -4292,4 +4300,25 @@ select[multiple] {
 
 .ui-sortable-helper {
     overflow: hidden;
+}
+
+.page-item {
+    display: flex;
+    align-items: center;
+    &:first-of-type {
+        margin-top: 20px;
+    }
+    & > div {
+        &:first-child {
+            width: 174px;
+            margin-right: 20px;
+            & img {
+                width: 100%;
+            }
+        }
+        &:last-child {
+            flex: 1;
+        }
+    }
+    margin-bottom: 20px;
 }

@@ -103,7 +103,7 @@ angular
         $scope.onEdit = (id, event) ->
             PageGroup.update {id: id, title: $(event.target).text()}
 
-    .controller 'PagesForm', ($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown) ->
+    .controller 'PagesForm', ($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem) ->
         bindArguments($scope, arguments)
 
         empty_useful = {text: null, page_id_field: null}
@@ -115,6 +115,9 @@ angular
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> AceService.initEditor(FormService, 15, "editor--#{field}")
             FormService.beforeSave = ->
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> FormService.model[field] = AceService.getEditor("editor--#{field}").getValue()
+                FormService.model.items.forEach (item) ->
+                    PageItem.update({id: item.id}, item)
+            bindFileUpload()
 
         $scope.generateUrl = (event) ->
             $http.post '/api/translit/to-url',
@@ -178,3 +181,40 @@ angular
 
         $scope.$watch 'FormService.model.station_id', (newVal, oldVal) ->
             $timeout -> $('#sort').selectpicker('refresh')
+
+        $scope.addService = ->
+            PageItem.save
+                page_id: FormService.model.id
+            , (response) ->
+                FormService.model.items.push(response)
+
+        $scope.removeService = (item) ->
+            PageItem.delete({id: item.id})
+            item.deleted = true
+
+        $scope.uploadSvg = (item) ->
+            console.log(item)
+            $scope.selected_item = item
+            $timeout -> $('#fileupload').click()
+
+        bindFileUpload = ->
+          # загрузка файла договора
+          $('#fileupload').fileupload
+            maxFileSize: 10000000, # 10 MB
+            # начало загрузки
+            send: ->
+              NProgress.configure({ showSpinner: true })
+            ,
+            # во время загрузки
+            progress: (e, data) ->
+                NProgress.set(data.loaded / data.total)
+            ,
+            # всегда по окончании загрузки (неважно, ошибка или успех)
+            always: ->
+                NProgress.configure({ showSpinner: false })
+                ajaxEnd()
+            ,
+            done: (i, response) =>
+                $scope.selected_item.file = response.result
+                $scope.$apply()
+                console.log(response.result)

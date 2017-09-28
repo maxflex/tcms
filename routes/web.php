@@ -28,6 +28,7 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
 
     Route::resource('photos', 'PhotosController');
 
+    Route::post('uploadPageitem', 'UploadController@pageItem');
     Route::post('upload', 'UploadController@original');
     Route::post('upload/cropped', 'UploadController@cropped');
 

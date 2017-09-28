@@ -17,6 +17,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('pages/checkExistance/{id?}', 'PagesController@checkExistance');
     Route::post('pages/search', 'PagesController@search');
     Route::resource('pages', 'PagesController');
+    Route::resource('pageitems', 'PageitemsController');
 
     #pr
     Route::resource('programs', 'ProgramsController');
@@ -34,7 +35,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     });
 
 
-    Route::resource('photos/upload', 'PhotosController@upload');
     Route::resource('photos/updateAll', 'PhotosController@updateAll');
     Route::resource('photos', 'PhotosController');
     Route::resource('masters', 'MastersController');

@@ -48,6 +48,11 @@ class Page extends Model
         'html_mobile'
     ];
 
+    public function items()
+    {
+        return $this->hasMany(PageItem::class);
+    }
+
     public function setVariableIdAttribute($value)
     {
         if (empty($value)) {

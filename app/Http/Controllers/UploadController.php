@@ -31,4 +31,11 @@ class UploadController extends Controller
         $photo->update(['cropped' => $filename]);
         return $photo;
     }
+
+    public function pageItem(Request $request)
+    {
+        $filename = uniqid() . '.' . $request->file('pageitem')->getClientOriginalExtension();
+        $request->pageitem->storeAs('pageitems', $filename, 'public');
+        return $filename;
+    }
 }

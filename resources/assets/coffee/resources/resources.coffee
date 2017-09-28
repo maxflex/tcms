@@ -31,6 +31,9 @@ angular.module('Egecms')
     .factory 'Photo', ($resource) ->
         $resource apiPath('photos'), {id: '@id'}, updatable()
 
+    .factory 'PageItem', ($resource) ->
+        $resource apiPath('pageitems'), {id: '@id'}, updatable()
+
     .factory 'User', ($resource) ->
         $resource apiPath('users'), {id: '@id'}, updatable()
 

@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Page;
+use App\Models\PageItem;
 
-class PagesController extends Controller
+class PageitemsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,7 +37,7 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
-        return Page::create($request->input())->fresh();
+        return PageItem::create($request->input())->fresh();
     }
 
     /**
@@ -48,7 +48,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        return Page::with('items')->find($id);
+        return PageItem::with('items')->find($id);
     }
 
     /**
@@ -71,7 +71,7 @@ class PagesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Page::find($id)->update($request->input());
+        PageItem::find($id)->update($request->input());
     }
 
 
@@ -83,29 +83,6 @@ class PagesController extends Controller
      */
     public function destroy($id)
     {
-        Page::destroy($id);
-    }
-
-    /**
-     * Check page existance
-     */
-     public function checkExistance(Request $request, $id = null)
-     {
-         $query = Page::query();
-
-         if ($id !== null) {
-             $query->where('id', '!=', $id);
-         }
-
-         return ['exists' => $query->where($request->field, $request->value)->exists()];
-     }
-
-     /**
-      * Search (used in Link Manager)
-      */
-    public function search(Request $request)
-    {
-        return Page::where('keyphrase', 'like', '%' . $request->q . '%')->orWhere('id', $request->q)
-            ->select('id', 'keyphrase', \DB::raw("CONCAT(id, ' – ', keyphrase) as title"))->get()->all();
+        PageItem::destroy($id);
     }
 }

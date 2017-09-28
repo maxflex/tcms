@@ -1,5 +1,5 @@
 <div class="field-container">
-  <{{ isset($textarea) ? "textarea rows=4" : 'input' }} class="field form-control {{ isset($class) ? $class : '' }}" required placeholder="{{ $title }}" ng-model='FormService.model.{{ $model }}' ng-model-options="{ allowInvalid: true }"
+  <{{ isset($textarea) ? "textarea rows=4" : 'input' }} class="field form-control {{ isset($class) ? $class : '' }}" required placeholder="{{ $title }}" {{ isset($model) ? "ng-model=FormService.model.{$model}" : '' }} ng-model-options="{ allowInvalid: true }"
     @if(isset($keyup))
         ng-keyup='{{ $keyup }}'
     @endif

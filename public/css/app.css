@@ -20296,6 +20296,15 @@ select[multiple] {
   color: #999999;
 }
 
+.photo-dashed {
+  border: 4px dashed transparent;
+  cursor: pointer;
+}
+
+.photo-dashed:hover {
+  border-color: rgba(153, 153, 153, 0.25);
+}
+
 .img-preview {
   width: 200px;
   height: 200px;
@@ -20420,6 +20429,32 @@ select[multiple] {
 
 .ui-sortable-helper {
   overflow: hidden;
+}
+
+.page-item {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-item:first-of-type {
+  margin-top: 20px;
+}
+
+.page-item > div:first-child {
+  width: 174px;
+  margin-right: 20px;
+}
+
+.page-item > div:first-child img {
+  width: 100%;
+}
+
+.page-item > div:last-child {
+  -webkit-box-flex: 1;
+  flex: 1;
 }
 
 .program-container h2 {

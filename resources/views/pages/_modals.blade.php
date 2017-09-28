@@ -11,7 +11,7 @@
                   <input class='form-control' placeholder='текст ссылки' type="text" ng-model='link_text'>
               </div>
               <div class="col-sm-6">
-                  <div angucomplete-alt id='page-search'
+                  {{-- <div angucomplete-alt id='page-search'
                         placeholder="номер раздела"
                         pause="500"
                         selected-object="searchSelected"
@@ -21,8 +21,7 @@
                         text-searching='поиск...'
                         text-no-results='не найдено'
                         input-class="form-control form-control-small"
-                        match-class="highlight"></div>
-                  {{-- <input class='form-control' placeholder='номер раздела' type="text" ng-model='link_page_id'> --}}
+                        match-class="highlight"></div> --}}
               </div>
           </div>
       </div>
