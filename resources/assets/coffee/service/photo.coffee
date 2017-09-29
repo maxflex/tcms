@@ -7,6 +7,8 @@ angular.module 'Egecms'
         this.selected_photo_index = null
 
         this.init = (FormService, type, id) =>
+            @type = type
+            @id = id
             @FormService = FormService
             @bindFileUpload(type, id)
 
@@ -41,12 +43,25 @@ angular.module 'Egecms'
                 ajaxEnd()
             ,
             done: (i, response) =>
-                @FormService.model.photos.push(response.result)
-                @edit(@FormService.model.photos.length - 1)
+                if @photo_id
+                    @FormService.model.photos[@selected_photo_index].original = response.result
+                    delete @photo_id
+                else
+                    @FormService.model.photos.push(response.result)
+                    @edit(@FormService.model.photos.length - 1)
                 $rootScope.$apply()
             ,
 
         this.getSelectedPhoto = -> @FormService.model.photos[@selected_photo_index]
+
+        this.loadNew = ->
+            @photo_id = @getSelectedPhoto().id
+            $('#fileupload').bind 'fileuploadsubmit', (e, data) =>
+                data.formData =
+                    id: @id
+                    type: @type
+                    photo_id: @photo_id
+            $('#fileupload').click()
 
         this.edit = (index) ->
             @selected_photo_index = index

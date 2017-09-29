@@ -42,7 +42,7 @@
                     @{{ PhotoService.getSelectedPhoto().file_size }}
                 </div>
                 <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">@{{ PhotoService.cropping ? 'сохранение...' : 'сохранить' }}</button>
-                <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">загрузить другое</button>
+                <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box' ng-click="PhotoService.loadNew()" ng-disabled="PhotoService.cropping">загрузить другое</button>
                 <button class="btn btn-primary full-width" style='box-sizing: border-box' ng-click="PhotoService.delete()">удалить</button>
             </div>
         </div>

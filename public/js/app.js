@@ -1305,6 +1305,94 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -1924,94 +2012,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
   angular.module('Egecms').service('AceService', function() {
     this.editors = {};
     this.initEditor = function(FormService, minLines, id, mode) {
@@ -2327,6 +2327,8 @@
     this.selected_photo_index = null;
     this.init = (function(_this) {
       return function(FormService, type, id) {
+        _this.type = type;
+        _this.id = id;
         _this.FormService = FormService;
         return _this.bindFileUpload(type, id);
       };
@@ -2367,8 +2369,13 @@
         },
         done: (function(_this) {
           return function(i, response) {
-            _this.FormService.model.photos.push(response.result);
-            _this.edit(_this.FormService.model.photos.length - 1);
+            if (_this.photo_id) {
+              _this.FormService.model.photos[_this.selected_photo_index].original = response.result;
+              delete _this.photo_id;
+            } else {
+              _this.FormService.model.photos.push(response.result);
+              _this.edit(_this.FormService.model.photos.length - 1);
+            }
             return $rootScope.$apply();
           };
         })(this)
@@ -2376,6 +2383,19 @@
     };
     this.getSelectedPhoto = function() {
       return this.FormService.model.photos[this.selected_photo_index];
+    };
+    this.loadNew = function() {
+      this.photo_id = this.getSelectedPhoto().id;
+      $('#fileupload').bind('fileuploadsubmit', (function(_this) {
+        return function(e, data) {
+          return data.formData = {
+            id: _this.id,
+            type: _this.type,
+            photo_id: _this.photo_id
+          };
+        };
+      })(this));
+      return $('#fileupload').click();
     };
     this.edit = function(index) {
       this.selected_photo_index = index;

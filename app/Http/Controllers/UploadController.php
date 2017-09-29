@@ -14,12 +14,21 @@ class UploadController extends Controller
     {
         $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
         $request->file('photo')->move(Photo::getDir('originals'), $filename);
-        $photo = Photo::create([
-            'original' => $filename,
-            'entity_id' => $request->id,
-            'entity_type' => 'App\Models\\' . $request->type,
-        ]);
-        return $photo;
+
+        if (! isset($request->photo_id)) {
+            // todo: удаление старого фото
+            Photo::whereId($request->photo_id)->update([
+                'original' => $filename
+            ]);
+            return $filename;
+        } else {
+            $photo = Photo::create([
+                'original' => $filename,
+                'entity_id' => $request->id,
+                'entity_type' => 'App\Models\\' . $request->type,
+            ]);
+            return $photo;
+        }
     }
 
     public function cropped(Request $request)
