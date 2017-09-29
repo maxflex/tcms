@@ -197,6 +197,10 @@ angular
             $scope.selected_item = item
             $timeout -> $('#fileupload').click()
 
+        $scope.togglePublished = ->
+            FormService.model.published = not FormService.model.published
+            FormService.model.published = if FormService.model.published then 1 else 0
+
         bindFileUpload = ->
           # загрузка файла договора
           $('#fileupload').fileupload

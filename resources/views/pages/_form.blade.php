@@ -10,6 +10,9 @@
                        ng-model-options="{ allowInvalid: true }">
                <label class="floating-label">отображаемый URL</label>
                <span class="input-group-btn">
+                   <button class="btn btn-default" type="button" ng-click="togglePublished()" style='padding: 4px'>
+                       <img src="img/svg/www.svg" style='width: 24px' ng-class="{'grayed-out': !FormService.model.published}" />
+                   </button>
                    <button class="btn btn-default" type="button" ng-disabled="!FormService.model.keyphrase" ng-click="generateUrl($event)">
                        <span class="glyphicon glyphicon-refresh no-margin-right"></span>
                    </button>
@@ -31,15 +34,8 @@
     </div>
 </div>
 
-<div class="row mbs">
-    <div class="col-sm-12">
-        <label class="no-margin-bottom label-opacity">публикация</label>
-        <ng-select-new model='FormService.model.published' object="Published" label="title" convert-to-number></ng-select-new>
-    </div>
-</div>
-
-<div class="row mbs">
-    <div class="col-sm-12">
+<div class="row mbl">
+    <div class="col-sm-6">
         @include('modules.input', [
             'title' => 'h1 вверху',
             'model' => 'h1',
@@ -47,15 +43,11 @@
                 'ng-counter' => true,
             ]
         ])
+        <div style='margin-top: 26px'>
+            @include('modules.input', ['title' => 'meta keywords', 'model' => 'keywords'])
+        </div>
     </div>
-</div>
-<div class="row mbs">
-    <div class="col-sm-12">
-        @include('modules.input', ['title' => 'meta keywords', 'model' => 'keywords'])
-    </div>
-</div>
-<div class="row mbl">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         @include('modules.input', [
             'title' => 'meta description',
             'model' => 'desc',
