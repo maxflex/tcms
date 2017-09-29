@@ -73,17 +73,11 @@
             <div class="photo-dashed" ng-click="uploadSvg(item)">
                 <img src="@{{ item.file ? '/storage/pageitems/' + item.file : '/img/icons/nocropped.png' }}" />
             </div>
-            <div>
-                <div class="flex-items" style='position: relative'>
-                    <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
-                    <div style='flex: 1; margin-right: 10px'>
+            <div style='position: relative'>
+                <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
+                <div>
+                    <div>
                         @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title']])
-                    </div>
-                    <div style='flex: 1; margin-right: 10px'>
-                        @include('modules.input', ['title' => 'заголовок ссылки', 'attributes' => ['ng-model' => 'item.href_title']])
-                    </div>
-                    <div style='flex: 1'>
-                        @include('modules.input', ['title' => 'номер раздела', 'class' => 'digits-only', 'attributes' => ['ng-model' => 'item.href_page_id']])
                     </div>
                 </div>
                 <div>
@@ -96,10 +90,15 @@
                         ]
                     ])
                 </div>
+                <div>
+                    @include('modules.input', ['title' => 'номер раздела', 'class' => 'digits-only', 'attributes' => ['ng-model' => 'item.href_page_id']])
+                </div>
             </div>
             {{-- <span class="link-like" ng-click="uploadSvg(item)">загрузить svg</span> --}}
         </div>
-        <span class="link-like small" ng-click="addService()">добавить услугу</span>
+        <div style='clear: both'>
+            <span class="link-like small" ng-click="addService()">добавить услугу</span>
+        </div>
     </div>
 </div>
 

@@ -12,7 +12,7 @@
           <a class="pointer" ng-click="editOrUpload(3)">фото 3</a>
           <span ng-show="FormService.model.photos.length >= 3" class="small text-gray" style='top: -1px; position: relative; margin-left: 3px'>загружено</span>
       </div>
-      <div class="mbl" style='margin-top: 30px'> 
+      <div class="mbl" style='margin-top: 30px'>
           <a ng-click="edit()" class="pointer">пересобрать фото</a>
       </div>
       <input type="file" name="photo" id="fileupload" style='display: none'/ data-url="upload">
@@ -41,8 +41,9 @@
                 <div style='margin-bottom: 15px'>
                     @{{ PhotoService.getSelectedPhoto().file_size }}
                 </div>
-                <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box;' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">@{{ PhotoService.cropping ? 'сохранение...' : 'сохранить' }}</button>
-                <button class="btn btn-primary full-width" style='box-sizing: border-box;' ng-click="PhotoService.delete()">удалить</button>
+                <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">@{{ PhotoService.cropping ? 'сохранение...' : 'сохранить' }}</button>
+                <button class="btn btn-primary full-width" style='margin-bottom: 15px; box-sizing: border-box' ng-click="PhotoService.crop()" ng-disabled="PhotoService.cropping">загрузить другое</button>
+                <button class="btn btn-primary full-width" style='box-sizing: border-box' ng-click="PhotoService.delete()">удалить</button>
             </div>
         </div>
     </div>

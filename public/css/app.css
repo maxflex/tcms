@@ -20436,7 +20436,17 @@ select[multiple] {
   display: flex;
   -webkit-box-align: center;
   align-items: center;
+  width: calc(50% - 20px);
+  float: left;
   margin-bottom: 20px;
+}
+
+.page-item:nth-child(even) {
+  margin-right: 20px;
+}
+
+.page-item:nth-child(odd) {
+  margin-left: 20px;
 }
 
 .page-item:first-of-type {
@@ -20445,7 +20455,7 @@ select[multiple] {
 
 .page-item > div:first-child {
   width: 174px;
-  margin-right: 20px;
+  margin-right: 30px;
 }
 
 .page-item > div:first-child img {

@@ -11,9 +11,9 @@ class PageItem extends Model
     protected $fillable = [
         'page_id',
         'href_page_id',
-        'href_title',
         'title',
         'description',
         'file'
     ];
+    
 }
