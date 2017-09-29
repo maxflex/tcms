@@ -115,7 +115,8 @@ angular
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> AceService.initEditor(FormService, 15, "editor--#{field}")
             FormService.beforeSave = ->
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> FormService.model[field] = AceService.getEditor("editor--#{field}").getValue()
-                FormService.model.items.forEach (item) ->
+                FormService.model.items.forEach (item, index) ->
+                    item.position = index
                     PageItem.update({id: item.id}, item)
             bindFileUpload()
 
@@ -181,6 +182,15 @@ angular
 
         $scope.$watch 'FormService.model.station_id', (newVal, oldVal) ->
             $timeout -> $('#sort').selectpicker('refresh')
+
+        $scope.sortableOptions =
+            handle: ".photo-dashed"
+            items: ".page-item-draggable"
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
+            containment: "parent"
+            tolerance: "pointer"
 
         $scope.addService = ->
             PageItem.save

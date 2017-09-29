@@ -4302,18 +4302,25 @@ select[multiple] {
     overflow: hidden;
 }
 
+.page-items-wrapper {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .page-item {
     display: flex;
     align-items: center;
     width: calc(50% - 20px);
-    float: left;
-    &:nth-child(even) {
-        margin-right: 20px;
-        clear: left;
-    }
-    &:nth-child(odd) {
-        margin-left: 20px;
-    }
+    // &:nth-child(odd) {
+    //     margin-right: 20px;
+    //     clear: left;
+    // }
+    // &:nth-child(even) {
+    //     margin-left: 20px;
+    // }
     & > div {
         &:first-child {
             width: 174px;

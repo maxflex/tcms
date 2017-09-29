@@ -20431,23 +20431,23 @@ select[multiple] {
   overflow: hidden;
 }
 
+.page-items-wrapper {
+  position: relative;
+  display: -webkit-box;
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .page-item {
   display: -webkit-box;
   display: flex;
   -webkit-box-align: center;
   align-items: center;
   width: calc(50% - 20px);
-  float: left;
   margin-bottom: 20px;
-}
-
-.page-item:nth-child(even) {
-  margin-right: 20px;
-  clear: left;
-}
-
-.page-item:nth-child(odd) {
-  margin-left: 20px;
 }
 
 .page-item > div:first-child {

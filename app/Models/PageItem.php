@@ -13,7 +13,7 @@ class PageItem extends Model
         'href_page_id',
         'title',
         'description',
-        'file'
+        'file',
+        'position'
     ];
-    
 }

@@ -61,35 +61,36 @@
 <div class="row mbs">
     <div class="col-sm-12">
         <input type="file" name="pageitem" id="fileupload" style='display: none'/ data-url="uploadPageitem">
-        <div class="page-item" ng-repeat="item in FormService.model.items">
-            <div class="photo-dashed" ng-click="uploadSvg(item)">
-                <img src="@{{ item.file ? '/storage/pageitems/' + item.file : '/img/icons/nocropped.png' }}" />
-            </div>
-            <div style='position: relative'>
-                <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
-                <div>
+        <div ui-sortable='sortableOptions' ng-model="FormService.model.items" class="page-items-wrapper">
+            <div class="page-item page-item-draggable" ng-repeat="item in FormService.model.items">
+                <div class="photo-dashed" ng-click="uploadSvg(item)">
+                    <img src="@{{ item.file ? '/storage/pageitems/' + item.file : '/img/icons/nocropped.png' }}" />
+                </div>
+                <div style='position: relative'>
+                    <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
                     <div>
-                        @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title']])
+                        <div>
+                            @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title']])
+                        </div>
+                    </div>
+                    <div>
+                        @include('modules.input', [
+                            'title' => 'описание',
+                            'textarea' => true,
+                            'attributes' => [
+                                'ng-counter' => true,
+                                'ng-model' => 'item.description'
+                            ]
+                        ])
+                    </div>
+                    <div>
+                        @include('modules.input', ['title' => 'номер раздела', 'class' => 'digits-only', 'attributes' => ['ng-model' => 'item.href_page_id']])
                     </div>
                 </div>
-                <div>
-                    @include('modules.input', [
-                        'title' => 'описание',
-                        'textarea' => true,
-                        'attributes' => [
-                            'ng-counter' => true,
-                            'ng-model' => 'item.description'
-                        ]
-                    ])
-                </div>
-                <div>
-                    @include('modules.input', ['title' => 'номер раздела', 'class' => 'digits-only', 'attributes' => ['ng-model' => 'item.href_page_id']])
-                </div>
             </div>
-            {{-- <span class="link-like" ng-click="uploadSvg(item)">загрузить svg</span> --}}
-        </div>
-        <div class="page-item page-item-add" ng-show="FormService.model.items.length < 6" ng-click="addService()">
-            добавить
+            <div class="page-item page-item-add" ng-show="FormService.model.items.length < 6" ng-click="addService()">
+                добавить
+            </div>
         </div>
     </div>
 </div>
