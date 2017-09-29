@@ -20450,10 +20450,6 @@ select[multiple] {
   margin-left: 20px;
 }
 
-.page-item:first-of-type {
-  margin-top: 20px;
-}
-
 .page-item > div:first-child {
   width: 174px;
   margin-right: 20px;

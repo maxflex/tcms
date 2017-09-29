@@ -54,7 +54,7 @@
         @include('modules.input', ['title' => 'meta keywords', 'model' => 'keywords'])
     </div>
 </div>
-<div class="row mbs">
+<div class="row mbl">
     <div class="col-sm-12">
         @include('modules.input', [
             'title' => 'meta description',
