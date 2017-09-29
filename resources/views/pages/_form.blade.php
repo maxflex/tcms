@@ -96,7 +96,7 @@
             </div>
             {{-- <span class="link-like" ng-click="uploadSvg(item)">загрузить svg</span> --}}
         </div>
-        <div style='clear: both'>
+        <div style='clear: both' ng-show="FormService.model.items.length < 6">
             <span class="link-like small" ng-click="addService()">добавить услугу</span>
         </div>
     </div>

@@ -20443,6 +20443,7 @@ select[multiple] {
 
 .page-item:nth-child(even) {
   margin-right: 20px;
+  clear: left;
 }
 
 .page-item:nth-child(odd) {
@@ -20455,7 +20456,7 @@ select[multiple] {
 
 .page-item > div:first-child {
   width: 174px;
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .page-item > div:first-child img {
