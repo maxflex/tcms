@@ -69,7 +69,7 @@
 <div class="row mbs">
     <div class="col-sm-12">
         <input type="file" name="pageitem" id="fileupload" style='display: none'/ data-url="uploadPageitem">
-        <div class="page-item" ng-repeat="item in FormService.model.items" ng-show="!item.deleted">
+        <div class="page-item" ng-repeat="item in FormService.model.items">
             <div class="photo-dashed" ng-click="uploadSvg(item)">
                 <img src="@{{ item.file ? '/storage/pageitems/' + item.file : '/img/icons/nocropped.png' }}" />
             </div>

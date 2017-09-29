@@ -190,7 +190,7 @@ angular
 
         $scope.removeService = (item) ->
             PageItem.delete({id: item.id})
-            item.deleted = true
+            FormService.model.items = _.filter FormService.model.items, (i) -> i.id != item.id
 
         $scope.uploadSvg = (item) ->
             console.log(item)
