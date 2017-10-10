@@ -44,7 +44,8 @@ angular.module 'Egecms'
             ,
             done: (i, response) =>
                 if @photo_id
-                    @FormService.model.photos[@selected_photo_index].original = response.result
+                    @FormService.model.photos[@selected_photo_index] = response.result
+                    @image = @getSelectedPhoto().original_url
                     delete @photo_id
                 else
                     @FormService.model.photos.push(response.result)
