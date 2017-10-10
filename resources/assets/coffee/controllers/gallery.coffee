@@ -7,7 +7,7 @@ angular
     .controller 'GalleryForm', ($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag) ->
         bindArguments($scope, arguments)
 
-        $scope.version = 1
+        $scope.version = makeId()
 
         angular.element(document).ready ->
             FormService.init(Gallery, $scope.id, $scope.model)
@@ -18,7 +18,7 @@ angular
 
         $scope.edit = ->
             FormService.edit ->
-                $scope.version++
+                $scope.version = makeId()
 
         $scope.editOrUpload = (photo_number) ->
             if photo_number > FormService.model.photos.length

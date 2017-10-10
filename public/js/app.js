@@ -510,7 +510,7 @@
     });
   }).controller('GalleryForm', function($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag) {
     bindArguments($scope, arguments);
-    $scope.version = 1;
+    $scope.version = makeId();
     angular.element(document).ready(function() {
       FormService.init(Gallery, $scope.id, $scope.model);
       return PhotoService.init(FormService, 'Gallery', $scope.id);
@@ -520,7 +520,7 @@
     };
     $scope.edit = function() {
       return FormService.edit(function() {
-        return $scope.version++;
+        return $scope.version = makeId();
       });
     };
     $scope.editOrUpload = function(photo_number) {
@@ -1407,109 +1407,6 @@
 }).call(this);
 
 (function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageGroup', function($resource) {
-    return $resource(apiPath('pages/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('gallery'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -2022,6 +1919,109 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageGroup', function($resource) {
+    return $resource(apiPath('pages/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('gallery'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
 
 }).call(this);
 
