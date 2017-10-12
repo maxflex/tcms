@@ -1,11 +1,13 @@
 angular.module('Egecms').directive 'ngCounter', ($timeout) ->
     restrict: 'A'
     link: ($scope, $element, $attrs) ->
-        $($element).parent().append "<span class='input-counter'></span>"
-        counter = $($element).parent().find('.input-counter')
+        $($element).append "<span class='input-counter'></span>"
+        counter = $($element).find('.input-counter')
+        input = $($element).parent().find('textarea, input')
+        maxlength = input.attr('maxlength')
 
-        $($element).on 'keyup', -> counter.text $(@).val().length or ''
+        input.on 'keyup', -> counter.html $(@).val().length + "/<span class='text-primary'>" + maxlength + "</span>"
 
         $timeout ->
-            $($element).keyup()
+            input.keyup()
         , 500

@@ -9,5 +9,5 @@
         @endforeach
     @endif type="text"
   >@if(isset($textarea))</textarea>@endif
-  <label class="floating-label">{{ $title }}</label>
+  <label class="floating-label" @if(isset($attributes) && isset($attributes['maxlength'])) ng-counter @endif>{{ $title }}</label>
 </div>

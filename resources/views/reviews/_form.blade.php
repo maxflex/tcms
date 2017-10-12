@@ -5,7 +5,6 @@
             'model' => 'body',
             'textarea' => true,
             'attributes' => [
-                'ng-counter' => true,
                 'maxlength' => 500
             ]
         ])

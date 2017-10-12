@@ -26,10 +26,7 @@
     <div class="col-sm-12">
         @include('modules.input', [
             'title' => 'title',
-            'model' => 'title',
-            'attributes' => [
-                'ng-counter' => true,
-            ]
+            'model' => 'title'
         ])
     </div>
 </div>
@@ -38,10 +35,7 @@
     <div class="col-sm-6">
         @include('modules.input', [
             'title' => 'h1 вверху',
-            'model' => 'h1',
-            'attributes' => [
-                'ng-counter' => true,
-            ]
+            'model' => 'h1'
         ])
         <div style='margin-top: 26px'>
             @include('modules.input', ['title' => 'meta keywords', 'model' => 'keywords'])
@@ -51,10 +45,7 @@
         @include('modules.input', [
             'title' => 'meta description',
             'model' => 'desc',
-            'textarea' => true,
-            'attributes' => [
-                'ng-counter' => true,
-            ]
+            'textarea' => true
         ])
     </div>
 </div>
@@ -70,7 +61,7 @@
                     <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
                     <div>
                         <div>
-                            @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title']])
+                            @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title', 'maxlength' => 35]])
                         </div>
                     </div>
                     <div>
@@ -78,8 +69,8 @@
                             'title' => 'описание',
                             'textarea' => true,
                             'attributes' => [
-                                'ng-counter' => true,
-                                'ng-model' => 'item.description'
+                                'ng-model' => 'item.description',
+                                'maxlength' => 110
                             ]
                         ])
                     </div>

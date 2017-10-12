@@ -1,6 +1,6 @@
 <div class="row mb">
     <div class="col-sm-6">
-        @include('modules.input', ['title' => 'название раздела', 'model' => 'name'])
+        @include('modules.input', ['title' => 'название раздела', 'model' => 'name', 'attributes' => ['maxlength' => 30]])
     </div>
     <div class="col-sm-6">
         <label class="no-margin-bottom label-opacity">родитель</label>

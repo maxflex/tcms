@@ -20,8 +20,7 @@
             'model' => 'description',
             'textarea' => true,
             'attributes' => [
-                'ng-counter' => true,
-                'maxlength' => 1000
+                'maxlength' => 500
             ]
         ])
     </div>

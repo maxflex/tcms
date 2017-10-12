@@ -19833,6 +19833,7 @@ table.summary-table.left-align tr td {
 .floating-label {
   position: absolute;
   pointer-events: none;
+  width: 100%;
   top: 5px;
   left: 10px;
   font-size: 12px;
@@ -20043,11 +20044,9 @@ label {
 }
 
 .input-counter {
-  color: rgba(0, 0, 0, 0.3) !important;
-  position: absolute;
-  top: 7px;
-  right: 10px;
-  background: white;
+  margin-left: 10px;
+  float: right;
+  margin-right: 16px;
 }
 
 .burger {

@@ -5,7 +5,7 @@
         </div>
         <div style='flex: 1'>
             <div class="mbl">
-                @include('modules.input', ['title' => 'название', 'model' => 'name'])
+                @include('modules.input', ['title' => 'название', 'model' => 'name', 'attributes' => ['maxlength' => 35]])
             </div>
             <div class="mbl">
                @include('modules.input', [
@@ -13,7 +13,7 @@
                    'model' => 'description',
                    'textarea' => true,
                    'attributes' => [
-                       'ng-counter' => true,
+                       'maxlength' => 500,
                    ]
                ])
            </div>
