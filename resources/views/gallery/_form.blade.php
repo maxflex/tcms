@@ -81,9 +81,3 @@
         ])
     </div>
 </div>
-
-<style>
-    .input-counter {
-        float: none !important;
-    }
-</style>

@@ -105,3 +105,9 @@
     </div>
 </div>
 @include('pages._modals')
+
+<style>
+    .input-counter {
+        float: none !important;
+    }
+</style>
