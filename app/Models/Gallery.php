@@ -75,7 +75,7 @@ class Gallery extends Model
                 // x = 450 | 550 - (240/2)
                 $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 760, 790);
                 // x = 1550 | 1650 - (240/2)
-                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1170, 790);
+                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1165, 790);
             }
 
 
