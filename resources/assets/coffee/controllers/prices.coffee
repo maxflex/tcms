@@ -44,8 +44,10 @@ angular
         angular.element(document).ready ->
             FormService.init(PriceSection, $scope.id, $scope.model)
             FormService.redirect_url = 'prices'
-    .controller 'PricePositionForm', ($scope, $attrs, $timeout, $http, FormService, PricePosition, Units) ->
+    .controller 'PricePositionForm', ($scope, $attrs, $timeout, $http, FormService, PricePosition, Units, Tag) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             FormService.init(PricePosition, $scope.id, $scope.model)
             FormService.redirect_url = 'prices'
+        $scope.loadTags = (text) ->
+            Tag.autocomplete({text: text}).$promise

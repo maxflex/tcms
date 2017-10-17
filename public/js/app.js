@@ -326,94 +326,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -1154,12 +1066,17 @@
       FormService.init(PriceSection, $scope.id, $scope.model);
       return FormService.redirect_url = 'prices';
     });
-  }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition, Units) {
+  }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition, Units, Tag) {
     bindArguments($scope, arguments);
-    return angular.element(document).ready(function() {
+    angular.element(document).ready(function() {
       FormService.init(PricePosition, $scope.id, $scope.model);
       return FormService.redirect_url = 'prices';
     });
+    return $scope.loadTags = function(text) {
+      return Tag.autocomplete({
+        text: text
+      }).$promise;
+    };
   });
 
 }).call(this);
@@ -1407,508 +1324,89 @@
 }).call(this);
 
 (function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageGroup', function($resource) {
-    return $resource(apiPath('pages/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
     }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('gallery'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
+      id: 1,
+      title: 'опубликовано'
     }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('AceService', function() {
-    this.editors = {};
-    this.initEditor = function(FormService, minLines, id, mode) {
-      if (minLines == null) {
-        minLines = 30;
-      }
-      if (id == null) {
-        id = 'editor';
-      }
-      if (mode == null) {
-        mode = 'ace/mode/html';
-      }
-      this.editor = ace.edit(id);
-      this.editor.getSession().setMode(mode);
-      this.editor.getSession().setUseWrapMode(true);
-      this.editor.setOptions({
-        minLines: minLines,
-        maxLines: 2e308
-      });
-      this.editor.commands.addCommand({
-        name: 'save',
-        bindKey: {
-          win: 'Ctrl-S',
-          mac: 'Command-S'
-        },
-        exec: function(editor) {
-          return FormService.edit();
-        }
-      });
-      return this.editors[id] = this.editor;
-    };
-    this.getEditor = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      return this.editors[id];
-    };
-    this.show = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      this.shown_editor = id;
-      return localStorage.setItem('shown_editor', id);
-    };
-    this.isShown = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      if (!localStorage.getItem('shown_editor')) {
-        this.show('editor');
-      }
-      return id === localStorage.getItem('shown_editor');
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('IndexService', function($rootScope) {
-    this.filter = function() {
-      $.cookie(this.controller, JSON.stringify(this.search), {
-        expires: 365,
-        path: '/'
-      });
-      this.current_page = 1;
-      return this.pageChanged();
-    };
-    this.max_size = 10;
-    this.init = function(Resource, current_page, attrs, load_page) {
-      if (load_page == null) {
-        load_page = true;
-      }
-      $rootScope.frontend_loading = true;
-      this.Resource = Resource;
-      this.current_page = parseInt(current_page);
-      this.controller = attrs.ngController.toLowerCase().slice(0, -5);
-      this.search = $.cookie(this.controller) ? JSON.parse($.cookie(this.controller)) : {};
-      if (load_page) {
-        return this.loadPage();
-      }
-    };
-    this.loadPage = function() {
-      var params;
-      params = {
-        page: this.current_page
-      };
-      if (this.sort !== void 0) {
-        params.sort = this.sort;
-      }
-      return this.Resource.get(params, (function(_this) {
-        return function(response) {
-          _this.page = response;
-          return $rootScope.frontend_loading = false;
-        };
-      })(this));
-    };
-    this.pageChanged = function() {
-      $rootScope.frontend_loading = true;
-      this.loadPage();
-      return this.changeUrl();
-    };
-    this["delete"] = function(id, text) {
-      return bootbox.confirm("Вы уверены, что хотите удалить " + text + " #" + id + "?", (function(_this) {
-        return function(result) {
-          if (result === true) {
-            return _this.Resource["delete"]({
-              id: id
-            }, function() {
-              return location.reload();
-            });
-          }
-        };
-      })(this));
-    };
-    this.changeUrl = function() {
-      return window.history.pushState('', '', this.controller + '?page=' + this.current_page);
-    };
-    return this;
-  }).service('FormService', function($rootScope, $q, $timeout) {
-    var beforeSave, modelLoaded, modelName;
-    this.init = function(Resource, id, model) {
-      this.dataLoaded = $q.defer();
-      $rootScope.frontend_loading = true;
-      this.Resource = Resource;
-      this.saving = false;
-      if (id) {
-        return this.model = Resource.get({
-          id: id
-        }, (function(_this) {
-          return function() {
-            return modelLoaded();
-          };
-        })(this));
-      } else {
-        this.model = new Resource(model);
-        return modelLoaded();
-      }
-    };
-    modelLoaded = (function(_this) {
-      return function() {
-        $rootScope.frontend_loading = false;
-        return $timeout(function() {
-          _this.dataLoaded.resolve(true);
-          return $('.selectpicker').selectpicker('refresh');
-        });
-      };
-    })(this);
-    beforeSave = (function(_this) {
-      return function() {
-        if (_this.error_element === void 0) {
-          ajaxStart();
-          if (_this.beforeSave !== void 0) {
-            _this.beforeSave();
-          }
-          _this.saving = true;
-          return true;
-        } else {
-          $(_this.error_element).focus();
-          return false;
-        }
-      };
-    })(this);
-    modelName = function() {
-      var l, model_name;
-      l = window.location.pathname.split('/');
-      model_name = l[l.length - 2];
-      if ($.isNumeric(model_name)) {
-        model_name = l[l.length - 3];
-      }
-      return model_name;
-    };
-    this["delete"] = function(event, callback) {
-      if (callback == null) {
-        callback = false;
-      }
-      return bootbox.confirm("Вы уверены, что хотите " + ($(event.target).text()) + " #" + this.model.id + "?", (function(_this) {
-        return function(result) {
-          if (result === true) {
-            beforeSave();
-            return _this.model.$delete().then(function() {
-              if (callback) {
-                callback();
-                _this.saving = false;
-                return ajaxEnd();
-              } else {
-                return redirect(modelName());
-              }
-            }, function(response) {
-              return notifyError(response.data.message);
-            });
-          }
-        };
-      })(this));
-    };
-    this.edit = function(callback) {
-      if (callback == null) {
-        callback = null;
-      }
-      if (!beforeSave()) {
-        return;
-      }
-      return this.model.$update().then((function(_this) {
-        return function() {
-          if (callback !== null) {
-            callback();
-          }
-          _this.saving = false;
-          return ajaxEnd();
-        };
-      })(this), function(response) {
-        notifyError(response.data.message);
-        this.saving = false;
-        return ajaxEnd();
-      });
-    };
-    this.create = function() {
-      if (!beforeSave()) {
-        return;
-      }
-      return this.model.$save().then((function(_this) {
-        return function(response) {
-          return redirect(_this.redirect_url || modelName() + ("/" + response.id + "/edit"));
-        };
-      })(this), (function(_this) {
-        return function(response) {
-          notifyError(response.data.message);
-          _this.saving = false;
-          ajaxEnd();
-          return _this.onCreateError(response);
-        };
-      })(this));
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('ExportService', function($rootScope, FileUploader) {
-    bindArguments(this, arguments);
-    this.init = function(options) {
-      var onWhenAddingFileFailed;
-      this.controller = options.controller;
-      this.FileUploader.FileSelect.prototype.isEmptyAfterSelection = function() {
-        return true;
-      };
-      return this.uploader = new this.FileUploader({
-        url: this.controller + "/import",
-        alias: 'imported_file',
-        autoUpload: true,
-        method: 'post',
-        removeAfterUpload: true,
-        onCompleteItem: function(i, response, status) {
-          if (status === 200) {
-            notifySuccess('Импортировано');
-          }
-          if (status !== 200) {
-            return notifyError(response.message);
-          }
-        }
-      }, onWhenAddingFileFailed = function(item, filter, options) {
-        if (filter.name === "queueLimit") {
-          this.clearQueue();
-          return this.addToQueue(item);
-        }
-      });
-    };
-    this["import"] = function(e) {
-      e.preventDefault();
-      $('#import-button').trigger('click');
-    };
-    this.exportDialog = function() {
-      $('#export-modal').modal('show');
-      return false;
-    };
-    this["export"] = function() {
-      window.location = "/" + this.controller + "/export?field=" + this.export_field;
-      $('#export-modal').modal('hide');
-      return false;
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('FactoryService', function($http) {
-    this.get = function(table, select, orderBy) {
-      if (select == null) {
-        select = null;
-      }
-      if (orderBy == null) {
-        orderBy = null;
-      }
-      return $http.post('api/factory', {
-        table: table,
-        select: select,
-        orderBy: orderBy
-      });
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('PhotoService', function($rootScope, $http, Photo) {
-    this.image = '';
-    this.cropped_image = '';
-    this.cripping = false;
-    this.FormService = null;
-    this.selected_photo_index = null;
-    this.init = (function(_this) {
-      return function(FormService, type, id) {
-        _this.type = type;
-        _this.id = id;
-        _this.FormService = FormService;
-        return _this.bindFileUpload(type, id);
-      };
-    })(this);
-    this.crop = function() {
-      this.cropping = true;
-      return $http.post('upload/cropped', {
-        id: this.getSelectedPhoto().id,
-        cropped_image: this.cropped_image
-      }).then((function(_this) {
-        return function(response) {
-          _this.cropping = false;
-          _this.FormService.model.photos[_this.selected_photo_index] = response.data;
-          return $('#change-photo').modal('hide');
-        };
-      })(this));
-    };
-    this.bindFileUpload = function(type, id) {
-      return $('#fileupload').fileupload({
-        formData: {
-          id: id,
-          type: type
-        },
-        maxFileSize: 10000000,
-        send: function() {
-          return NProgress.configure({
-            showSpinner: true
-          });
-        },
-        progress: function(e, data) {
-          return NProgress.set(data.loaded / data.total);
-        },
-        always: function() {
-          NProgress.configure({
-            showSpinner: false
-          });
-          return ajaxEnd();
-        },
-        done: (function(_this) {
-          return function(i, response) {
-            if (_this.photo_id) {
-              _this.FormService.model.photos[_this.selected_photo_index] = response.result;
-              _this.image = _this.getSelectedPhoto().original_url;
-              delete _this.photo_id;
-            } else {
-              _this.FormService.model.photos.push(response.result);
-              _this.edit(_this.FormService.model.photos.length - 1);
-            }
-            return $rootScope.$apply();
-          };
-        })(this)
-      });
-    };
-    this.getSelectedPhoto = function() {
-      return this.FormService.model.photos[this.selected_photo_index];
-    };
-    this.loadNew = function() {
-      this.photo_id = this.getSelectedPhoto().id;
-      $('#fileupload').bind('fileuploadsubmit', (function(_this) {
-        return function(e, data) {
-          return data.formData = {
-            id: _this.id,
-            type: _this.type,
-            photo_id: _this.photo_id
-          };
-        };
-      })(this));
-      return $('#fileupload').click();
-    };
-    this.edit = function(index) {
-      this.selected_photo_index = index;
-      this.image = this.getSelectedPhoto().original_url;
-      return $('#change-photo').modal('show');
-    };
-    this["delete"] = function() {
-      Photo["delete"]({
-        id: this.getSelectedPhoto().id
-      });
-      this.FormService.model.photos.splice(this.selected_photo_index, 1);
-      return $('#change-photo').modal('hide');
-    };
-    return this;
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
   });
 
 }).call(this);
@@ -2428,6 +1926,513 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageGroup', function($resource) {
+    return $resource(apiPath('pages/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('gallery'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('AceService', function() {
+    this.editors = {};
+    this.initEditor = function(FormService, minLines, id, mode) {
+      if (minLines == null) {
+        minLines = 30;
+      }
+      if (id == null) {
+        id = 'editor';
+      }
+      if (mode == null) {
+        mode = 'ace/mode/html';
+      }
+      this.editor = ace.edit(id);
+      this.editor.getSession().setMode(mode);
+      this.editor.getSession().setUseWrapMode(true);
+      this.editor.setOptions({
+        minLines: minLines,
+        maxLines: 2e308
+      });
+      this.editor.commands.addCommand({
+        name: 'save',
+        bindKey: {
+          win: 'Ctrl-S',
+          mac: 'Command-S'
+        },
+        exec: function(editor) {
+          return FormService.edit();
+        }
+      });
+      return this.editors[id] = this.editor;
+    };
+    this.getEditor = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      return this.editors[id];
+    };
+    this.show = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      this.shown_editor = id;
+      return localStorage.setItem('shown_editor', id);
+    };
+    this.isShown = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      if (!localStorage.getItem('shown_editor')) {
+        this.show('editor');
+      }
+      return id === localStorage.getItem('shown_editor');
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('IndexService', function($rootScope) {
+    this.filter = function() {
+      $.cookie(this.controller, JSON.stringify(this.search), {
+        expires: 365,
+        path: '/'
+      });
+      this.current_page = 1;
+      return this.pageChanged();
+    };
+    this.max_size = 10;
+    this.init = function(Resource, current_page, attrs, load_page) {
+      if (load_page == null) {
+        load_page = true;
+      }
+      $rootScope.frontend_loading = true;
+      this.Resource = Resource;
+      this.current_page = parseInt(current_page);
+      this.controller = attrs.ngController.toLowerCase().slice(0, -5);
+      this.search = $.cookie(this.controller) ? JSON.parse($.cookie(this.controller)) : {};
+      if (load_page) {
+        return this.loadPage();
+      }
+    };
+    this.loadPage = function() {
+      var params;
+      params = {
+        page: this.current_page
+      };
+      if (this.sort !== void 0) {
+        params.sort = this.sort;
+      }
+      return this.Resource.get(params, (function(_this) {
+        return function(response) {
+          _this.page = response;
+          return $rootScope.frontend_loading = false;
+        };
+      })(this));
+    };
+    this.pageChanged = function() {
+      $rootScope.frontend_loading = true;
+      this.loadPage();
+      return this.changeUrl();
+    };
+    this["delete"] = function(id, text) {
+      return bootbox.confirm("Вы уверены, что хотите удалить " + text + " #" + id + "?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            return _this.Resource["delete"]({
+              id: id
+            }, function() {
+              return location.reload();
+            });
+          }
+        };
+      })(this));
+    };
+    this.changeUrl = function() {
+      return window.history.pushState('', '', this.controller + '?page=' + this.current_page);
+    };
+    return this;
+  }).service('FormService', function($rootScope, $q, $timeout) {
+    var beforeSave, modelLoaded, modelName;
+    this.init = function(Resource, id, model) {
+      this.dataLoaded = $q.defer();
+      $rootScope.frontend_loading = true;
+      this.Resource = Resource;
+      this.saving = false;
+      if (id) {
+        return this.model = Resource.get({
+          id: id
+        }, (function(_this) {
+          return function() {
+            return modelLoaded();
+          };
+        })(this));
+      } else {
+        this.model = new Resource(model);
+        return modelLoaded();
+      }
+    };
+    modelLoaded = (function(_this) {
+      return function() {
+        $rootScope.frontend_loading = false;
+        return $timeout(function() {
+          _this.dataLoaded.resolve(true);
+          return $('.selectpicker').selectpicker('refresh');
+        });
+      };
+    })(this);
+    beforeSave = (function(_this) {
+      return function() {
+        if (_this.error_element === void 0) {
+          ajaxStart();
+          if (_this.beforeSave !== void 0) {
+            _this.beforeSave();
+          }
+          _this.saving = true;
+          return true;
+        } else {
+          $(_this.error_element).focus();
+          return false;
+        }
+      };
+    })(this);
+    modelName = function() {
+      var l, model_name;
+      l = window.location.pathname.split('/');
+      model_name = l[l.length - 2];
+      if ($.isNumeric(model_name)) {
+        model_name = l[l.length - 3];
+      }
+      return model_name;
+    };
+    this["delete"] = function(event, callback) {
+      if (callback == null) {
+        callback = false;
+      }
+      return bootbox.confirm("Вы уверены, что хотите " + ($(event.target).text()) + " #" + this.model.id + "?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            beforeSave();
+            return _this.model.$delete().then(function() {
+              if (callback) {
+                callback();
+                _this.saving = false;
+                return ajaxEnd();
+              } else {
+                return redirect(modelName());
+              }
+            }, function(response) {
+              return notifyError(response.data.message);
+            });
+          }
+        };
+      })(this));
+    };
+    this.edit = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
+      if (!beforeSave()) {
+        return;
+      }
+      return this.model.$update().then((function(_this) {
+        return function() {
+          if (callback !== null) {
+            callback();
+          }
+          _this.saving = false;
+          return ajaxEnd();
+        };
+      })(this), function(response) {
+        notifyError(response.data.message);
+        this.saving = false;
+        return ajaxEnd();
+      });
+    };
+    this.create = function() {
+      if (!beforeSave()) {
+        return;
+      }
+      return this.model.$save().then((function(_this) {
+        return function(response) {
+          return redirect(_this.redirect_url || modelName() + ("/" + response.id + "/edit"));
+        };
+      })(this), (function(_this) {
+        return function(response) {
+          notifyError(response.data.message);
+          _this.saving = false;
+          ajaxEnd();
+          return _this.onCreateError(response);
+        };
+      })(this));
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('ExportService', function($rootScope, FileUploader) {
+    bindArguments(this, arguments);
+    this.init = function(options) {
+      var onWhenAddingFileFailed;
+      this.controller = options.controller;
+      this.FileUploader.FileSelect.prototype.isEmptyAfterSelection = function() {
+        return true;
+      };
+      return this.uploader = new this.FileUploader({
+        url: this.controller + "/import",
+        alias: 'imported_file',
+        autoUpload: true,
+        method: 'post',
+        removeAfterUpload: true,
+        onCompleteItem: function(i, response, status) {
+          if (status === 200) {
+            notifySuccess('Импортировано');
+          }
+          if (status !== 200) {
+            return notifyError(response.message);
+          }
+        }
+      }, onWhenAddingFileFailed = function(item, filter, options) {
+        if (filter.name === "queueLimit") {
+          this.clearQueue();
+          return this.addToQueue(item);
+        }
+      });
+    };
+    this["import"] = function(e) {
+      e.preventDefault();
+      $('#import-button').trigger('click');
+    };
+    this.exportDialog = function() {
+      $('#export-modal').modal('show');
+      return false;
+    };
+    this["export"] = function() {
+      window.location = "/" + this.controller + "/export?field=" + this.export_field;
+      $('#export-modal').modal('hide');
+      return false;
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('FactoryService', function($http) {
+    this.get = function(table, select, orderBy) {
+      if (select == null) {
+        select = null;
+      }
+      if (orderBy == null) {
+        orderBy = null;
+      }
+      return $http.post('api/factory', {
+        table: table,
+        select: select,
+        orderBy: orderBy
+      });
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('PhotoService', function($rootScope, $http, Photo) {
+    this.image = '';
+    this.cropped_image = '';
+    this.cripping = false;
+    this.FormService = null;
+    this.selected_photo_index = null;
+    this.init = (function(_this) {
+      return function(FormService, type, id) {
+        _this.type = type;
+        _this.id = id;
+        _this.FormService = FormService;
+        return _this.bindFileUpload(type, id);
+      };
+    })(this);
+    this.crop = function() {
+      this.cropping = true;
+      return $http.post('upload/cropped', {
+        id: this.getSelectedPhoto().id,
+        cropped_image: this.cropped_image
+      }).then((function(_this) {
+        return function(response) {
+          _this.cropping = false;
+          _this.FormService.model.photos[_this.selected_photo_index] = response.data;
+          return $('#change-photo').modal('hide');
+        };
+      })(this));
+    };
+    this.bindFileUpload = function(type, id) {
+      return $('#fileupload').fileupload({
+        formData: {
+          id: id,
+          type: type
+        },
+        maxFileSize: 10000000,
+        send: function() {
+          return NProgress.configure({
+            showSpinner: true
+          });
+        },
+        progress: function(e, data) {
+          return NProgress.set(data.loaded / data.total);
+        },
+        always: function() {
+          NProgress.configure({
+            showSpinner: false
+          });
+          return ajaxEnd();
+        },
+        done: (function(_this) {
+          return function(i, response) {
+            if (_this.photo_id) {
+              _this.FormService.model.photos[_this.selected_photo_index] = response.result;
+              _this.image = _this.getSelectedPhoto().original_url;
+              delete _this.photo_id;
+            } else {
+              _this.FormService.model.photos.push(response.result);
+              _this.edit(_this.FormService.model.photos.length - 1);
+            }
+            return $rootScope.$apply();
+          };
+        })(this)
+      });
+    };
+    this.getSelectedPhoto = function() {
+      return this.FormService.model.photos[this.selected_photo_index];
+    };
+    this.loadNew = function() {
+      this.photo_id = this.getSelectedPhoto().id;
+      $('#fileupload').bind('fileuploadsubmit', (function(_this) {
+        return function(e, data) {
+          return data.formData = {
+            id: _this.id,
+            type: _this.type,
+            photo_id: _this.photo_id
+          };
+        };
+      })(this));
+      return $('#fileupload').click();
+    };
+    this.edit = function(index) {
+      this.selected_photo_index = index;
+      this.image = this.getSelectedPhoto().original_url;
+      return $('#change-photo').modal('show');
+    };
+    this["delete"] = function() {
+      Photo["delete"]({
+        id: this.getSelectedPhoto().id
+      });
+      this.FormService.model.photos.splice(this.selected_photo_index, 1);
+      return $('#change-photo').modal('hide');
+    };
+    return this;
+  });
 
 }).call(this);
 
