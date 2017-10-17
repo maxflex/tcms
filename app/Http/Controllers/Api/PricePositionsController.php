@@ -49,7 +49,7 @@ class PricePositionsController extends Controller
      */
     public function show($id)
     {
-        return PricePosition::find($id);
+        return PricePosition::find($id)->append('tags');
     }
 
     /**
