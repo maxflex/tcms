@@ -1,6 +1,6 @@
 <div class="row mb">
     <div class="col-sm-3">
-        @include('modules.input', ['title' => 'название позиции', 'model' => 'name', 'attributes' => ['maxlength' => 30]])
+        @include('modules.input', ['title' => 'название позиции', 'model' => 'name', 'attributes' => ['maxlength' => 60]])
     </div>
     <div class="col-sm-3">
         @include('modules.input', ['title' => 'цена, руб.', 'model' => 'price'])
