@@ -17,7 +17,7 @@ class TagsController extends Controller
      */
     public function index()
     {
-        return Tag::orderBy('position')->paginate(30);
+        return Tag::orderBy('position')->paginate(9999);
     }
 
     /**
