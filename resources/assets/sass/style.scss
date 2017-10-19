@@ -4358,3 +4358,7 @@ select[multiple] {
   -webkit-filter: grayscale(100%);
   opacity: .75;
 }
+
+.alert.alert-danger.animated {
+    z-index: 99999 !important;
+}

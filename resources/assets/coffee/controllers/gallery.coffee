@@ -14,7 +14,7 @@ angular
             PhotoService.init(FormService, 'Gallery', $scope.id)
 
         $scope.preview = ->
-            window.open("/img/gallery/#{FormService.model.id}.jpg", '_blank')
+            window.open("/img/gallery/#{FormService.model.id}.jpg?v=" + makeId(), '_blank')
 
         $scope.edit = ->
             FormService.edit ->
@@ -39,3 +39,8 @@ angular
             $scope.size = {w: 2200, h:1100}
             $scope.size.w = $scope.size.w / newVal
             $scope.ratio = $scope.size.w / $scope.size.h
+            $('#fileupload').bind 'fileuploadsubmit', (e, data) =>
+                data.formData =
+                    id: FormService.model.id
+                    type: 'Gallery'
+                    count: FormService.model.count

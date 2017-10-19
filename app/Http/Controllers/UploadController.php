@@ -10,9 +10,32 @@ use App\Models\Photo;
 
 class UploadController extends Controller
 {
+    const OK_FACTOR = 50;
+    const allowedMimeTypes = ['image/jpeg','image/jpg','image/png'];
+
     public function original(Request $request)
     {
+        if ($request->file('photo')->getClientSize() > 5000000) {
+            return response()->json(['error' => 'максимальный объём файла – 5 Мб']);
+        }
+
+        if (! in_array($request->file('photo')->getClientMimeType(), self::allowedMimeTypes)) {
+            return response()->json(['error' => 'разрешенные форматы – jpg, png']);
+        }
+
+        /** validations **/
+        $min_height = 1100 + self::OK_FACTOR;
+        $min_width = 2200 / $request->count + self::OK_FACTOR;
+
+        list($width, $height) = getimagesize($request->file('photo'));
+
+        if ($width < $min_width || $height < $min_height) {
+            return response()->json(['error' => 'не соответствует минимальной высоте или ширине']);
+        }
+
+
         $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
+
         $request->file('photo')->move(Photo::getDir('originals'), $filename);
 
         if ( isset($request->photo_id)) {

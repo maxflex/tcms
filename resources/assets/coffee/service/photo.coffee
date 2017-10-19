@@ -28,7 +28,7 @@ angular.module 'Egecms'
             formData:
                 id: id
                 type: type
-            maxFileSize: 10000000, # 10 MB
+            # maxFileSize: 10000000, # 10 MB
             # начало загрузки
             send: ->
               NProgress.configure({ showSpinner: true })
@@ -43,6 +43,9 @@ angular.module 'Egecms'
                 ajaxEnd()
             ,
             done: (i, response) =>
+                if response.result.hasOwnProperty('error')
+                    notifyError(response.result.error)
+                    return
                 if @photo_id
                     @FormService.model.photos[@selected_photo_index] = response.result
                     @image = @getSelectedPhoto().original_url
@@ -51,7 +54,7 @@ angular.module 'Egecms'
                     @FormService.model.photos.push(response.result)
                     @edit(@FormService.model.photos.length - 1)
                 $rootScope.$apply()
-            ,
+
 
         this.getSelectedPhoto = -> @FormService.model.photos[@selected_photo_index]
 
@@ -62,6 +65,7 @@ angular.module 'Egecms'
                     id: @id
                     type: @type
                     photo_id: @photo_id
+                    count: @FormService.model.count
             $('#fileupload').click()
 
         this.edit = (index) ->

@@ -20491,6 +20491,10 @@ select[multiple] {
   opacity: .75;
 }
 
+.alert.alert-danger.animated {
+  z-index: 99999 !important;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }
