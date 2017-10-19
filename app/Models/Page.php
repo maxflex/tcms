@@ -8,10 +8,11 @@ use Schema;
 use Shared\Model;
 use App\Service\VersionControl;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\HasTags;
 
 class Page extends Model
 {
-   use Exportable, SoftDeletes;
+   use Exportable, SoftDeletes, HasTags;
 
    protected $dates = ['deleted_at'];
    protected $commaSeparated = ['subjects'];
@@ -28,7 +29,8 @@ class Page extends Model
         'variable_id',
         'group_id',
         'position',
-        'seo_text'
+        'seo_text',
+        'tags'
     ];
 
     protected static $hidden_on_export = [

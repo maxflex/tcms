@@ -103,7 +103,7 @@ angular
         $scope.onEdit = (id, event) ->
             PageGroup.update {id: id, title: $(event.target).text()}
 
-    .controller 'PagesForm', ($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem) ->
+    .controller 'PagesForm', ($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag) ->
         bindArguments($scope, arguments)
 
         empty_useful = {text: null, page_id_field: null}
@@ -210,6 +210,9 @@ angular
         $scope.togglePublished = ->
             FormService.model.published = not FormService.model.published
             FormService.model.published = if FormService.model.published then 1 else 0
+
+        $scope.loadTags = (text) ->
+            Tag.autocomplete({text: text}).$promise
 
         bindFileUpload = ->
           # загрузка файла договора

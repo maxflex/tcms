@@ -29,6 +29,12 @@ angular
         $scope.loadTags = (text) ->
             Tag.autocomplete({text: text}).$promise
 
+        $scope.getTotalPrice = ->
+            total_price = 0
+            [1, 2, 3, 4, 5, 6].forEach (i) ->
+                total_price += parseInt(FormService.model["price_#{i}"])
+            total_price
+
         $scope.$watch 'FormService.model.count', (newVal, oldVal) ->
             $scope.size = {w: 2200, h:1100}
             $scope.size.w = $scope.size.w / newVal

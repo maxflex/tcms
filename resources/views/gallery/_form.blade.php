@@ -47,7 +47,7 @@
     <div class="col-sm-3">
         <div class="mbl">
             @include('modules.input', ['title' => 'название работы', 'model' => 'name', 'attributes' => [
-                'maxlength' => 35
+                'maxlength' => 31
             ]])
         </div>
         <div class="mbb">
@@ -61,6 +61,13 @@
 @include('gallery._component', ['number' => 4])
 @include('gallery._component', ['number' => 5])
 @include('gallery._component', ['number' => 6])
+<div class="row mb">
+    <div class="col-sm-9"></div>
+    <div class="col-sm-3">
+        <div class="blocker-div"></div>
+        @include('modules.input', ['title' => 'общая стоимость, руб.', 'attributes' => ['ng-value' => 'getTotalPrice()']])
+    </div>
+</div>
 
 <div class="row mb" ng-show='FormService.model.id'>
     <div class="col-sm-4">

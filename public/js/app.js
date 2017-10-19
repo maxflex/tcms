@@ -535,6 +535,14 @@
         text: text
       }).$promise;
     };
+    $scope.getTotalPrice = function() {
+      var total_price;
+      total_price = 0;
+      [1, 2, 3, 4, 5, 6].forEach(function(i) {
+        return total_price += parseInt(FormService.model["price_" + i]);
+      });
+      return total_price;
+    };
     return $scope.$watch('FormService.model.count', function(newVal, oldVal) {
       $scope.size = {
         w: 2200,
@@ -838,7 +846,7 @@
         title: $(event.target).text()
       });
     };
-  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem) {
+  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag) {
     var bindFileUpload, empty_useful;
     bindArguments($scope, arguments);
     empty_useful = {
@@ -980,6 +988,11 @@
       FormService.model.published = !FormService.model.published;
       return FormService.model.published = FormService.model.published ? 1 : 0;
     };
+    $scope.loadTags = function(text) {
+      return Tag.autocomplete({
+        text: text
+      }).$promise;
+    };
     return bindFileUpload = function() {
       return $('#fileupload').fileupload({
         maxFileSize: 10000000,
@@ -1115,8 +1128,25 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('TagsIndex', function($scope, $attrs, IndexService, Tag) {
+  angular.module('Egecms').controller('TagsIndex', function($scope, $attrs, $timeout, IndexService, Tag) {
     bindArguments($scope, arguments);
+    $scope.sortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      update: function(event, ui) {
+        return $timeout(function() {
+          return IndexService.page.data.forEach(function(model, index) {
+            return Tag.update({
+              id: model.id,
+              position: index
+            });
+          });
+        });
+      }
+    };
     return angular.element(document).ready(function() {
       return IndexService.init(Tag, $scope.current_page, $attrs);
     });

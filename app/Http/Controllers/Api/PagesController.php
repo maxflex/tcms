@@ -48,7 +48,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        return Page::with('items')->find($id);
+        return Page::with('items')->find($id)->append('tags');
     }
 
     /**

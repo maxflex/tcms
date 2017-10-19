@@ -8,14 +8,16 @@
 
 @section('content')
     <table class="table">
-        <tr ng-repeat="model in IndexService.page.data">
-            <td>
-                <a href='tags/@{{ model.id }}/edit'>@{{ model.text }}</a>
-            </td>
-            <td width='100' style='text-align: right'>
-                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
-            </td>
-        </tr>
+        <tbody ui-sortable='sortableOptions' ng-model="IndexService.page.data">
+            <tr ng-repeat="model in IndexService.page.data">
+                <td>
+                    <a href='tags/@{{ model.id }}/edit'>@{{ model.text }}</a>
+                </td>
+                <td width='100' style='text-align: right'>
+                    <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+                </td>
+            </tr>
+        </tbody>
     </table>
     @include('modules.pagination')
 @stop
