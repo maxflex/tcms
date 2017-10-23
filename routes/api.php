@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('prices/change', 'PricesController@change');
     Route::resource('prices', 'PricesController');
     Route::resource('prices/positions', 'PricePositionsController');
+    Route::resource('gallery/folders', 'GalleryFoldersController');
     Route::resource('gallery', 'GalleryController');
 
     Route::get('tags/autocomplete', 'TagsController@autocomplete');
@@ -53,6 +54,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('logs', 'LogsController');
 
     Route::resource('faq', 'FaqController');
+
     Route::group(['prefix' => 'faq'], function() {
         Route::resource('groups', 'FaqGroupsController');
     });

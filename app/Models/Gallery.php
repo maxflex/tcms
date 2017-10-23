@@ -22,7 +22,9 @@ class Gallery extends Model
         'tags',
         'count',
         'watermark',
-        'before_and_after'
+        'before_and_after',
+        'position',
+        'folder_id'
     ];
 
     protected $appends = ['file_size', 'has_photo', 'image_size'];

@@ -25,6 +25,9 @@ angular.module('Egecms')
     .factory 'PricePosition', ($resource) ->
         $resource apiPath('prices/positions'), {id: '@id'}, updatable()
 
+    .factory 'GalleryFolder', ($resource) ->
+        $resource apiPath('gallery/folders'), {id: '@id'}, updatable()
+
     .factory 'Gallery', ($resource) ->
         $resource apiPath('gallery'), {id: '@id'}, updatable()
 

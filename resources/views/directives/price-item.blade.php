@@ -1,7 +1,7 @@
 <a ng-class="{'price-section': item.is_section}" href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'>@{{ item.model.name }}</a>
 <a ng-show='item.is_section' href='prices/@{{ item.model.id }}/positions/create' class='pull-right'>+ позиция</a>
 <a ng-show='item.is_section' href='prices/@{{ item.model.id }}/create' class='pull-right' style='margin-right: 20px'>+ раздел</a>
-<span class="pull-right" ng-show="!item.is_section && item.model.price" style='width: 800px'>
+<span class="pull-right" ng-show="!item.is_section && item.model.price" style='width: 600px'>
     от @{{ item.model.price | number }} руб.<span ng-show="item.model.unit">/@{{ findById(Units, item.model.unit).title }}</span>
 </span>
 <div class="price-divider"></div>

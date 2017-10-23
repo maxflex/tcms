@@ -1,10 +1,36 @@
 angular
     .module 'Egecms'
-    .controller 'GalleryIndex', ($scope, $attrs, IndexService, Gallery) ->
+    .controller 'GalleryIndex', ($scope, $attrs, $timeout, IndexService, Gallery, GalleryFolder) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
-            IndexService.init(Gallery, $scope.current_page, $attrs)
-    .controller 'GalleryForm', ($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag) ->
+            IndexService.init(Gallery, $scope.current_page, $attrs, {folder_id: $scope.folder_id})
+            folders = []
+            $.each $scope.folders, (index, folder) ->
+                folders.push(folder)
+            $scope.folders = folders
+
+        $scope.sortableOptions =
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
+            tolerance: "pointer"
+            axis: 'y'
+            update: (event, ui) ->
+                $timeout ->
+                    IndexService.page.data.forEach (model, index) ->
+                        Gallery.update({id: model.id, position: index})
+
+        $scope.sortableOptionsFolder =
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
+            tolerance: "pointer"
+            axis: 'y'
+            update: (event, ui) ->
+                $timeout ->
+                    $scope.folders.forEach (model, index) ->
+                        GalleryFolder.update({id: model.id, position: index})
+    .controller 'GalleryForm', ($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag, GalleryFolder) ->
         bindArguments($scope, arguments)
 
         $scope.version = makeId()
@@ -32,8 +58,25 @@ angular
         $scope.getTotalPrice = ->
             total_price = 0
             [1, 2, 3, 4, 5, 6].forEach (i) ->
-                total_price += parseInt(FormService.model["price_#{i}"])
+                price = parseInt(FormService.model["price_#{i}"])
+                total_price += price if price
             total_price
+
+        $scope.changeFolder = ->
+            if FormService.model.folder_id is -1
+                FormService.model.folder_id = ''
+                $('#new-folder').modal('show')
+            # console.log(FormService.model.folder_id)
+
+        $scope.createNewFolder = ->
+            $('#new-folder').modal('hide')
+            GalleryFolder.save
+                name: $scope.new_folder_name
+            , (response) ->
+                $scope.new_folder_name = ''
+                $scope.folders[makeId()] = response
+                FormService.model.folder_id = response.id
+                $timeout -> $('.selectpicker').selectpicker('refresh')
 
         $scope.$watch 'FormService.model.count', (newVal, oldVal) ->
             $scope.size = {w: 2200, h:1100}

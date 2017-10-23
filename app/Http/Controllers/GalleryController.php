@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Gallery;
 use App\Models\Master;
+use App\Models\GalleryFolder;
 
 class GalleryController extends Controller
 {
@@ -15,10 +16,12 @@ class GalleryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request, $folder_id = null)
     {
         return view('gallery.index')->with(ngInit([
-            'current_page' => $request->page
+            'current_page' => $request->page,
+            'folder_id' => $folder_id,
+            'folders' => GalleryFolder::orderBy('position')->get()
         ]));
     }
 
@@ -32,7 +35,8 @@ class GalleryController extends Controller
         $masters = Master::light()->get();
         return view('gallery.create')->with(ngInit([
             'model' => new Gallery,
-            'masters' => $masters
+            'masters' => $masters,
+            'folders' => GalleryFolder::orderBy('position')->get()
         ]));
     }
 
@@ -67,7 +71,8 @@ class GalleryController extends Controller
     public function edit($id)
     {
         $masters = Master::light()->get();
-        return view('gallery.edit')->with(ngInit(compact('id', 'masters')));
+        $folders = GalleryFolder::orderBy('position')->get();
+        return view('gallery.edit')->with(ngInit(compact('id', 'masters', 'folders')));
     }
 
     /**

@@ -6,24 +6,18 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Gallery;
+use App\Models\GalleryFolder;
 
-class GalleryController extends Controller
+class GalleryFoldersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Gallery::orderBy('position');
-
-        if (isset($request->folder_id) && $request->folder_id) {
-            $query->where('folder_id', $request->folder_id);
-        }
-
-        return $query->paginate(9999);
+        return GalleryFolder::paginate(30);
     }
 
     /**
@@ -44,7 +38,7 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        return Gallery::create($request->input())->fresh();
+        return GalleryFolder::create($request->input())->fresh();
     }
 
     /**
@@ -55,7 +49,7 @@ class GalleryController extends Controller
      */
     public function show($id)
     {
-        return Gallery::with('photos')->find($id)->append('tags');
+        return GalleryFolder::find($id)->append('tags');
     }
 
     /**
@@ -78,9 +72,7 @@ class GalleryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $gallery = Gallery::with('photos')->find($id);
-        $gallery->update($request->input());
-        return $gallery;
+        GalleryFolder::find($id)->update($request->input());
     }
 
     /**
@@ -91,6 +83,6 @@ class GalleryController extends Controller
      */
     public function destroy($id)
     {
-        Gallery::destroy($id);
+        GalleryFolder::destroy($id);
     }
 }

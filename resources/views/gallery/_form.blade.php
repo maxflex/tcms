@@ -53,6 +53,17 @@
         <div class="mbb">
             @include('modules.input', ['title' => 'срок выполнения, дней', 'model' => 'days_to_complete'])
         </div>
+        <div class="mbb">
+            <label class="no-margin-bottom label-opacity">папка</label>
+            <select class='form-control selectpicker' ng-model='FormService.model.folder_id' ng-change='changeFolder()' convert-to-number>
+                <option value=''>не выбрано</option>
+                <option value='-1'>новая папка</option>
+                <option disabled>──────────────</option>
+                <option ng-repeat="folder in folders" value="@{{ folder.id }}">
+                    @{{ folder.name }}
+                </option>
+            </select>
+        </div>
     </div>
 </div>
 @include('gallery._component', ['number' => 1])
@@ -88,3 +99,4 @@
         ])
     </div>
 </div>
+@include('gallery._modals')

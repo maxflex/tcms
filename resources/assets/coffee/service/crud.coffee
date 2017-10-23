@@ -7,18 +7,21 @@ angular.module 'Egecms'
 
         this.max_size = 10
 
-        this.init = (Resource, current_page, attrs, load_page = true) ->
+        this.init = (Resource, current_page, attrs, params = {}) ->
             $rootScope.frontend_loading = true
             this.Resource = Resource
             this.current_page = parseInt(current_page)
             this.controller = attrs.ngController.toLowerCase().slice(0, -5)
             this.search = if $.cookie(this.controller) then JSON.parse($.cookie(this.controller)) else {}
-            this.loadPage() if load_page
+            this.params = params
+            this.loadPage()
 
         this.loadPage = ->
-            params = {page: this.current_page}
-            params.sort = this.sort if this.sort isnt undefined
-            this.Resource.get params, (response) =>
+            p = {page: this.current_page}
+            p.sort = this.sort if this.sort isnt undefined
+            $.each @params, (key, val) -> p[key] = val
+            console.log(p)
+            this.Resource.get p, (response) =>
                 this.page = response
                 $rootScope.frontend_loading = false
 

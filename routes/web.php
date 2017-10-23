@@ -43,6 +43,8 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::resource('prices', 'PricesController');
     Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
     Route::resource('prices/{id}/positions', 'PricePositionsController');
+
+    Route::get('gallery/folder/{folder_id}', 'GalleryController@index');
     Route::resource('gallery', 'GalleryController');
 });
 
