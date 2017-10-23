@@ -326,94 +326,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -621,7 +533,7 @@
         });
       }
     };
-    return $scope.sortableOptionsFolder = {
+    $scope.sortableOptionsFolder = {
       cursor: "move",
       opacity: 0.9,
       zIndex: 9999,
@@ -637,6 +549,29 @@
           });
         });
       }
+    };
+    $scope.editFolderPopup = function(folder) {
+      $scope.popup_folder = folder;
+      $scope.popup_folder_name = folder.name;
+      return $('#edit-folder').modal('show');
+    };
+    $scope.editFolder = function() {
+      $scope.popup_folder.name = $scope.popup_folder_name;
+      GalleryFolder.update($scope.popup_folder);
+      return $('#edit-folder').modal('hide');
+    };
+    return $scope.deleteFolder = function(folder) {
+      return bootbox.confirm("Вы уверены, что хотите удалить папку «" + folder.name + "»?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            return GalleryFolder["delete"]({
+              id: folder.id
+            }, function() {
+              return location.reload();
+            });
+          }
+        };
+      })(this));
     };
   }).controller('GalleryForm', function($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag, GalleryFolder) {
     bindArguments($scope, arguments);
@@ -1516,6 +1451,94 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
+
+}).call(this);
+
+(function() {
   var apiPath, countable, updatable;
 
   angular.module('Egecms').factory('Variable', function($resource) {
@@ -2233,7 +2256,6 @@
       $.each(this.params, function(key, val) {
         return p[key] = val;
       });
-      console.log(p);
       return this.Resource.get(p, (function(_this) {
         return function(response) {
           _this.page = response;

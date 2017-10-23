@@ -20,7 +20,6 @@ angular.module 'Egecms'
             p = {page: this.current_page}
             p.sort = this.sort if this.sort isnt undefined
             $.each @params, (key, val) -> p[key] = val
-            console.log(p)
             this.Resource.get p, (response) =>
                 this.page = response
                 $rootScope.frontend_loading = false

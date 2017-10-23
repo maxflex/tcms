@@ -8,7 +8,7 @@
       <div class="modal-body">
           <div class="row">
               <div class="col-sm-12">
-                  <input class='form-control' class='selectpicker' ng-model='new_folder_name' placeholder="новая папка">
+                  <input class='form-control' ng-model='new_folder_name' placeholder="новая папка">
               </div>
           </div>
       </div>

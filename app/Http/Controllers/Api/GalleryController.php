@@ -21,6 +21,8 @@ class GalleryController extends Controller
 
         if (isset($request->folder_id) && $request->folder_id) {
             $query->where('folder_id', $request->folder_id);
+        } else {
+            $query->whereNull('folder_id');
         }
 
         return $query->paginate(9999);

@@ -14,6 +14,12 @@
                     <i class="fa fa-folder text-success" aria-hidden="true" style='margin-right: 5px'></i>
                     <a href="/gallery/folder/@{{ folder.id }}">@{{ folder.name }}</a>
                 </td>
+                <td width='100'>
+                    <a class="pointer" ng-click="editFolderPopup(folder)">редактировать</a>
+                </td>
+                <td width='100' style='text-align: right'>
+                    <a class="pointer" ng-click="deleteFolder(folder)">удалить</a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -55,6 +61,28 @@
     </table>
     @include('modules.pagination')
 @stop
+
+<!-- Modal -->
+<div id="edit-folder" class="modal" role="dialog" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Редактировать папку</h4>
+    </div>
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-sm-12">
+                  <input class='form-control' ng-model='popup_folder_name' placeholder="новая папка">
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer center">
+        <button ng-disabled="!popup_folder_name" type="button" class="btn btn-primary" ng-click="editFolder()">редактировать</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
     .table tr td {
         vertical-align: middle !important;

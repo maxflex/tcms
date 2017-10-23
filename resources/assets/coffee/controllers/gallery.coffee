@@ -30,6 +30,22 @@ angular
                 $timeout ->
                     $scope.folders.forEach (model, index) ->
                         GalleryFolder.update({id: model.id, position: index})
+
+        $scope.editFolderPopup = (folder) ->
+            $scope.popup_folder = folder
+            $scope.popup_folder_name = folder.name
+            $('#edit-folder').modal('show')
+
+        $scope.editFolder = ->
+            $scope.popup_folder.name = $scope.popup_folder_name
+            GalleryFolder.update($scope.popup_folder)
+            $('#edit-folder').modal('hide')
+
+        $scope.deleteFolder = (folder) ->
+            bootbox.confirm "Вы уверены, что хотите удалить папку «#{folder.name}»?", (result) =>
+                if result is true
+                    GalleryFolder.delete {id: folder.id}, -> location.reload()
+
     .controller 'GalleryForm', ($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag, GalleryFolder) ->
         bindArguments($scope, arguments)
 
