@@ -1121,6 +1121,35 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').controller('PaymentRemainders', function($scope, $http, $timeout) {
+    var load;
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      return $timeout(function() {
+        $scope.source_id = 2;
+        $scope.current_page = 1;
+        return load(1);
+      });
+    });
+    $scope.pageChanged = function() {
+      load($scope.current_page);
+      return paginate('payments/remainders', $scope.current_page);
+    };
+    return load = function(page) {
+      ajaxStart();
+      return $http.post('api/payments/remainders', {
+        page: page,
+        source_id: $scope.source_id
+      }).then(function(response) {
+        ajaxEnd();
+        return $scope.data = response.data;
+      });
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, PriceSection, PricePosition) {
     var clearChangePrice;
     bindArguments($scope, arguments);

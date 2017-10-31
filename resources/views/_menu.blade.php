@@ -11,10 +11,13 @@
 <a href="variables" class="list-group-item">Переменные</a>
 <a href="pages" class="list-group-item">Страницы</a>
 <a class="list-group-item active">Настройки</a>
-@if (allowed(\App\Service\Rights::EDIT_USERS))
+@if (allowed(\Rights::EDIT_USERS))
     <a href="users" class="list-group-item">Пользователи</a>
 @endif
-@if (allowed(\App\Service\Rights::LOGS))
+@if (allowed(\Rights::LOGS))
     <a href="logs" class="list-group-item">Логи</a>
+@endif
+@if (allowed(\Rights::PAYMENTS))
+    <a href="payments/remainders" class="list-group-item">Счёт</a>
 @endif
 <a href="logout" class="list-group-item">Выход</a>

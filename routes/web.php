@@ -19,6 +19,8 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::resource('pages', 'PagesController');
     Route::get('search', 'PagesController@search');
 
+    Route::get('payments/remainders', 'PaymentsController@remainders');
+
     Route::resource('logs', 'LogsController');
 
     Route::resource('programs', 'ProgramsController');

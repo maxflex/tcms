@@ -220,6 +220,14 @@
         return \DB::connection('egecrm')->table($table);
     }
 
+   /**
+     * Factory connection helper
+     */
+    function egerep($table)
+    {
+        return \DB::connection('egerep')->table($table);
+    }
+
     function mb_ucfirst($text) {
         return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
     }
@@ -236,4 +244,9 @@
         $base = log($size, 1024);
         $suffixes = array('байт', 'Кб', 'Мб', 'Гб', 'Тб');
         return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
+    }
+
+    function cloneQuery($q) {
+        $clone = clone $q;
+        return $clone;
     }
