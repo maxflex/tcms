@@ -3,7 +3,7 @@ angular.module('Egecms')
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             $timeout ->
-                $scope.source_id = 2
+                $scope.source_id = 4
                 $scope.current_page = 1
                 load(1)
 
