@@ -75,4 +75,7 @@
     .table tr.last-date td {
         border-bottom: 1px solid #ddd !important;
     }
+    .text-green {
+        color: #158E51 !important;
+    }
 </style>
