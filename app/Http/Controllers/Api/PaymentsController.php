@@ -40,7 +40,7 @@ class PaymentsController extends Controller
                 $remainder += egerep('payments')->where('source_id', $source->id)->where('date', '>=', $date)->where('date', '<', $source->remainder_date)->sum('sum');
             }
             // если date == source->remainder_date, то будет перезаписано ниже
-            $totals[$date] = ['sum' => $remainder];
+            $totals[$date] = ['sum' => round($remainder, 2)];
         }
 
         // inject входящий остаток
