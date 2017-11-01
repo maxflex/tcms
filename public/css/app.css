@@ -20337,7 +20337,7 @@ select[multiple] {
 
 .price-list ul {
   list-style-type: none;
-  padding-left: 15px;
+  padding-left: 30px;
 }
 
 .price-list > ul {
@@ -20347,6 +20347,10 @@ select[multiple] {
 .price-list .price-section {
   font-size: 14px;
   font-weight: bold;
+}
+
+.price-list .price-section-item {
+  margin-left: 11px;
 }
 
 .price-list .price-divider {

@@ -4217,7 +4217,7 @@ select[multiple] {
     overflow: hidden;
     & ul {
       list-style-type: none;
-      padding-left: 15px;
+      padding-left: 30px;
     //   margin-bottom: 15px;
     }
     & > ul {
@@ -4226,6 +4226,9 @@ select[multiple] {
     & .price-section {
         font-size: 14px;
         font-weight: bold;
+    }
+    & .price-section-item {
+        margin-left: 11px;
     }
     & .price-divider {
         background-color: $gray-high-opacity;
