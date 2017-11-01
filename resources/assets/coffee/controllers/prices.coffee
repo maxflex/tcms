@@ -6,6 +6,7 @@ angular
         angular.element(document).ready ->
             $http.get('api/prices').then (response) ->
                 $scope.items = response.data
+            $scope.collapsed_price_sections = if $.cookie("collapsed_price_sections") then JSON.parse($.cookie("collapsed_price_sections")) else []
 
         clearChangePrice = (section_id) ->
             $scope.change_price =
@@ -25,6 +26,16 @@ angular
             $http.post 'api/prices/change', $scope.change_price
             .then ->
                 location.reload()
+
+        $scope.toggleCollapse = (item) ->
+            id = item.model.id
+            if id in $scope.collapsed_price_sections
+                $scope.collapsed_price_sections = _.without($scope.collapsed_price_sections, id)
+            else
+                $scope.collapsed_price_sections.push(id)
+            $.cookie("collapsed_price_sections", JSON.stringify($scope.collapsed_price_sections), { expires: 365, path: '/' })
+
+        $scope.isCollapsed = (item) -> item.model.id in $scope.collapsed_price_sections
 
         $scope.sortableOptions =
             update: (event, ui) ->

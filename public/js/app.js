@@ -326,94 +326,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -1238,13 +1150,16 @@
 }).call(this);
 
 (function() {
+  var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, PriceSection, PricePosition) {
     var clearChangePrice;
     bindArguments($scope, arguments);
     angular.element(document).ready(function() {
-      return $http.get('api/prices').then(function(response) {
+      $http.get('api/prices').then(function(response) {
         return $scope.items = response.data;
       });
+      return $scope.collapsed_price_sections = $.cookie("collapsed_price_sections") ? JSON.parse($.cookie("collapsed_price_sections")) : [];
     });
     clearChangePrice = function(section_id) {
       $scope.change_price = {
@@ -1267,6 +1182,23 @@
       return $http.post('api/prices/change', $scope.change_price).then(function() {
         return location.reload();
       });
+    };
+    $scope.toggleCollapse = function(item) {
+      var id;
+      id = item.model.id;
+      if (indexOf.call($scope.collapsed_price_sections, id) >= 0) {
+        $scope.collapsed_price_sections = _.without($scope.collapsed_price_sections, id);
+      } else {
+        $scope.collapsed_price_sections.push(id);
+      }
+      return $.cookie("collapsed_price_sections", JSON.stringify($scope.collapsed_price_sections), {
+        expires: 365,
+        path: '/'
+      });
+    };
+    $scope.isCollapsed = function(item) {
+      var ref;
+      return ref = item.model.id, indexOf.call($scope.collapsed_price_sections, ref) >= 0;
     };
     return $scope.sortableOptions = {
       update: function(event, ui) {
@@ -1563,6 +1495,94 @@
         return FormService.model.html = AceService.editor.getValue();
       };
     });
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
   });
 
 }).call(this);
