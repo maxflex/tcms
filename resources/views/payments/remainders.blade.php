@@ -6,20 +6,30 @@
 
 @section('content')
     <table class="table table-hover reverse-borders">
+        <thead>
+            <tr>
+                <td></td>
+                <td>пополнения</td>
+                <td>расходные операции</td>
+                <td>остаток на конец дня</td>
+                <td>статья</td>
+                <td>назначение операции</td>
+            </tr>
+        </thead>
         <tbody ng-repeat="(date, items) in data.items">
             <tr>
                 <td colspan="3"></td>
                 <td>@{{ data.totals[date].sum | number }}</td>
-                <td colspan="2">
+                <td colspan="2" class="text-gray">
                     @{{ data.totals[date].comment }}
                 </td>
             </tr>
-            <tr ng-repeat="item in items">
+            <tr ng-repeat="item in items" ng-class="{'last-date': $last}">
                 <td width='120'>
                     <span ng-show="$last">@{{ date | date:'dd.MM.yyyy' }}</span>
                 </td>
                 <td width='120'>
-                    <span ng-show="item.addressee_id == source_id" class="text-green">+@{{ item.sum | number }}</span>
+                    <span ng-show="item.addressee_id == source_id" class="text-success">+@{{ item.sum | number }}</span>
                 </td>
                 <td width='120'>
                     <span ng-show="item.source_id == source_id" class="text-danger">-@{{ item.sum | number }}</span>
@@ -59,7 +69,10 @@
     .table tr td {
         font-size: 12px;
     }
-    .text-green {
-        color: #158E51 !important;
+    .table tr td {
+        border-bottom: none !important;
+    }
+    .table tr.last-date td {
+        border-bottom: 1px solid #ddd !important;
     }
 </style>
