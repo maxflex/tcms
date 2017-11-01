@@ -29,7 +29,7 @@
                     <span ng-show="$last">@{{ date | date:'dd.MM.yyyy' }}</span>
                 </td>
                 <td width='120'>
-                    <span ng-show="item.addressee_id == source_id" class="text-success">+@{{ item.sum | number }}</span>
+                    <span ng-show="item.addressee_id == source_id" class="text-green">+@{{ item.sum | number }}</span>
                 </td>
                 <td width='120'>
                     <span ng-show="item.source_id == source_id" class="text-danger">-@{{ item.sum | number }}</span>
