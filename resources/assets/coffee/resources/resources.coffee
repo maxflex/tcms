@@ -48,6 +48,9 @@ angular.module('Egecms')
                     method: 'GET'
                     url: apiPath('tags', 'autocomplete')
                     isArray: true
+                checkExistance:
+                    method: 'POST'
+                    url: apiPath('tags', 'checkExistance')
 
     .factory 'Master', ($resource) ->
         $resource apiPath('masters'), {id: '@id'}, updatable()

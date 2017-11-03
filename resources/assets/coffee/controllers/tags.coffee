@@ -21,3 +21,16 @@ angular
 
         angular.element(document).ready ->
             FormService.init(Tag, $scope.id, $scope.model)
+
+        $scope.checkExistance = (field, event) ->
+            Tag.checkExistance
+                id: FormService.model.id
+                text: FormService.model.text
+            , (response) ->
+                element = $(event.target)
+                if response.exists
+                    $scope.already_exists = true
+                    element.addClass('has-error').focus()
+                else
+                    $scope.already_exists = false
+                    element.removeClass('has-error')

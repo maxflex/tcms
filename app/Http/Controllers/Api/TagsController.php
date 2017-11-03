@@ -90,4 +90,18 @@ class TagsController extends Controller
     {
         return Tag::where('text', 'like', "%{$request->text}%")->get();
     }
+
+    /**
+     * Check page existance
+     */
+     public function checkExistance(Request $request, $id = null)
+     {
+         $query = Tag::where('text', $request->text);
+
+         if ($id !== null) {
+             $query->where('id', '!=', $id);
+         }
+
+         return ['exists' => $query->exists()];
+     }
 }

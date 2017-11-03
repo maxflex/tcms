@@ -46,6 +46,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('gallery/folders', 'GalleryFoldersController');
     Route::resource('gallery', 'GalleryController');
 
+    Route::post('tags/checkExistance/{id?}', 'TagsController@checkExistance');
     Route::get('tags/autocomplete', 'TagsController@autocomplete');
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
