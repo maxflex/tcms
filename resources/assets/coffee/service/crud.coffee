@@ -59,6 +59,7 @@ angular.module 'Egecms'
                 $('.selectpicker').selectpicker 'refresh'
 
         beforeSave = =>
+            # если нет ошибок, вернуть true и обработать в save/create
             if this.error_element is undefined
                 ajaxStart()
                 this.beforeSave() if this.beforeSave isnt undefined
@@ -66,7 +67,7 @@ angular.module 'Egecms'
                 true
             else
                 $(this.error_element).focus()
-                # если нет ошибок, вернуть true и обработать в save/create
+                notifyError(this.error_text) if this.error_text isnt undefined
                 false
 
         # вырезаем MODEL из url типа /website/model/create

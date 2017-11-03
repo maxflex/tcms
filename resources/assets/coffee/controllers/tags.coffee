@@ -21,6 +21,7 @@ angular
 
         angular.element(document).ready ->
             FormService.init(Tag, $scope.id, $scope.model)
+            FormService.error_text = "тэг уже существует"
 
         $scope.checkExistance = (field, event) ->
             Tag.checkExistance
@@ -29,8 +30,8 @@ angular
             , (response) ->
                 element = $(event.target)
                 if response.exists
-                    $scope.already_exists = true
+                    FormService.error_element = element
                     element.addClass('has-error').focus()
                 else
-                    $scope.already_exists = false
+                    FormService.error_element = undefined
                     element.removeClass('has-error')
