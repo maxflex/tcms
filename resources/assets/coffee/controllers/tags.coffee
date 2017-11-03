@@ -21,7 +21,7 @@ angular
 
         angular.element(document).ready ->
             FormService.init(Tag, $scope.id, $scope.model)
-            FormService.error_text = "тэг уже существует"
+            FormService.error_text = "тег уже существует"
 
         $scope.checkExistance = (field, event) ->
             Tag.checkExistance
