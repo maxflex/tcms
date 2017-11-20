@@ -25,7 +25,7 @@ class UploadController extends Controller
 
         /** validations **/
         $min_height = 1100 + self::OK_FACTOR;
-        $min_width = 2200 / $request->count + self::OK_FACTOR;
+        $min_width  = 2200 / $request->count + self::OK_FACTOR;
 
         list($width, $height) = getimagesize($request->file('photo'));
 

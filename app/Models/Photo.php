@@ -65,4 +65,14 @@ class Photo extends Model
             return self::getDir('cropped') . $this->attributes['cropped'];
         }
     }
+
+
+        public static function boot()
+        {
+            static::deleting(function($model) {
+                if ($model->entity_type == 'App\Models\Gallery') {
+                    unlink(public_path() . '/img/gallery/' . $model->entity_id . ".jpg");
+                }
+            });
+        }
 }

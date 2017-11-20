@@ -1,9 +1,9 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
-        <div class="btn-group btn-group-justified mbl">
-          <a class="btn btn-primary" ng-class="{'active-group-btn': FormService.model.count == 1}" ng-click='FormService.model.count = 1'>1 фото</a>
-          <a class="btn btn-primary" ng-class="{'active-group-btn': FormService.model.count == 2}" ng-click='FormService.model.count = 2'>2 фото</a>
-          <a class="btn btn-primary" ng-class="{'active-group-btn': FormService.model.count == 3}" ng-click='FormService.model.count = 3'>3 фото</a>
+        <div style='margin-bottom: 12px'>
+            <a class="pointer" ng-click="editOrUpload(1)" ng-show="FormService.model.photos.length == 0">загрузить</a>
+            <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.loadNew()" ng-show="FormService.model.photos.length > 0" style='margin-right: 10px'>загрузить другое</a>
+            <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.delete()" ng-show="FormService.model.photos.length > 0">удалить</a>
         </div>
         <div class="flex-items" style='width: 100%'>
             <div style='width: 200px'>
