@@ -29,8 +29,8 @@ class UploadController extends Controller
 
         list($width, $height) = getimagesize($request->file('photo'));
 
-        if ($width < $min_width || $height < $min_height) {
-            return response()->json(['error' => 'не соответствует минимальной высоте или ширине']);
+        if ($width != $min_width || $height != $min_height) {
+            return response()->json(['error' => 'не соответствует формату 4000x2000']);
         }
 
 

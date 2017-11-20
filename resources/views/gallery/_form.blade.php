@@ -1,5 +1,8 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
+        <div style='margin-bottom: 6px; font-size: 12px'>
+            разрешение: 4000x2000, форматы: jpg, jpeg, png
+        </div>
         <div style='margin-bottom: 12px'>
             <a class="pointer" ng-click="editOrUpload(1)" ng-show="FormService.model.photos.length == 0">загрузить</a>
             <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.loadNew()" ng-show="FormService.model.photos.length > 0" style='margin-right: 10px'>загрузить другое</a>

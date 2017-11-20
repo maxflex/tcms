@@ -53,7 +53,7 @@ angular
 
         angular.element(document).ready ->
             FormService.init(Gallery, $scope.id, $scope.model)
-            PhotoService.afterSave = $scope.edit
+            # PhotoService.afterSave = $scope.edit
             PhotoService.init(FormService, 'Gallery', $scope.id)
 
         $scope.preview = ->

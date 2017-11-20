@@ -53,7 +53,7 @@ angular.module 'Egecms'
                 else
                     @FormService.model.photos.push(response.result)
                     @edit(@FormService.model.photos.length - 1)
-                @afterDone() if typeof @afterDone is 'function'
+                # @afterDone() if typeof @afterDone is 'function'
                 $rootScope.$apply()
 
 
