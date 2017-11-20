@@ -73,7 +73,7 @@ class Gallery extends Model
                 }
             }
 
-            if ($this->before_and_after && $this->count == 2) {
+            if ($this->before_and_after) {
                 // x = 450 | 550 - (240/2)
                 $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 760, 790);
                 // x = 1550 | 1650 - (240/2)

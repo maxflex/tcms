@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex-items" style='width: 100%; margin-bottom: 15px' ng-show="FormService.model.count == 2">
+        <div class="flex-items" style='width: 100%; margin-bottom: 15px'>
             <div style='width: 200px'>
                 До и после
             </div>
