@@ -105,7 +105,7 @@ angular.module 'Egecms'
         this.create = ->
             return if not beforeSave()
             this.model.$save().then (response) =>
-                url = @redirect_url || @prefix + modelName() + "/#{response.id}/edit"
+                url = @redirect_url || modelName() + "/#{response.id}/edit"
                 url = @prefix + url if @prefix
                 redirect url
             , (response) =>
