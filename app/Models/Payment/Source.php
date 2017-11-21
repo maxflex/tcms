@@ -13,7 +13,18 @@ class Source extends Model
     const PER_PAGE_REMAINDERS = 100;
 
     protected $fillable = ['name', 'remainder', 'remainder_date', 'position'];
-    protected static $dotDates = ['remainder_date'];
+
+    public function getRemainderDateAttribute($value)
+    {
+        if ($value) {
+            return dateFormat($value, true);
+        }
+    }
+
+    public function setRemainderDateAttribute($value)
+    {
+        $this->attributes['remainder_date'] = fromDotDate($value);
+    }
 
     public function getCalcRemainderAttribute()
     {

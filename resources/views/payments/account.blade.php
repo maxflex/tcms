@@ -1,22 +1,21 @@
 @extends('app')
 @section('title')
-    Остатки
-    <a href="payments" class="title-link">назад в стрим</a>
+    Счёт
 @stop
-@section('controller', 'PaymentRemainders')
+@section('controller', 'PaymentAccount')
 
 @section('content')
-    <div class="row flex-list" style="width: 300px">
-        <div>
-            <label>счёт</label>
-            <select title="не выбрано" ng-model="source_id" class="selectpicker" ng-change="filterChanged()">
-                <option value="">не выбрано</option>
-                <option disabled>──────────────</option>
-                <option ng-repeat="source in sources" value="@{{ source.id }}">@{{ source.name }}</option>
-            </select>
-        </div>
-    </div>
     <table class="table table-hover reverse-borders">
+        <thead>
+            <tr>
+                <td></td>
+                <td>пополнения</td>
+                <td>расходные операции</td>
+                <td>остаток на конец дня</td>
+                <td>статья</td>
+                <td>назначение операции</td>
+            </tr>
+        </thead>
         <tbody ng-repeat="(date, items) in data.items">
             <tr>
                 <td colspan="3"></td>
@@ -30,7 +29,7 @@
                     <span ng-show="$last">@{{ date | date:'dd.MM.yyyy' }}</span>
                 </td>
                 <td width='120'>
-                    <span ng-show="item.addressee_id == source_id" class="text-success">+@{{ item.sum | number }}</span>
+                    <span ng-show="item.addressee_id == source_id" class="text-green">+@{{ item.sum | number }}</span>
                 </td>
                 <td width='120'>
                     <span ng-show="item.source_id == source_id" class="text-danger">-@{{ item.sum | number }}</span>
@@ -51,10 +50,10 @@
     <pagination
           ng-model="current_page"
           ng-change="pageChanged()"
-          ng-hide="!data || data.item_cnt < {{ \App\Models\Payment\Source::PER_PAGE_REMAINDERS }}"
+          ng-hide="!data || data.item_cnt < {{ \App\Http\Controllers\PaymentsController::PER_PAGE }}"
           total-items="data.item_cnt"
           max-size="10"
-          items-per-page="{{ \App\Models\Payment\Source::PER_PAGE_REMAINDERS }}"
+          items-per-page="{{ \App\Http\Controllers\PaymentsController::PER_PAGE }}"
           first-text="«"
           last-text="»"
           previous-text="«"
@@ -75,5 +74,8 @@
     }
     .table tr.last-date td {
         border-bottom: 1px solid #ddd !important;
+    }
+    .text-green {
+        color: #158E51 !important;
     }
 </style>

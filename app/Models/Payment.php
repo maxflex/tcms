@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Shared\Model;
 
 class Payment extends Model
 {
@@ -30,6 +30,18 @@ class Payment extends Model
     public function getSumCommaAttribute()
     {
         return str_replace('.', ',', $this->sum);
+    }
+
+    public function getDateAttribute($value)
+    {
+        if ($value) {
+            return dateFormat($value, true);
+        }
+    }
+
+    public function setDateAttribute($value)
+    {
+        $this->attributes['date'] = fromDotDate($value);
     }
 
     public function setSumCommaAttribute($value)

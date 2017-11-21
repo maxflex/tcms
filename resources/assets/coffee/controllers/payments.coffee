@@ -241,13 +241,38 @@ angular.module('Egecms')
                 FormService.model.group_id = response.id
                 $timeout -> $('.selectpicker').selectpicker('refresh')
 
-    .controller 'PaymentRemainders', ($scope, $http, $timeout) ->
+    .controller 'PaymentAccount', ($scope, $http, $timeout) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             $timeout ->
                 $scope.source_id = 4
                 $scope.current_page = 1
                 load(1)
+
+        $scope.pageChanged = ->
+            load($scope.current_page)
+            paginate 'account', $scope.current_page
+
+        load = (page) ->
+            ajaxStart()
+            $http.post 'api/account',
+                page: page
+                source_id: $scope.source_id
+            .then (response) ->
+                ajaxEnd()
+                $scope.data = response.data
+
+    .controller 'PaymentRemainders', ($scope, $http, $timeout) ->
+        bindArguments($scope, arguments)
+        angular.element(document).ready ->
+            # $timeout ->
+            #     # load($scope.page)
+            #     $scope.current_page = $scope.page
+
+        $scope.filterChanged = ->
+            # load($scope.page)
+            $scope.current_page = 1
+            load(1)
 
         $scope.pageChanged = ->
             load($scope.current_page)

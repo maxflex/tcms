@@ -17,7 +17,10 @@
 @if (allowed(\Rights::LOGS))
     <a href="logs" class="list-group-item">Логи</a>
 @endif
-@if (allowed(\Rights::PAYMENTS))
-    <a href="payments/remainders" class="list-group-item">Счёт</a>
+@if (allowed(\Rights::ACCOUNT))
+    <a href="account" class="list-group-item">Счёт</a>
+@endif
+@if (allowed(\Rights::PAYSTREAM))
+    <a href="payments" class="list-group-item">Платежи</a>
 @endif
 <a href="logout" class="list-group-item">Выход</a>

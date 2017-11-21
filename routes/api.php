@@ -13,7 +13,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         Route::resource('groups', 'PageGroupsController');
     });
 
-    Route::post('payments/remainders', 'PaymentsController@remainders');
+    Route::post('account', 'PaymentsController@account');
 
     # Pages
     Route::post('pages/checkExistance/{id?}', 'PagesController@checkExistance');

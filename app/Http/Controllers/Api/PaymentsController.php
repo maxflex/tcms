@@ -42,7 +42,6 @@ class PaymentsController extends Controller
     {
         if (isset($request->create_loan) && $request->create_loan) {
             $loan = new Payment($request->input());
-            $loan->type = 1;
             $buf = $loan->addressee_id;
             $loan->addressee_id = $loan->source_id;
             $loan->source_id = $buf;
@@ -173,7 +172,7 @@ class PaymentsController extends Controller
     }
 
 
-    public function remainders(Request $request)
+    public function account(Request $request)
     {
         $page = isset($request->page) ? $request->page : 1;
         $source = egerep('payment_sources')->whereId($request->source_id)->first();
@@ -211,6 +210,53 @@ class PaymentsController extends Controller
                 $items = array_reverse($items);
             }
         }
+        return compact('items', 'totals', 'item_cnt');
+    }
+
+    public function remainders(Request $request)
+    {
+        $page = isset($request->page) ? $request->page : 1;
+        $source = DB::table('payment_sources')->whereId($request->source_id)->first();
+
+        // $sources = DB::table('payment_sources')->get();
+        // $sources = DB::table('payment_sources')->whereId(1)->get();
+
+        // кол-во элементов
+        $query      = DB::table('payments')->where('source_id', $source->id)->orWhere('addressee_id', $source->id);
+        $item_cnt   = cloneQuery($query)->count();
+        $items      = cloneQuery($query)->orderBy('date', 'desc')->take(Source::PER_PAGE_REMAINDERS)->skip(($page - 1) * Source::PER_PAGE_REMAINDERS)->get();
+
+        $items = collect($items)->groupBy('date')->all();
+
+        // суммы дней
+        $totals = [];
+        foreach($items as $date => $data) {
+            $remainder = $source->remainder;
+            if ($date > $source->remainder_date) {
+                $remainder += Payment::where('addressee_id', $source->id)->where('date', '<=', $date)->where('date', '>', $source->remainder_date)->sum('sum');
+                $remainder -= Payment::where('source_id', $source->id)->where('date', '<=', $date)->where('date', '>', $source->remainder_date)->sum('sum');
+            }
+            if ($date < $source->remainder_date) {
+                $remainder -= Payment::where('addressee_id', $source->id)->where('date', '>=', $date)->where('date', '<', $source->remainder_date)->sum('sum');
+                $remainder += Payment::where('source_id', $source->id)->where('date', '>=', $date)->where('date', '<', $source->remainder_date)->sum('sum');
+            }
+            // если date == source->remainder_date, то будет перезаписано ниже
+            $totals[$date] = ['sum' => round($remainder, 2)];
+        }
+
+        // inject входящий остаток
+        if ($source->remainder_date >= array_keys($items)[count($items) - 1] && $source->remainder_date <= array_keys($items)[0]) {
+            $totals[$source->remainder_date] = [
+                'sum'       => $source->remainder,
+                'comment'   => 'входящий остаток',
+            ];
+            if (! isset($items[$source->remainder_date])) {
+                $items[$source->remainder_date] = [[]];
+                ksort($items);
+                $items = array_reverse($items);
+            }
+        }
+
         return compact('items', 'totals', 'item_cnt');
     }
 }
