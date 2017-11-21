@@ -1,7 +1,9 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
-        <div style='margin-bottom: 6px; font-size: 12px'>
-            разрешение: 4000x2000, форматы: jpg, jpeg, png
+        <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
+            разрешение: 4000x2000<br />
+            форматы: jpg, jpeg, png<br />
+            максимальный размер: 7мб
         </div>
         <div style='margin-bottom: 12px'>
             <a class="pointer" ng-click="editOrUpload(1)" ng-show="FormService.model.photos.length == 0">загрузить</a>

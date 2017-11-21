@@ -20499,6 +20499,73 @@ select[multiple] {
   z-index: 99999 !important;
 }
 
+.hidden-datepicker {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 99;
+}
+
+.simpleinput-wrapper {
+  margin-bottom: 17px !important;
+}
+
+.simpleinput-wrapper input, .simpleinput-wrapper textarea {
+  border: none;
+  border-bottom: 1px solid black;
+  width: 100%;
+  outline: none;
+  padding: 4px 0;
+}
+
+.simpleinput-wrapper label {
+  color: #757575;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.simpleinput-wrapper i {
+  position: absolute;
+  bottom: 8px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.simpleinput-wrapper label, .flex-list label {
+  color: #757575;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+#payment-stream-modal .modal-dialog {
+  margin: 7% auto !important;
+  width: 475px;
+}
+
+.hidden-select {
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  opacity: 0;
+  z-index: 99;
+}
+
+.table-star {
+  margin-right: 5px;
+  top: 1px;
+  position: relative;
+  cursor: pointer;
+  color: #d1d1d1;
+  outline: none;
+}
+
+.table-star.active {
+  color: #f78d46;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }

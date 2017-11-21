@@ -72,6 +72,19 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
         Route::post('update/{table}', 'SyncController@update');
     });
 
+    # Payments
+    Route::post('payments/remainders', 'PaymentsController@remainders');
+    Route::post('payments/stats', 'PaymentsController@stats');
+    Route::post('payments/delete', 'PaymentsController@delete');
+
+    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
+        Route::resource('sources', 'SourcesController');
+        Route::resource('expendituregroups', 'ExpenditureGroupsController');
+        Route::resource('expenditures', 'ExpendituresController');
+    });
+
+    Route::resource('payments', 'PaymentsController');
+
     # Search
     Route::post('search', 'SearchController@search');
 });

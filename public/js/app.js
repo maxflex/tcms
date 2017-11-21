@@ -1121,7 +1121,320 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('PaymentRemainders', function($scope, $http, $timeout) {
+  var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  angular.module('Egecms').controller('PaymentsIndex', function($scope, $attrs, $timeout, $http, IndexService, Payment, UserService, Checked) {
+    var getTotal;
+    bindArguments($scope, arguments);
+    $(window).on('keydown', function(e) {
+      if (e.which === 8) {
+        return $scope.removeSelectedPayments();
+      }
+    });
+    $('#import-button').fileupload({
+      start: function() {
+        return ajaxStart();
+      },
+      always: function() {
+        return ajaxEnd();
+      },
+      done: function(i, response) {
+        notifySuccess("<b>" + response.result + "</b> импортировано");
+        return $scope.filter();
+      },
+      error: function(response) {
+        console.log(response);
+        return notifyError(response.responseJSON);
+      }
+    });
+    angular.element(document).ready(function() {
+      $timeout(function() {
+        return $('.selectpicker').selectpicker('refresh');
+      }, 1000);
+      $scope.search = $.cookie("payments") ? JSON.parse($.cookie("payments")) : {
+        addressee_id: '',
+        source_id: '',
+        expenditure_id: '',
+        type: ''
+      };
+      $scope.selected_payments = [];
+      $scope.tab = 'payments';
+      return IndexService.init(Payment, $scope.current_page, $attrs);
+    });
+    $scope.filter = function() {
+      $.cookie("payments", JSON.stringify($scope.search), {
+        expires: 365,
+        path: '/'
+      });
+      IndexService.current_page = 1;
+      return IndexService.pageChanged();
+    };
+    $scope.keyFilter = function(event) {
+      if (event.keyCode === 13) {
+        return $scope.filter();
+      }
+    };
+    $scope.selectPayment = function(payment) {
+      var ref;
+      if (ref = payment.id, indexOf.call($scope.selected_payments, ref) >= 0) {
+        return $scope.selected_payments = _.without($scope.selected_payments, payment.id);
+      } else {
+        return $scope.selected_payments.push(payment.id);
+      }
+    };
+    $scope.removeSelectedPayments = function() {
+      if ($scope.selected_payments.length) {
+        return bootbox.confirm("Вы уверены, что хотите удалить <b>" + $scope.selected_payments.length + "</b> платежей?", function(response) {
+          if (response === true) {
+            ajaxStart();
+            return $.post('api/payments/delete', {
+              ids: $scope.selected_payments
+            }).then(function(response) {
+              $scope.selected_payments = [];
+              $scope.filter();
+              return ajaxEnd();
+            });
+          }
+        });
+      }
+    };
+    $scope.getExpenditure = function(id) {
+      var expenditure;
+      id = parseInt(id);
+      expenditure = null;
+      $scope.expenditures.forEach(function(e) {
+        if (expenditure) {
+          return;
+        }
+        return e.data.forEach(function(d) {
+          if (d.id === id) {
+            expenditure = d;
+          }
+        });
+      });
+      return expenditure;
+    };
+    $scope.addPaymentDialog = function(payment) {
+      if (payment == null) {
+        payment = false;
+      }
+      $scope.modal_payment = _.clone(payment || $scope.fresh_payment);
+      return $('#payment-stream-modal').modal('show');
+    };
+    $scope.savePayment = function() {
+      var func;
+      $scope.adding_payment = true;
+      if (!$scope.modal_payment.date) {
+        $('#payment-date').focus();
+        notifyError("укажите дату");
+        return;
+      }
+      if (!$scope.modal_payment.source_id) {
+        notifyError("укажите источник");
+        return;
+      }
+      if (!$scope.modal_payment.addressee_id) {
+        notifyError("укажите адресат");
+        return;
+      }
+      if (!$scope.modal_payment.expenditure_id) {
+        notifyError("укажите статью");
+        return;
+      }
+      if (!$scope.modal_payment.purpose) {
+        $('#payment-purpose').focus();
+        notifyError("укажите назначение");
+        return;
+      }
+      func = $scope.modal_payment.id ? Payment.update : Payment.save;
+      return func($scope.modal_payment, function(response) {
+        $scope.adding_payment = false;
+        $('#payment-stream-modal').modal('hide');
+        return $scope.filter();
+      });
+    };
+    $scope.clonePayment = function(payment) {
+      var new_payment;
+      new_payment = _.clone(payment);
+      delete new_payment.id;
+      delete new_payment.created_at;
+      delete new_payment.updated_at;
+      delete new_payment.user_id;
+      return $scope.addPaymentDialog(new_payment);
+    };
+    $scope.deletePayment = function() {
+      return Payment["delete"]({
+        id: $scope.modal_payment.id
+      }, function(response) {
+        $('#payment-stream-modal').modal('hide');
+        return $scope.filter();
+      });
+    };
+    $scope.editPayment = function(model) {
+      $scope.modal_payment = _.clone(model);
+      return $('#payment-stream-modal').modal('show');
+    };
+    $scope.formatStatDate = function(date) {
+      return moment(date + '-01').format('MMMM');
+    };
+    $scope.loadStats = function() {
+      if ($scope.tab !== 'stats') {
+        return;
+      }
+      $scope.stats_loading = true;
+      ajaxStart();
+      return $http.post('api/payments/stats', $scope.search_stats).then(function(response) {
+        ajaxEnd();
+        $scope.stats_loading = false;
+        if (response.data) {
+          $scope.stats_data = response.data.data;
+          $scope.expenditure_data = response.data.expenditures;
+          return $timeout(function() {
+            return $scope.totals = getTotal();
+          });
+        } else {
+          return $scope.stats_data = null;
+        }
+      });
+    };
+    return getTotal = function() {
+      var total;
+      total = {
+        "in": 0,
+        out: 0,
+        sum: 0
+      };
+      $.each($scope.stats_data, function(year, data) {
+        return data.forEach(function(d) {
+          total["in"] += parseFloat(d["in"]);
+          total.out += parseFloat(d.out);
+          return total.sum += parseFloat(d.sum);
+        });
+      });
+      return total;
+    };
+  }).controller('PaymentForm', function($scope, FormService, Payment) {
+    bindArguments($scope, arguments);
+    return angular.element(document).ready(function() {
+      FormService.init(Payment, $scope.id, $scope.model);
+      return FormService.prefix = '';
+    });
+  }).controller('PaymentSourceIndex', function($scope, $attrs, $timeout, IndexService, PaymentSource) {
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      return IndexService.init(PaymentSource, $scope.current_page, $attrs);
+    });
+    return $scope.sortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      containment: "parent",
+      update: function(event, ui) {
+        return $timeout(function() {
+          return IndexService.page.data.forEach(function(model, index) {
+            return PaymentSource.update({
+              id: model.id,
+              position: index
+            });
+          });
+        });
+      }
+    };
+  }).controller('PaymentSourceForm', function($scope, FormService, PaymentSource) {
+    bindArguments($scope, arguments);
+    return angular.element(document).ready(function() {
+      FormService.init(PaymentSource, $scope.id, $scope.model);
+      return FormService.prefix = 'payments/';
+    });
+  }).controller('PaymentExpenditureIndex', function($scope, $attrs, $timeout, IndexService, PaymentExpenditure, PaymentExpenditureGroup) {
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      return $scope.groups = PaymentExpenditureGroup.query();
+    });
+    $scope.onEdit = function(id, event) {
+      return PaymentExpenditureGroup.update({
+        id: id,
+        name: $(event.target).text()
+      });
+    };
+    $scope.removeGroup = function(group) {
+      return bootbox.confirm("Вы уверены, что хотите удалить группу «" + group.name + "»", function(response) {
+        if (response === true) {
+          return PaymentExpenditureGroup.remove({
+            id: group.id
+          }, function() {
+            return $scope.groups = PaymentExpenditureGroup.query();
+          });
+        }
+      });
+    };
+    $scope.sortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      containment: "parent",
+      update: function(event, ui, data) {
+        return $timeout(function() {
+          return $scope.groups.forEach(function(group) {
+            return group.data.forEach(function(model, index) {
+              return PaymentExpenditure.update({
+                id: model.id,
+                position: index
+              });
+            });
+          });
+        });
+      }
+    };
+    return $scope.sortableGroupOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      containment: "parent",
+      items: ".item-draggable",
+      update: function(event, ui, data) {
+        return $timeout(function() {
+          return $scope.groups.forEach(function(group, index) {
+            return PaymentExpenditureGroup.update({
+              id: group.id,
+              position: index
+            });
+          });
+        });
+      }
+    };
+  }).controller('PaymentExpenditureForm', function($scope, $timeout, FormService, PaymentExpenditure, PaymentExpenditureGroup) {
+    bindArguments($scope, arguments);
+    angular.element(document).ready(function() {
+      FormService.init(PaymentExpenditure, $scope.id, $scope.model);
+      return FormService.prefix = 'payments/';
+    });
+    $scope.changeGroup = function() {
+      if (FormService.model.group_id === -1) {
+        FormService.model.group_id = '';
+        return $('#new-group').modal('show');
+      }
+    };
+    return $scope.createNewGroup = function() {
+      $('#new-group').modal('hide');
+      return PaymentExpenditureGroup.save({
+        name: $scope.new_group_name
+      }, function(response) {
+        $scope.new_group_name = '';
+        $scope.groups.push(response);
+        FormService.model.group_id = response.id;
+        return $timeout(function() {
+          return $('.selectpicker').selectpicker('refresh');
+        });
+      });
+    };
+  }).controller('PaymentRemainders', function($scope, $http, $timeout) {
     var load;
     bindArguments($scope, arguments);
     angular.element(document).ready(function() {
@@ -1517,117 +1830,6 @@
 }).call(this);
 
 (function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageGroup', function($resource) {
-    return $resource(apiPath('pages/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('GalleryFolder', function($resource) {
-    return $resource(apiPath('gallery/folders'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('gallery'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('tags', 'checkExistance')
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
   angular.module('Egecms').value('Published', [
     {
       id: 0,
@@ -1668,7 +1870,7 @@
       id: 10,
       title: '10'
     }
-  ]).value('UpDown', [
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
     {
       id: 1,
       title: 'вверху'
@@ -2234,6 +2436,133 @@
 }).call(this);
 
 (function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageGroup', function($resource) {
+    return $resource(apiPath('pages/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('GalleryFolder', function($resource) {
+    return $resource(apiPath('gallery/folders'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('gallery'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Payment', function($resource) {
+    return $resource(apiPath('payments'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentSource', function($resource) {
+    return $resource(apiPath('payments/sources'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditure', function($resource) {
+    return $resource(apiPath('payments/expenditures'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditureGroup', function($resource) {
+    return $resource(apiPath('payments/expendituregroups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('tags', 'checkExistance')
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').service('AceService', function() {
     this.editors = {};
     this.initEditor = function(FormService, minLines, id, mode) {
@@ -2461,7 +2790,7 @@
       }
       return this.model.$save().then((function(_this) {
         return function(response) {
-          return redirect(_this.redirect_url || modelName() + ("/" + response.id + "/edit"));
+          return redirect(_this.redirect_url || _this.prefix + modelName() + ("/" + response.id + "/edit"));
         };
       })(this), (function(_this) {
         return function(response) {
@@ -2640,6 +2969,108 @@
       });
       this.FormService.model.photos.splice(this.selected_photo_index, 1);
       return $('#change-photo').modal('hide');
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('UserService', function(User, $rootScope, $timeout) {
+    var system_user;
+    this.users = User.query();
+    $timeout((function(_this) {
+      return function() {
+        return _this.current_user = $rootScope.$$childTail.user;
+      };
+    })(this));
+    system_user = {
+      color: '#999999',
+      login: 'system',
+      id: 0
+    };
+    this.get = function(user_id) {
+      return this.getUser(user_id);
+    };
+    this.getUser = function(user_id) {
+      return _.findWhere(this.users, {
+        id: parseInt(user_id)
+      }) || system_user;
+    };
+    this.getLogin = function(user_id) {
+      return this.getUser(parseInt(user_id)).login;
+    };
+    this.getColor = function(user_id) {
+      return this.getUser(parseInt(user_id)).color;
+    };
+    this.getWithSystem = function(only_active) {
+      var users;
+      if (only_active == null) {
+        only_active = true;
+      }
+      users = this.getAll(only_active);
+      users.unshift(system_user);
+      return users;
+    };
+    this.getAll = function(only_active) {
+      if (only_active == null) {
+        only_active = true;
+      }
+      if (only_active) {
+        return _.filter(this.users, function(user) {
+          return user.rights.length && user.rights.indexOf('35') === -1;
+        });
+      } else {
+        return this.users;
+      }
+    };
+    this.toggle = function(entity, user_id, Resource) {
+      var new_user_id, obj;
+      if (Resource == null) {
+        Resource = false;
+      }
+      new_user_id = entity[user_id] ? 0 : this.current_user.id;
+      if (Resource) {
+        return Resource.update((
+          obj = {
+            id: entity.id
+          },
+          obj["" + user_id] = new_user_id,
+          obj
+        ), function() {
+          return entity[user_id] = new_user_id;
+        });
+      } else {
+        return entity[user_id] = new_user_id;
+      }
+    };
+    this.getBannedUsers = function() {
+      return _.filter(this.users, function(user) {
+        return user.rights.length && user.rights.indexOf('35') !== -1;
+      });
+    };
+    this.getBannedHaving = function(condition_obj) {
+      return _.filter(this.users, function(user) {
+        return user.rights.indexOf('35') !== -1 && condition_obj && condition_obj[user.id];
+      });
+    };
+    this.getActiveInAnySystem = function(with_system) {
+      var users;
+      if (with_system == null) {
+        with_system = true;
+      }
+      users = _.chain(this.users).filter(function(user) {
+        return user.rights.indexOf('35') === -1 || user.rights.indexOf('34') === -1;
+      }).sortBy('login').value();
+      if (with_system) {
+        users.unshift(system_user);
+      }
+      return users;
+    };
+    this.getBannedInBothSystems = function() {
+      return _.chain(this.users).filter(function(user) {
+        return user.rights.indexOf('35') !== -1 && user.rights.indexOf('34') !== -1;
+      }).sortBy('login').value();
     };
     return this;
   });

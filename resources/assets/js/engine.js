@@ -183,6 +183,7 @@
 
 			// REGEX для полей типа "число" и "1-5"
 			$(".digits-only-float").inputmask("Regex", {regex: "[0-9]*[.]?[0-9]+"});
+			$(".digits-only-floatcomma").inputmask("Regex", {regex: "[0-9]*[,]?[0-9]{0,2}"});
 			$(".digits-only-minus").inputmask("Regex", {regex: "[-]?[0-9]*"});
 			$(".digits-only").inputmask("Regex", {regex: "[0-9]*"});
 
@@ -191,6 +192,7 @@
 		    $.mask.definitions['M'] = "[0-5]";
 		    $.mask.definitions['m'] = "[0-9]";
 			$(".timemask").mask("Hh:Mm", {clearIfNotMatch: true});
+			$(".datemask").mask("99.99.9999", {clearIfNotMatch: true});
 
 			// Маска телефонов
 			$(".phone-masked")

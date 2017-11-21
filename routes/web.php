@@ -48,6 +48,15 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
 
     Route::get('gallery/folder/{folder_id}', 'GalleryController@index');
     Route::resource('gallery', 'GalleryController');
+
+    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
+        Route::resource('expenditures', 'ExpendituresController');
+        Route::resource('sources', 'SourcesController');
+    });
+    Route::get('payments/remainders', 'PaymentsController@remainders');
+    Route::get('payments/export', 'PaymentsController@export');
+    Route::post('payments/import', 'PaymentsController@import');
+    Route::resource('payments', 'PaymentsController');
 });
 
 # Templates for angular directives

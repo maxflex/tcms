@@ -15,6 +15,7 @@ angular.module('Egecms')
         {id:9, title: '9'},
         {id:10, title: '10'},
     ]
+    .value 'Checked', ['не проверено', 'проверено']
     .value 'UpDown', [
         {id: 1, title: 'вверху'},
         {id: 2, title: 'внизу'},

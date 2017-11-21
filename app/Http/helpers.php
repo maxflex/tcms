@@ -94,9 +94,28 @@
 	 * $array – [var_name = {var_values}; ...]
 	 * @return строка вида 'a = {test: true}; b = {var : 12};'
 	 */
-	function ngInit($array)
+	// function ngInit($array)
+	// {
+    //     $return = '';
+	// 	foreach ($array as $var_name => $var_value) {
+	// 		// Если значение не установлено, то это пустой массив по умолчанию
+	// 		// if (!$var_value && !is_int($var_value)) {
+	// 		// 	$var_value = "[]";
+	// 		// } else {
+	// 			// иначе кодируем объект в JSON
+	// 			// $var_value = htmlspecialchars(json_encode($var_value, JSON_NUMERIC_CHECK));
+	// 			$var_value = htmlspecialchars(json_encode($var_value, JSON_FORCE_OBJECT));
+	// 		// }
+	// 		$return .= $var_name." = ". $var_value ."; ";
+	// 	}
+    //
+	// 	return ['nginit' => $return];
+	// }
+
+    function ngInit($array)
 	{
         $return = '';
+
 		foreach ($array as $var_name => $var_value) {
 			// Если значение не установлено, то это пустой массив по умолчанию
 			// if (!$var_value && !is_int($var_value)) {
@@ -104,7 +123,7 @@
 			// } else {
 				// иначе кодируем объект в JSON
 				// $var_value = htmlspecialchars(json_encode($var_value, JSON_NUMERIC_CHECK));
-				$var_value = htmlspecialchars(json_encode($var_value, JSON_FORCE_OBJECT));
+				$var_value = htmlspecialchars(json_encode($var_value));
 			// }
 			$return .= $var_name." = ". $var_value ."; ";
 		}
