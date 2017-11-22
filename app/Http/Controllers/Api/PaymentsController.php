@@ -40,13 +40,6 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        if (isset($request->create_loan) && $request->create_loan) {
-            $loan = new Payment($request->input());
-            $buf = $loan->addressee_id;
-            $loan->addressee_id = $loan->source_id;
-            $loan->source_id = $buf;
-            $loan->save();
-        }
         return Payment::create($request->input())->fresh();
     }
 
