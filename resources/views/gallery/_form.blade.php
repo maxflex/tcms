@@ -64,7 +64,7 @@
                 <option value=''>не выбрано</option>
                 <option value='-1'>новая папка</option>
                 <option disabled>──────────────</option>
-                <option ng-repeat="folder in folders" value="@{{ folder.id }}">
+                <option ng-repeat="folder in folders track by $index" value="@{{ folder.id }}">
                     @{{ folder.name }}
                 </option>
             </select>

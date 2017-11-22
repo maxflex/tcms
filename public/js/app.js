@@ -624,7 +624,7 @@
         name: $scope.new_folder_name
       }, function(response) {
         $scope.new_folder_name = '';
-        $scope.folders[makeId()] = response;
+        $scope.folders.push(response);
         FormService.model.folder_id = response.id;
         return $timeout(function() {
           return $('.selectpicker').selectpicker('refresh');

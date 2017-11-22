@@ -91,7 +91,7 @@ angular
                 name: $scope.new_folder_name
             , (response) ->
                 $scope.new_folder_name = ''
-                $scope.folders[makeId()] = response
+                $scope.folders.push(response)
                 FormService.model.folder_id = response.id
                 $timeout -> $('.selectpicker').selectpicker('refresh')
 
