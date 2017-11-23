@@ -1,7 +1,7 @@
 angular.module 'Egecms'
-    .service 'UserService', (User, $rootScope, $timeout)->
+    .service 'UserService', (AllUser, $rootScope, $timeout)->
         # load all users
-        this.users = User.query()
+        this.users = AllUser.query()
 
         # logged user
         $timeout =>

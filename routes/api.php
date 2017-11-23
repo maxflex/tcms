@@ -50,6 +50,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::get('tags/autocomplete', 'TagsController@autocomplete');
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
+    Route::resource('allusers', 'AllUsersController');
 
     Route::resource('reviews', 'ReviewsController');
     Route::resource('equipment', 'EquipmentController');

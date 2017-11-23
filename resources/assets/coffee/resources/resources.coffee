@@ -40,6 +40,9 @@ angular.module('Egecms')
     .factory 'User', ($resource) ->
         $resource apiPath('users'), {id: '@id'}, updatable()
 
+    .factory 'AllUser', ($resource) ->
+        $resource apiPath('allusers'), {id: '@id'}, updatable()
+
     .factory 'Payment', ($resource) ->
         $resource apiPath('payments'), {id: '@id'}, updatable()
 
