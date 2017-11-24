@@ -15,7 +15,7 @@ class UploadController extends Controller
 
     public function original(Request $request)
     {
-        if ($request->file('photo')->getClientSize() > 7340032) { // 7.3 mb с запасом
+        if ($request->file('photo')->getClientSize() > 7654604) { // 7.3 mb с запасом
             return response()->json(['error' => 'максимальный объём файла – 7 Мб']);
         }
 
