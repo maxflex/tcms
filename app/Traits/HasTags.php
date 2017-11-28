@@ -8,12 +8,16 @@ trait HasTags
 {
     public function tags()
     {
-        return DB::table('tag_entities')->where('entity_type', self::class)->where('entity_id', $this->id);
+        return DB::table('tag_entities')->where('entity_type', self::class)->where('entity_id', $this->id)->orderBy('id');
     }
 
     public function getTagsAttribute()
     {
-        return Tag::whereIn('id', $this->tags()->pluck('tag_id'))->get();
+        $tag_ids = $this->tags()->pluck('tag_id')->all();
+        if (count($tag_ids)) {
+            return Tag::whereIn('id', $tag_ids)->orderBy(DB::raw("FIELD(id, " . implode(",", $tag_ids) . ")"))->get();
+        }
+        return [];
     }
 
     public function setTagsAttribute($tags)
