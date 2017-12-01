@@ -9,7 +9,8 @@ class PriceSection extends Model
     protected $fillable = [
         'name',
         'price_section_id',
-        'position'
+        'position',
+        'extra_column'
     ];
 
     // protected $with = ['sections', 'positions'];

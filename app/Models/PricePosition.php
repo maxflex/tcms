@@ -15,7 +15,6 @@ class PricePosition extends Model
         'unit',
         'price_section_id',
         'position',
-        'tags',
-        'extra_column'
+        'tags'
     ];
 }

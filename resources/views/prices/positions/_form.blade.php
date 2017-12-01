@@ -17,10 +17,7 @@
     </div>
 </div>
 <div class="row mb">
-    <div class="col-sm-6">
-        @include('modules.input', ['title' => 'дополнительно', 'model' => 'extra_column', 'attributes' => ['maxlength' => 60]])
-    </div>
-    <div class="col-sm-6">
+    <div class="col-sm-12">
          <label class="no-margin-bottom label-opacity">тэги</label>
         <tags-input ng-model="FormService.model.tags" display-property="text" replace-spaces-with-dashes='false' add-from-autocomplete-only="true" placeholder="добавьте тэг">
            <auto-complete source="loadTags($query)"></auto-complete>
