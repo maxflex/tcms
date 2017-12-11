@@ -175,7 +175,7 @@ class PaymentsController extends Controller
         // $sources = DB::table('payment_sources')->whereId(1)->get();
 
         // кол-во элементов
-        $query      = egerep('payments')->where('date', '>=', $source->remainders->last()->getClean('date'))->whereRaw("(source_id={$source->id} or addressee_id={$source->id})");
+        $query      = egerep('payments')->where('date', '>=', $source->remainders->last()->date)->whereRaw("(source_id={$source->id} or addressee_id={$source->id})");
         $item_cnt   = cloneQuery($query)->count();
         $items      = cloneQuery($query)->orderBy('date', 'desc')->take(EgerepSource::PER_PAGE_REMAINDERS)->skip(($page - 1) * EgerepSource::PER_PAGE_REMAINDERS)->get();
 
@@ -190,9 +190,9 @@ class PaymentsController extends Controller
         foreach($items as $date => $data) {
             $remainder = $source->remainders->last();
             $sum = $remainder->remainder;
-            if ($date > $remainder->getClean('date')) {
-                $sum += egerep('payments')->where('addressee_id', $source->id)->where('date', '<=', $date)->where('date', '>', $remainder->getClean('date'))->sum('sum');
-                $sum -= egerep('payments')->where('source_id', $source->id)->where('date', '<=', $date)->where('date', '>', $remainder->getClean('date'))->sum('sum');
+            if ($date > $remainder->date) {
+                $sum += egerep('payments')->where('addressee_id', $source->id)->where('date', '<=', $date)->where('date', '>', $remainder->date)->sum('sum');
+                $sum -= egerep('payments')->where('source_id', $source->id)->where('date', '<=', $date)->where('date', '>', $remainder->date)->sum('sum');
             }
             // если date == source->remainder_date, то будет перезаписано ниже
             $totals[$date] = ['sum' => round($sum, 2)];
@@ -202,15 +202,15 @@ class PaymentsController extends Controller
         $dates = array_keys($items);
         $remainders = [];
         foreach($source->remainders as $r) {
-            if (($r->getClean('date') >= $dates[count($dates) - 1] && $r->getClean('date') <= $dates[0])
-                || ($r->getClean('date') < $earliest_payment_date) || ($r->getClean('date') > $latest_payment_date)
+            if (($r->date >= $dates[count($dates) - 1] && $r->date <= $dates[0])
+                || ($r->date < $earliest_payment_date) || ($r->date > $latest_payment_date)
             ) {
-                $remainders[$r->getClean('date')] = [
+                $remainders[$r->date] = [
                     'sum'     => $r->remainder,
                     'comment' => ($r->date == $source->remainders->last()->date) ? 'входящий остаток' : 'засвидетельствованный остаток',
                 ];
-                if (! isset($items[$r->getClean('date')])) {
-                    $items[$r->getClean('date')] = [];
+                if (! isset($items[$r->date])) {
+                    $items[$r->date] = [];
                 }
             }
         }
