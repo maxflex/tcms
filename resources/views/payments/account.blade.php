@@ -17,9 +17,18 @@
             </tr>
         </thead>
         <tbody ng-repeat="(date, items) in data.items">
-            <tr>
+            <tr ng-if="data.remainders[date]">
+                <td colspan="4">
+                    <span ng-show="!items.length">@{{ date | date:'dd.MM.yyyy' }}</span>
+                </td>
+                <td>@{{ data.remainders[date].sum | number }}</td>
+                <td colspan="2" class="text-gray">
+                    @{{ data.remainders[date].comment }}
+                </td>
+            </tr>
+            <tr ng-if="data.totals[date]">
                 <td colspan="3"></td>
-                <td>@{{ data.totals[date].sum | number }}</td>
+                <td colspan="2">@{{ data.totals[date].sum | number }}</td>
                 <td colspan="2" class="text-gray">
                     @{{ data.totals[date].comment }}
                 </td>
@@ -29,10 +38,12 @@
                     <span ng-show="$last">@{{ date | date:'dd.MM.yyyy' }}</span>
                 </td>
                 <td width='120'>
-                    <span ng-show="item.addressee_id == source_id" class="text-green">+@{{ item.sum | number }}</span>
+                    <span ng-show="item.addressee_id == source_id" class="text-success">+@{{ item.sum | number }}</span>
                 </td>
                 <td width='120'>
                     <span ng-show="item.source_id == source_id" class="text-danger">-@{{ item.sum | number }}</span>
+                </td>
+                <td width='120'>
                 </td>
                 <td width='120'>
                 </td>
