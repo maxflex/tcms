@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\Payment\Source;
+use App\Models\Payment\EgerepSource;
 use DB;
 
 class PaymentsController extends Controller
@@ -168,7 +169,7 @@ class PaymentsController extends Controller
     public function account(Request $request)
     {
         $page = isset($request->page) ? $request->page : 1;
-        $source = Source::find($request->source_id);
+        $source = EgerepSource::find($request->source_id);
 
         // $sources = DB::table('payment_sources')->get();
         // $sources = DB::table('payment_sources')->whereId(1)->get();
@@ -176,7 +177,7 @@ class PaymentsController extends Controller
         // кол-во элементов
         $query      = egerep('payments')->where('date', '>=', $source->remainders->last()->getClean('date'))->whereRaw("(source_id={$source->id} or addressee_id={$source->id})");
         $item_cnt   = cloneQuery($query)->count();
-        $items      = cloneQuery($query)->orderBy('date', 'desc')->take(Source::PER_PAGE_REMAINDERS)->skip(($page - 1) * Source::PER_PAGE_REMAINDERS)->get();
+        $items      = cloneQuery($query)->orderBy('date', 'desc')->take(EgerepSource::PER_PAGE_REMAINDERS)->skip(($page - 1) * EgerepSource::PER_PAGE_REMAINDERS)->get();
 
         // для inject входящий остаток
         $earliest_payment_date = cloneQuery($query)->orderBy('date', 'asc')->value('date');
