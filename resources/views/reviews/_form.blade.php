@@ -5,7 +5,7 @@
             'model' => 'body',
             'textarea' => true,
             'attributes' => [
-                'maxlength' => 500
+                'maxlength' => 800
             ]
         ])
     </div>
