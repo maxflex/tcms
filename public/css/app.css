@@ -20349,10 +20349,6 @@ select[multiple] {
   font-weight: bold;
 }
 
-.price-list .price-section-item {
-  margin-left: 18px;
-}
-
 .price-list .price-divider {
   background-color: rgba(0, 0, 0, 0.1);
   height: 1px;
@@ -20572,6 +20568,7 @@ select[multiple] {
   padding: 1px 4px 2px;
   border-radius: 4px;
   margin-right: 5px;
+  font-size: 10px;
 }
 
 .program-container h2 {

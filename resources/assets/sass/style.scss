@@ -4228,7 +4228,7 @@ select[multiple] {
         font-weight: bold;
     }
     & .price-section-item {
-        margin-left: 18px;
+        // margin-left: 18px;
     }
     & .price-divider {
         background-color: $gray-high-opacity;
@@ -4440,4 +4440,5 @@ select[multiple] {
     padding: 1px 4px 2px;
     border-radius: 4px;
     margin-right: 5px;
+    font-size: 10px;
 }
