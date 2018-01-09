@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@1/dist/clipboard.min.js"></script>
     <div class="price-list">
         <ul ui-sortable='sortableOptions' ng-model="items">
             <li ng-repeat="item in items" class='price-item-@{{ $parent.$id }}'>

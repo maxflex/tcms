@@ -20566,6 +20566,14 @@ select[multiple] {
   color: #f78d46;
 }
 
+.tag {
+  background: #ce171f;
+  color: white;
+  padding: 1px 4px 2px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }

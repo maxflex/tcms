@@ -8,6 +8,7 @@ angular.module 'Egecms'
             $scope.Units = Units
             $scope.findById = $rootScope.findById
             $scope.controller_scope = scope
+
             $scope.sortableOptions =
                 update: (event, ui) ->
                     $timeout ->

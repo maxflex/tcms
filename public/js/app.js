@@ -1494,7 +1494,10 @@
       $http.get('api/prices').then(function(response) {
         return $scope.items = response.data;
       });
-      return $scope.collapsed_price_sections = $.cookie("collapsed_price_sections") ? JSON.parse($.cookie("collapsed_price_sections")) : [];
+      $scope.collapsed_price_sections = $.cookie("collapsed_price_sections") ? JSON.parse($.cookie("collapsed_price_sections")) : [];
+      return $timeout(function() {
+        return new Clipboard('.copiable');
+      }, 1000);
     });
     clearChangePrice = function(section_id) {
       $scope.change_price = {

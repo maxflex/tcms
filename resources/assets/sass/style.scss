@@ -4433,3 +4433,11 @@ select[multiple] {
 		color: #f78d46;
 	}
 }
+
+.tag {
+    background: $green-main;
+    color: white;
+    padding: 1px 4px 2px;
+    border-radius: 4px;
+    margin-right: 5px;
+}

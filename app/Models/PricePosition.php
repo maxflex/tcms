@@ -9,6 +9,8 @@ class PricePosition extends Model
 {
     use HasTags;
 
+    protected $appends = ['tags'];
+    
     protected $fillable = [
         'name',
         'price',

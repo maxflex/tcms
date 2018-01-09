@@ -7,6 +7,9 @@ angular
             $http.get('api/prices').then (response) ->
                 $scope.items = response.data
             $scope.collapsed_price_sections = if $.cookie("collapsed_price_sections") then JSON.parse($.cookie("collapsed_price_sections")) else []
+            $timeout ->
+                new Clipboard('.copiable')
+            , 1000
 
         clearChangePrice = (section_id) ->
             $scope.change_price =
