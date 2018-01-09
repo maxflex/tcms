@@ -5,7 +5,7 @@
 <a ng-show='item.is_section' href='prices/@{{ item.model.id }}/positions/create' style='margin-left: 20px'>+ позиция</a>
 <a ng-show='item.is_section' href='prices/@{{ item.model.id }}/create' style='margin-left: 5px'>+ раздел</a>
 <span class="pull-right" ng-show="!item.is_section && item.model.price" style='width: 700px; white-space: nowrap'>
-    от @{{ item.model.price | number }} руб.<span ng-show="item.model.unit">/@{{ findById(Units, item.model.unit).title }}</span>
+    <span style='display: inline-block; width: 175px'>от @{{ item.model.price | number }} руб.<span ng-show="item.model.unit">/@{{ findById(Units, item.model.unit).title }}</span></span>
     <span style='margin-left: 10px'>
         <span class="tag" ng-repeat="tag in item.model.tags">@{{ tag.text }}</span>
     </span>
