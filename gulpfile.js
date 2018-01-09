@@ -28,8 +28,7 @@ const elixir = require('laravel-elixir');
             port: 8103,
             open: 'external',
             host: 'tcms.app',
-            proxy: 'https://tcms.app:8102',
-            https: true,
+            proxy: 'http://tcms.localhost:8102',
             ghostMode: false,
             watchOptions: {
                 ignored: '*.php'

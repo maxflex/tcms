@@ -70,7 +70,7 @@
                     <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
                     <div>
                         <div>
-                            @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title', 'maxlength' => 35]])
+                            @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title', 'maxlength' => 45]])
                         </div>
                     </div>
                     <div>
