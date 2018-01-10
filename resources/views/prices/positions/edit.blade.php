@@ -4,7 +4,7 @@
     <span ng-click="FormService.edit()">сохранить</span>
 @stop
 @section('title-right')
-    <span ng-click="FormService.delete($event)">удалить раздел</a>
+    <span ng-click="FormService.delete($event)">удалить позицию</a>
 @stop
 @section('content')
 @section('controller', 'PricePositionForm')

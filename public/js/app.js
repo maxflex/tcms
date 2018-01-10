@@ -2778,12 +2778,17 @@
           if (result === true) {
             beforeSave();
             return _this.model.$delete().then(function() {
+              var url;
               if (callback) {
                 callback();
                 _this.saving = false;
                 return ajaxEnd();
               } else {
-                return redirect(modelName());
+                url = _this.redirect_url || modelName();
+                if (_this.prefix) {
+                  url = _this.prefix + url;
+                }
+                return redirect(url);
               }
             }, function(response) {
               return notifyError(response.data.message);

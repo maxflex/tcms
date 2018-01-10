@@ -87,7 +87,9 @@ angular.module 'Egecms'
                             this.saving = false
                             ajaxEnd()
                         else
-                            redirect modelName()
+                            url = @redirect_url || modelName()
+                            url = @prefix + url if @prefix
+                            redirect url
                     , (response) ->
                         notifyError response.data.message
 
