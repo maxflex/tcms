@@ -19,6 +19,8 @@ class Variable extends Model
         'position'
     ];
 
+    protected $hidden = ['html'];
+
     protected static function boot()
     {
         parent::boot();
