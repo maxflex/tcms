@@ -18,12 +18,12 @@
             <div class="image-col-left">
                 <ui-cropper image="PhotoService.image" result-image="PhotoService.cropped_image"
                     area-type="{{ $type }}"
-                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-quality="1"></ui-cropper>
+                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="{{ $size }}" result-image-quality="1"></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
                 <div style='margin-bottom: 15px'>
                     <div class="form-group">
-                       <img ng-src="@{{ PhotoService.cropped_image }}" />
+                       <img ng-src="@{{ PhotoService.cropped_image }}" class="img-preview {{ $type }}" />
                     </div>
                 </div>
                 <div style='margin-bottom: 15px'>
