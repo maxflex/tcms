@@ -1,1 +1,1 @@
-<input type="file" name="photo" id="fileupload" style='display: none'/ data-url="upload">
+<input type="file" name="photo" id="fileupload" style='display: none'/ data-url="galleryUpload">

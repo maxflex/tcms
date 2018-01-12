@@ -13,7 +13,7 @@ class UploadController extends Controller
     const OK_FACTOR = 50;
     const allowedMimeTypes = ['image/jpeg','image/jpg','image/png'];
 
-    public function original(Request $request)
+    public function galleryOriginal(Request $request)
     {
         if ($request->file('photo')->getClientSize() > 7654604) { // 7.3 mb с запасом
             return response()->json(['error' => 'максимальный объём файла – 7 Мб']);
@@ -38,6 +38,24 @@ class UploadController extends Controller
 
         $request->file('photo')->move(Photo::getDir('originals'), $filename);
 
+        if ( isset($request->photo_id)) {
+            // todo: удаление старого фото
+            $photo = Photo::find($request->photo_id);
+            $photo->update(['original' => $filename]);
+        } else {
+            $photo = Photo::create([
+                'original' => $filename,
+                'entity_id' => $request->id,
+                'entity_type' => 'App\Models\\' . $request->type,
+            ]);
+        }
+        return $photo;
+    }
+
+    public function original(Request $request)
+    {
+        $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
+        $request->file('photo')->move(Photo::getDir('originals'), $filename);
         if ( isset($request->photo_id)) {
             // todo: удаление старого фото
             $photo = Photo::find($request->photo_id);
