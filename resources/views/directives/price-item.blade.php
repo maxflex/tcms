@@ -1,7 +1,7 @@
 <a ng-show="item.is_section" ng-class="{'invisible': !item.items.length}" class="pointer" style='margin-right: 3px'><i  class="pointer fa" ng-class="{'fa-plus': controller_scope.isCollapsed(item), 'fa-minus': !controller_scope.isCollapsed(item)}" ng-click="controller_scope.toggleCollapse(item)" aria-hidden="true"></i></a>
 <span ng-class="{'price-section': item.is_section, 'price-section-item': !item.is_section}">
     <span style='margin-right: 5px' ng-show='!item.is_section' class='link-like show-on-hover pointer copiable' data-clipboard-text="@{{ item.model.name }}"><i class="fa fa-clipboard" aria-hidden="true"></i></span>
-    <a href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'>@{{ item.model.name | cut:false:40 }}</a>
+    <a href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'>@{{ (item.model.name || 'имя не указано') | cut:false:40 }}</a>
 </span>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/positions/create' style='margin-left: 20px'>+ позиция</a>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/create' style='margin-left: 5px'>+ раздел</a>

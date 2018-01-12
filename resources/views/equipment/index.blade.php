@@ -10,7 +10,7 @@
     <table class="table">
         <tr ng-repeat="model in IndexService.page.data">
             <td>
-                <a href='equipment/@{{ model.id }}/edit'>@{{ model.name }}</a>
+                <a href='equipment/@{{ model.id }}/edit'>@{{ model.name || 'имя не указано' }}</a>
             </td>
             <td width='100' style='text-align: right'>
                 <a href='equipment/@{{ model.id }}/edit'>редактировать</a>

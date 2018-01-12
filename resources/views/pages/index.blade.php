@@ -25,7 +25,7 @@
                     ng-repeat="page in group.page"
                     ng-dragstart="dnd.page_id = page.id; dnd.old_group_id = group.id;"
                 >
-                    <a style="width:35%;" class="group-item-title" href="pages/@{{ page.id }}/edit">@{{ page.keyphrase }}</a>
+                    <a style="width:35%;" class="group-item-title" href="pages/@{{ page.id }}/edit">@{{ page.keyphrase || 'имя не указано' }}</a>
                     <span style="width:20%;" class="link-like" ng-class="{'link-gray': 0 == +page.published}" ng-click="toggleEnumServer(page, 'published', Published, Page)">@{{ Published[page.published].title }}</span>
                     <span style="width:20%;">@{{ formatDateTime(page.updated_at) }}</span>
                     <a style="width:23%;" href="{{ config('app.web-url') }}@{{ page.url }}" target="_blank">просмотреть страницу на сайте</a>

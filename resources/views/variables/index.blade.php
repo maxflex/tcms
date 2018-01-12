@@ -23,7 +23,7 @@
                     ng-repeat="variable in group.variable"
                     ng-dragstart="dnd.variable_id = variable.id; dnd.old_group_id = group.id;"
                 >
-                    <a class="group-item-title" href='variables/@{{ variable.id }}/edit'>@{{ variable.name }}</a>
+                    <a class="group-item-title" href='variables/@{{ variable.id }}/edit'>@{{ variable.name || 'имя не указано' }}</a>
                     <span class="group-item-desc">@{{ variable.desc }}</span>
                 </li>
             </ul>

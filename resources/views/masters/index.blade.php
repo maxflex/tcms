@@ -11,7 +11,7 @@
         <tr ng-repeat="model in IndexService.page.data">
             <td>
                 <a href='masters/@{{ model.id }}/edit'>
-                  @{{ model.last_name }} @{{ model.first_name[0] }}. @{{ model.middle_name[0] }}.
+                     @{{ (model.last_name || model.first_name || model.middle_name) ? (model.last_name + ' ' + model.first_name[0] + '. ' + model.middle_name[0] + '.') : 'имя не указано' }}
                 </a>
             </td>
             <td width='100' style='text-align: right'>
