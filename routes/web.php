@@ -41,6 +41,7 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
     Route::resource('reviews', 'ReviewsController');
+    Route::resource('videos', 'VideosController');
 
     Route::get('prices/{id}/create', 'PricesController@create');
     Route::resource('prices', 'PricesController');

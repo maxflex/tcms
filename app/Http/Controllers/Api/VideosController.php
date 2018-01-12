@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Variable;
+use App\Models\Video;
 
-class VariablesController extends Controller
+class VideosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +17,7 @@ class VariablesController extends Controller
      */
     public function index()
     {
+        return Video::paginate(30);
     }
 
     /**
@@ -37,7 +38,7 @@ class VariablesController extends Controller
      */
     public function store(Request $request)
     {
-        return Variable::create($request->input())->fresh();
+        return Video::create($request->input())->fresh();
     }
 
     /**
@@ -48,7 +49,7 @@ class VariablesController extends Controller
      */
     public function show($id)
     {
-        return Variable::find($id);
+        return Video::find($id);
     }
 
     /**
@@ -71,7 +72,7 @@ class VariablesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Variable::find($id)->update($request->input());
+        Video::find($id)->update($request->input());
     }
 
     /**
@@ -82,6 +83,6 @@ class VariablesController extends Controller
      */
     public function destroy($id)
     {
-        Variable::destroy($id);
+        Video::destroy($id);
     }
 }

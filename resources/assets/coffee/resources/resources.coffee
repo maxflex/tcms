@@ -73,6 +73,9 @@ angular.module('Egecms')
     .factory 'Review', ($resource) ->
         $resource apiPath('reviews'), {id: '@id'}, updatable()
 
+    .factory 'Video', ($resource) ->
+        $resource apiPath('videos'), {id: '@id'}, updatable()
+
 
 apiPath = (entity, additional = '') ->
     "api/#{entity}/" + (if additional then additional + '/' else '') + ":id"

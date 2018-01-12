@@ -20317,6 +20317,14 @@ select[multiple] {
   border-radius: 4px;
 }
 
+.img-preview-rectangle {
+  height: 200px;
+  width: 200px;
+  background-size: 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
 .img-preview-wrapper {
   display: -webkit-box;
   display: flex;

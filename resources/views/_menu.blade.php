@@ -4,6 +4,7 @@
 <a href="masters" class="list-group-item">Мастера</a>
 <a href="equipment" class="list-group-item">Оборудование</a>
 <a href="tags" class="list-group-item">Теги</a>
+<a href="videos" class="list-group-item">Видео</a>
 <a href="reviews" class="list-group-item">Отзывы</a>
 <a href="gallery" class="list-group-item">Галерея</a>
 <a href="prices" class="list-group-item">Прайс лист</a>

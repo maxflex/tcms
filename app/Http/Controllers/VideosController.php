@@ -1,22 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Models\Variable;
+use App\Models\Video;
 
-class VariablesController extends Controller
+class VideosController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        return view('videos.index')->with(ngInit([
+            'current_page' => $request->page
+        ]));
     }
 
     /**
@@ -26,7 +28,9 @@ class VariablesController extends Controller
      */
     public function create()
     {
-        //
+        return view('videos.create')->with(ngInit([
+            'model' => new Video,
+        ]));
     }
 
     /**
@@ -37,7 +41,7 @@ class VariablesController extends Controller
      */
     public function store(Request $request)
     {
-        return Variable::create($request->input())->fresh();
+        //
     }
 
     /**
@@ -48,7 +52,7 @@ class VariablesController extends Controller
      */
     public function show($id)
     {
-        return Variable::find($id);
+        //
     }
 
     /**
@@ -59,7 +63,7 @@ class VariablesController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('videos.edit')->with(ngInit(compact('id')));
     }
 
     /**
@@ -71,7 +75,7 @@ class VariablesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Variable::find($id)->update($request->input());
+        //
     }
 
     /**
@@ -82,6 +86,6 @@ class VariablesController extends Controller
      */
     public function destroy($id)
     {
-        Variable::destroy($id);
+        //
     }
 }

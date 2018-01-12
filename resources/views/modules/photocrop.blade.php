@@ -1,8 +1,13 @@
 <div class="row mb" ng-show="FormService.model.id">
   <div class="col-sm-12">
       <div style='display: flex'>
-          <img ng-repeat="photo in FormService.model.photos" class="photo {{ $type }}" ng-click="PhotoService.edit($index)"
-            src="@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}}">
+          @if ($type == 'rectangle')
+              <div ng-repeat="photo in FormService.model.photos" ng-click="PhotoService.edit($index)"
+                    style="background-image: url(@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}})"  class="photo img-preview-rectangle"></div>
+          @else
+              <img ng-repeat="photo in FormService.model.photos" class="photo {{ $type }}" ng-click="PhotoService.edit($index)"
+                src="@{{ photo.cropped ? 'photos/cropped/' + photo.cropped : 'img/icons/nocropped.png'}}">
+          @endif
 
         <div class="add-photo {{ $type }}" onclick="$('#fileupload').click()" ng-show="FormService.model.photos.length < {{ $max }}">
             добавить фото
@@ -18,12 +23,16 @@
             <div class="image-col-left">
                 <ui-cropper image="PhotoService.image" result-image="PhotoService.cropped_image"
                     area-type="{{ $type }}"
-                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="{{ $size }}" result-image-quality="1"></ui-cropper>
+                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="'max'" result-image-quality="1"></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
                 <div style='margin-bottom: 15px'>
                     <div class="form-group">
-                       <img ng-src="@{{ PhotoService.cropped_image }}" class="img-preview {{ $type }}" />
+                        @if ($type == 'rectangle')
+                            <div style='background-image: url(@{{ PhotoService.cropped_image }})'  class="img-preview-rectangle"></div>
+                        @else
+                            <img ng-src="@{{ PhotoService.cropped_image }}" class="img-preview {{ $type }}" />
+                        @endif
                     </div>
                 </div>
                 <div style='margin-bottom: 15px'>

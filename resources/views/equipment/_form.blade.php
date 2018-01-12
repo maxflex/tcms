@@ -1,7 +1,7 @@
 <div class="row mb">
     <div class="col-sm-12" style='display: flex'>
         <div style='width: 220px'>
-            @include('modules.photocrop', ['size' => '500', 'type' => 'rectangle', 'max' => 1])
+            @include('modules.photocrop', ['size' => '100', 'type' => 'rectangle', 'max' => 1])
         </div>
         <div style='flex: 1'>
             <div class="mbl">
