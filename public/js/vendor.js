@@ -69313,6 +69313,9 @@ angular.module('uiCropper').factory('cropArea', ['cropCanvas', function (CropCan
     CropArea.prototype.setForceAspectRatio = function (force) {
         this._forceAspectRatio = force;
     };
+    CropArea.prototype.resetAspect = function () {
+        this._aspect = null;
+    };
     CropArea.prototype.setAspect = function (aspect) {
         this._aspect = aspect;
     };
@@ -71531,10 +71534,10 @@ angular.module('uiCropper').factory('cropHost', ['$document', '$q', 'cropAreaCir
 
         this.resetAspect = function() {
             isAspectRatio = false;
+            theArea.resetAspect();
         }
 
         this.setAspect = function (aspect) {
-            console.log('setting aspect...')
             isAspectRatio = true;
             theArea.setAspect(aspect);
             var minSize = theArea.getMinSize();
@@ -71892,8 +71895,7 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                     scope.aspectRatio = parseInt(scope.aspectRatio);
                 }
                 if (scope.aspectRatio === null) {
-                    console.log('hia')
-                    cropHost.isAspectRatio = false
+                    cropHost.resetAspect();
                 }
                 if (scope.aspectRatio) {
                     cropHost.setAspect(scope.aspectRatio);
