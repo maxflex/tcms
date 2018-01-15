@@ -2937,6 +2937,7 @@
     this.image = '';
     this.cropped_image = '';
     this.cripping = false;
+    this.aspect_ratio = null;
     this.FormService = null;
     this.selected_photo_index = null;
     this.init = (function(_this) {
@@ -3027,6 +3028,14 @@
       });
       this.FormService.model.photos.splice(this.selected_photo_index, 1);
       return $('#change-photo').modal('hide');
+    };
+    this.toggleAscpectRatio = function() {
+      console.log('aspect ratio');
+      if (this.aspect_ratio === null) {
+        return this.aspect_ratio = 2;
+      } else {
+        return this.aspect_ratio = null;
+      }
     };
     return this;
   });

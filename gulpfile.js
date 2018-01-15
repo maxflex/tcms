@@ -79,7 +79,7 @@ const elixir = require('laravel-elixir');
              'Sortable/Sortable',
              'vue/dist/vue',
              'vue-resource/dist/vue-resource.min',
-             'ui-cropper/compile/unminified/ui-cropper',
+            //  'ui-cropper/compile/unminified/ui-cropper',
              'ng-tags-input/ng-tags-input.min',
          ]).concat(['resources/assets/js/*.js']), 'public/js/vendor.js');
  });

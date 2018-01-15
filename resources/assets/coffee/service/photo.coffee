@@ -3,6 +3,7 @@ angular.module 'Egecms'
         this.image = ''
         this.cropped_image = ''
         this.cripping = false
+        this.aspect_ratio = null
         this.FormService = null
         this.selected_photo_index = null
 
@@ -78,5 +79,12 @@ angular.module 'Egecms'
             Photo.delete({id: @getSelectedPhoto().id})
             @FormService.model.photos.splice(@selected_photo_index, 1)
             $('#change-photo').modal('hide')
+
+        this.toggleAscpectRatio = ->
+            console.log('aspect ratio')
+            if @aspect_ratio is null
+                @aspect_ratio = 2
+            else
+                @aspect_ratio = null
 
         this
