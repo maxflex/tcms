@@ -17,7 +17,7 @@ class MastersController extends Controller
      */
     public function index()
     {
-        return Master::paginate(30);
+        return Master::with('photos')->paginate(30);
     }
 
     /**

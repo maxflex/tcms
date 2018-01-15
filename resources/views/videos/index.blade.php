@@ -9,6 +9,9 @@
 @section('content')
     <table class="table">
         <tr ng-repeat="model in IndexService.page.data">
+            <td width='10'>
+                @{{ model.id }}
+            </td>
             <td>
                 <a href='videos/@{{ model.id }}/edit'>@{{ model.title }}</a>
             </td>

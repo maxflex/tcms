@@ -17,7 +17,7 @@ class EquipmentController extends Controller
      */
     public function index()
     {
-        return Equipment::paginate(30);
+        return Equipment::with('photos')->paginate(30);
     }
 
     /**

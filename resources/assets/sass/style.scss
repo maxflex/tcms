@@ -4450,3 +4450,14 @@ select[multiple] {
     margin-right: 5px;
     font-size: 10px;
 }
+
+.vertical-align-table tr td {
+    vertical-align: middle !important;
+}
+
+.inline-photo {
+    height: 50px;
+    &.circle {
+        border-radius: 50%;
+    }
+}

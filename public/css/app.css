@@ -20579,6 +20579,18 @@ select[multiple] {
   font-size: 10px;
 }
 
+.vertical-align-table tr td {
+  vertical-align: middle !important;
+}
+
+.inline-photo {
+  height: 50px;
+}
+
+.inline-photo.circle {
+  border-radius: 50%;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }
