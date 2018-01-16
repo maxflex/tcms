@@ -964,12 +964,14 @@
         ['html', 'html_mobile', 'seo_text'].forEach(function(field) {
           return FormService.model[field] = AceService.getEditor("editor--" + field).getValue();
         });
-        return FormService.model.items.forEach(function(item, index) {
-          item.position = index;
-          return PageItem.update({
-            id: item.id
-          }, item);
-        });
+        if (FormService.model.items) {
+          return FormService.model.items.forEach(function(item, index) {
+            item.position = index;
+            return PageItem.update({
+              id: item.id
+            }, item);
+          });
+        }
       };
       return bindFileUpload();
     });

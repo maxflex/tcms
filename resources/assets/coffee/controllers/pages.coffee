@@ -115,7 +115,7 @@ angular
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> AceService.initEditor(FormService, 15, "editor--#{field}")
             FormService.beforeSave = ->
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> FormService.model[field] = AceService.getEditor("editor--#{field}").getValue()
-                FormService.model.items.forEach (item, index) ->
+                if FormService.model.items then FormService.model.items.forEach (item, index) ->
                     item.position = index
                     PageItem.update({id: item.id}, item)
             bindFileUpload()
