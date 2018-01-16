@@ -10,6 +10,9 @@
     <table class="table" style='margin: 0' ng-show='!folder_id'>
         <tbody ui-sortable='sortableOptionsFolder' ng-model="folders">
             <tr ng-repeat="folder in folders">
+                <td width='10'>
+                    @{{ folder.id }}
+                </td>
                 <td>
                     <i class="fa fa-folder text-success" aria-hidden="true" style='margin-right: 5px'></i>
                     <a href="/gallery/folder/@{{ folder.id }}">@{{ folder.name }}</a>
@@ -34,7 +37,7 @@
     <table class="table">
         <tbody ui-sortable='sortableOptions' ng-model="IndexService.page.data">
             <tr ng-repeat="model in IndexService.page.data">
-                <td>
+                <td width='10'>
                     @{{ model.id }}
                 </td>
                 <td>
