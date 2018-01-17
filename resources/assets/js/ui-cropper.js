@@ -3122,6 +3122,8 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
             paletteColor: '=?',
             paletteColorLength: '=?',
 
+            methods: '=?',
+
             onChange: '&',
             onLoadBegin: '&',
             onLoadDone: '&',
@@ -3196,9 +3198,13 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                 }
             };
 
+            scope.methods.updateResultImage = function(callback) {
+                updateResultImage(scope, true, callback)
+            }
+
             if (scope.liveView && typeof scope.liveView.block === 'boolean') {
                 scope.liveView.render = function (callback) {
-                    updateResultImage(scope, true, callback);
+                    // updateResultImage(scope, true, callback);
                 };
             } else {
                 scope.liveView = {block: false};
@@ -3294,7 +3300,7 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                 }))
                 .on('area-move area-resize', fnSafeApply(function (scope) {
                     if (scope.changeOnFly === 'true') {
-                        updateResultImage(scope);
+                        // updateResultImage(scope);
                     }
                     updateCropject(scope);
                 }))
@@ -3302,7 +3308,7 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                     cropHost.setAreaMinRelativeSize(scope.areaMinRelativeSize);
                 }))
                 .on('area-move-end area-resize-end image-updated', fnSafeApply(function (scope) {
-                    updateResultImage(scope);
+                    // updateResultImage(scope);
                     updateCropject(scope);
                 }));
 
@@ -3323,26 +3329,26 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
             });
             scope.$watch('areaType', function () {
                 cropHost.setAreaType(scope.areaType);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('areaMinSize', function () {
                 cropHost.setAreaMinSize(scope.areaMinSize);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('areaMinRelativeSize', function () {
                 if (scope.image !== '') {
                     cropHost.setAreaMinRelativeSize(scope.areaMinRelativeSize);
-                    updateResultImage(scope);
+                    // updateResultImage(scope);
                 }
             });
             scope.$watch('areaInitSize', function () {
                 cropHost.setAreaInitSize(scope.areaInitSize);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('areaInitCoords', function () {
                 cropHost.setAreaInitCoords(scope.areaInitCoords);
                 cropHost.areaInitIsRelativeToImage = scope.areaInitIsRelativeToImage;
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('maxCanvasDimensions', function () {
                 cropHost.setMaxCanvasDimensions(scope.maxCanvasDimensions);
@@ -3352,15 +3358,15 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
             });
             scope.$watch('resultImageFormat', function () {
                 cropHost.setResultImageFormat(scope.resultImageFormat);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('resultImageQuality', function () {
                 cropHost.setResultImageQuality(scope.resultImageQuality);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('resultImageSize', function () {
                 cropHost.setResultImageSize(scope.resultImageSize);
-                updateResultImage(scope);
+                // updateResultImage(scope);
             });
             scope.$watch('paletteColorLength', function () {
                 cropHost.setPaletteColorLength(scope.paletteColorLength);
@@ -3397,7 +3403,7 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                     if (cropHost.getScalemode() === 'fixed-height') {
                         if (value[0] > 0 && value[1] > 0) {
                             cropHost.setMaxDimensions(value[0], value[1]);
-                            updateResultImage(scope);
+                            // updateResultImage(scope);
                         }
                     }
                     if (cropHost.getScalemode() === 'full-width') {

@@ -1,10 +1,11 @@
 angular.module 'Egecms'
-    .service 'PhotoService', ($rootScope, $http, Photo) ->
+    .service 'PhotoService', ($rootScope, $http, $timeout, Photo) ->
         this.image = ''
         this.cropped_image = ''
         this.cripping = false
         this.aspect_ratio = null
         this.FormService = null
+        this.methods = {}
         this.selected_photo_index = null
 
         this.init = (FormService, type, id) =>
@@ -15,13 +16,17 @@ angular.module 'Egecms'
 
         this.crop = ->
             @cropping = true
-            $http.post 'upload/cropped',
-                id: @getSelectedPhoto().id
-                cropped_image: @cropped_image
-            .then (response) =>
-                @cropping = false
-                @FormService.model.photos[@selected_photo_index] = response.data
-                $('#change-photo').modal('hide')
+            # именно так
+            $timeout => @methods.updateResultImage => $timeout =>
+                $http.post 'upload/cropped',
+                    id: @getSelectedPhoto().id
+                    cropped_image: @cropped_image
+                .then (response) =>
+                    @cropping = false
+                    @FormService.model.photos[@selected_photo_index] = response.data
+                    @closeModal()
+
+        this.closeModal = -> $('#change-photo').modal('hide')
 
         this.bindFileUpload = (type, id) ->
           # загрузка файла договора
