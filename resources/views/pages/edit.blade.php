@@ -4,6 +4,7 @@
     <span ng-click="FormService.edit()">сохранить</span>
 @stop
 @section('title-right')
+    <span ng-click="copy()">копировать</span>
     <a href="{{ config('app.web-url') }}@{{ FormService.model.url }}" target="_blank">посмотреть на сайте</a>
     <span ng-click="FormService.delete($event)">удалить</span>
 @stop

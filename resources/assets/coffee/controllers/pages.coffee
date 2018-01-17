@@ -108,6 +108,12 @@ angular
 
         empty_useful = {text: null, page_id_field: null}
 
+        $scope.copy = ->
+            ajaxStart()
+            $http.post 'api/pages/copy', {id: $scope.id}
+            .then (response) ->
+                console.log(response)
+                redirect("pages/#{response.data}/edit")
         angular.element(document).ready ->
             FormService.init(Page, $scope.id, $scope.model)
             FormService.dataLoaded.promise.then ->

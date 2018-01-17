@@ -18,6 +18,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     # Pages
     Route::post('pages/checkExistance/{id?}', 'PagesController@checkExistance');
     Route::post('pages/search', 'PagesController@search');
+    Route::post('pages/copy', 'PagesController@copy');
     Route::resource('pages', 'PagesController');
     Route::resource('pageitems', 'PageitemsController');
 

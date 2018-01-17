@@ -108,4 +108,16 @@ class PagesController extends Controller
         return Page::where('keyphrase', 'like', '%' . $request->q . '%')->orWhere('id', $request->q)
             ->select('id', 'keyphrase', \DB::raw("CONCAT(id, ' – ', keyphrase) as title"))->get()->all();
     }
+
+    public function copy(Request $request)
+    {
+        $page = Page::find($request->id);
+        $new = $page->replicate();
+        unset($new->id);
+        $new->url = uniqid();
+        $new->save();
+        $new->url = "page-{$new->id}";
+        $new->save();
+        return $new->id;
+    }
 }
