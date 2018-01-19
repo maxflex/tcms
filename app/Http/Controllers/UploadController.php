@@ -72,6 +72,7 @@ class UploadController extends Controller
 
     public function cropped(Request $request)
     {
+        $error_message = 'Could not upload';
         foreach(range(1, 3) as $i) {
             try {
                 $filename = uniqid() . '.png';
@@ -80,9 +81,12 @@ class UploadController extends Controller
                 $photo = Photo::find($request->id);
                 $photo->update(['cropped' => $filename]);
                 return $photo;
-            } catch (\Exception $e) { }
+            } catch (\Exception $e) {
+                $error_message = $e->getMessage();
+                sleep(1);
+            }
         }
-        throw new \Exception('Could not upload');
+        throw new \Exception($error_message);
     }
 
     public function pageItem(Request $request)
