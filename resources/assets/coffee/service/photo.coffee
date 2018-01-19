@@ -34,6 +34,10 @@ angular.module 'Egecms'
                     @cropping = false
                     @FormService.model.photos[@selected_photo_index] = response.data
                     @closeModal()
+                , (error) =>
+                    @cropping = false
+                    notifyError("Ошибка при загрузке")
+
 
         this.closeModal = -> $('#change-photo').modal('hide')
 

@@ -72,12 +72,17 @@ class UploadController extends Controller
 
     public function cropped(Request $request)
     {
-        $filename = uniqid() . '.png';
-        $img = new \claviska\SimpleImage();
-        $img->fromFile($request->file('cropped_image'))->toFile(Photo::getDir('cropped') . $filename, 'image/jpeg', Photo::QUALITY);
-        $photo = Photo::find($request->id);
-        $photo->update(['cropped' => $filename]);
-        return $photo;
+        foreach(range(1, 3) as $i) {
+            try {
+                $filename = uniqid() . '.png';
+                $img = new \claviska\SimpleImage();
+                $img->fromFile($request->file('cropped_image'))->toFile(Photo::getDir('cropped') . $filename, 'image/jpeg', Photo::QUALITY);
+                $photo = Photo::find($request->id);
+                $photo->update(['cropped' => $filename]);
+                return $photo;
+            } catch (\Exception $e) { }
+        }
+        throw new \Exception('Could not upload');
     }
 
     public function pageItem(Request $request)
