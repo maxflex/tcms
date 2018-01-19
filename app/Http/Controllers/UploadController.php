@@ -72,7 +72,7 @@ class UploadController extends Controller
 
     public function cropped(Request $request)
     {
-        $filename = uniqid() . '.' . $request->file('cropped_image')->getClientOriginalExtension();
+        $filename = uniqid() . '.jpg';
         $request->file('cropped_image')->move(Photo::getDir('cropped'), $filename);
         $photo = Photo::find($request->id);
         $photo->update(['cropped' => $filename]);

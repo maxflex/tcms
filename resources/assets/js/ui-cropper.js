@@ -2218,7 +2218,7 @@ angular.module('uiCropper').factory('cropHost', ['$document', '$q', 'cropAreaCir
             areaMinRelativeSize = null,
 
             // Result Image type
-            resImgFormat = 'image/png',
+            resImgFormat = 'image/jpeg',
 
             // Result Image quality
             resImgQuality = null,
@@ -2460,11 +2460,14 @@ angular.module('uiCropper').factory('cropHost', ['$document', '$q', 'cropAreaCir
                         Math.round(resultHeight));
                 }
 
-                if (resImgQuality !== null) {
-                    retObj.dataURI = temp_canvas.toDataURL(resImgFormat, resImgQuality);
-                } else {
-                    retObj.dataURI = temp_canvas.toDataURL(resImgFormat);
-                }
+                // @custom : в оригинальной библиотеке не работало!
+                retObj.dataURI = temp_canvas.toDataURL('image/jpeg', 0.8);
+                // console.log(resImgFormat, resImgQuality)
+                // if (resImgQuality !== null) {
+                //     retObj.dataURI = temp_canvas.toDataURL(resImgFormat, resImgQuality);
+                // } else {
+                //     retObj.dataURI = temp_canvas.toDataURL(resImgFormat);
+                // }
             }
             return retObj;
         };
