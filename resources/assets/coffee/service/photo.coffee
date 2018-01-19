@@ -24,8 +24,8 @@ angular.module 'Egecms'
                 fd.append('id', @getSelectedPhoto().id)
 
                 # @methods.getResultImageDataBlob().then (blob) ->
-                # console.log('blob', blob)
-                
+                console.log('blob', blob)
+
                 # return
                 $http.post 'upload/cropped', fd,
                     transformRequest: angular.identity
