@@ -23,7 +23,7 @@
             <div class="image-col-left">
                 <ui-cropper image="PhotoService.image" result-image="PhotoService.cropped_image"
                     area-type="{{ $type }}" aspect-ratio="PhotoService.aspect_ratio" methods="PhotoService.methods"
-                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="'max'" result-image-quality="1"></ui-cropper>
+                    area-init-size="{{ $size }}" area-min-relative-size="{{ $size }}" result-image-size="'max'" result-image-quality="0.8"></ui-cropper>
             </div>
             <div class="img-preview-wrapper">
                 {{-- <div style='margin-bottom: 15px'>
