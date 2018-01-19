@@ -3202,6 +3202,8 @@ angular.module('uiCropper').directive('uiCropper', ['$timeout', 'cropHost', 'cro
                 updateResultImage(scope, true, callback)
             }
 
+            scope.methods.getResultImageDataBlob = cropHost.getResultImageDataBlob
+
             if (scope.liveView && typeof scope.liveView.block === 'boolean') {
                 scope.liveView.render = function (callback) {
                     // updateResultImage(scope, true, callback);

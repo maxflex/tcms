@@ -2966,9 +2966,16 @@
         return function() {
           return _this.methods.updateResultImage(function() {
             return $timeout(function() {
-              return $http.post('upload/cropped', {
-                id: _this.getSelectedPhoto().id,
-                cropped_image: _this.cropped_image
+              var blob, fd;
+              fd = new FormData();
+              blob = dataURItoBlob(_this.cropped_image);
+              fd.append('cropped_image', blob);
+              fd.append('id', _this.getSelectedPhoto().id);
+              return $http.post('upload/cropped', fd, {
+                transformRequest: angular.identity,
+                headers: {
+                  'Content-Type': void 0
+                }
               }).then(function(response) {
                 _this.cropping = false;
                 _this.FormService.model.photos[_this.selected_photo_index] = response.data;

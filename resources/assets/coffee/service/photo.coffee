@@ -18,9 +18,18 @@ angular.module 'Egecms'
             @cropping = true
             # именно так
             $timeout => @methods.updateResultImage => $timeout =>
-                $http.post 'upload/cropped',
-                    id: @getSelectedPhoto().id
-                    cropped_image: @cropped_image
+                fd = new FormData()
+                blob = dataURItoBlob(@cropped_image)
+                fd.append('cropped_image', blob)
+                fd.append('id', @getSelectedPhoto().id)
+
+                # @methods.getResultImageDataBlob().then (blob) ->
+                # console.log('blob', blob)
+                
+                # return
+                $http.post 'upload/cropped', fd,
+                    transformRequest: angular.identity
+                    headers: {'Content-Type': undefined}
                 .then (response) =>
                     @cropping = false
                     @FormService.model.photos[@selected_photo_index] = response.data
