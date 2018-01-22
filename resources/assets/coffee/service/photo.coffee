@@ -101,7 +101,7 @@ angular.module 'Egecms'
         this.toggleAscpectRatio = ->
             console.log('aspect ratio')
             if @aspect_ratio is null
-                @aspect_ratio = 2
+                @aspect_ratio = 7 / 4
             else
                 @aspect_ratio = null
 
