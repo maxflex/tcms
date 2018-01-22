@@ -66554,7 +66554,9 @@ angular.module('uiCropper').factory('cropHost', ['$document', '$q', 'cropAreaCir
                 }
 
                 // @custom : в оригинальной библиотеке не работало!
-                retObj.dataURI = temp_canvas.toDataURL('image/jpeg', 0.8);
+                retObj.dataURI = temp_canvas.toDataURL('image/jpeg', 0.2);
+
+
                 // console.log(resImgFormat, resImgQuality)
                 // if (resImgQuality !== null) {
                 //     retObj.dataURI = temp_canvas.toDataURL(resImgFormat, resImgQuality);
