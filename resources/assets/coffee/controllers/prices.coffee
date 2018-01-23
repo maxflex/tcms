@@ -19,9 +19,25 @@ angular
                 value: null
             $timeout -> $('.selectpicker').selectpicker('refresh')
 
-        $scope.changePriceDialog = (section_id) ->
-            clearChangePrice(section_id)
+        getRowsAffected = (item) ->
+            return 1 if not item.is_section
+            result = 0
+            item.items.forEach (item) ->
+                result += getRowsAffected(item)
+            result
+
+
+        $scope.changePriceDialog = (item) ->
+            clearChangePrice(item.model.id)
+            $scope.rows_affected = getRowsAffected(item)
             $('#change-price-modal').modal('show')
+
+        $scope.changePriceRootDialog = ->
+            item =
+                is_section: true
+                items: $scope.items
+                model: {id: -1}
+            $scope.changePriceDialog(item)
 
         $scope.changePrice = ->
             ajaxStart()

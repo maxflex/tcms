@@ -20591,6 +20591,10 @@ select[multiple] {
   border-radius: 50%;
 }
 
+#change-price-modal .modal-dialog {
+  width: 400px;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }

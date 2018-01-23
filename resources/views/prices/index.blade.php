@@ -4,6 +4,7 @@
 
 @section('title-right')
     {{ link_to_route('prices.create', '+ раздел') }}
+    <a class="pointer" ng-click="changePriceRootDialog()">индексация</a>
 @endsection
 
 @section('content')

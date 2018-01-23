@@ -20,7 +20,7 @@ class PricesController extends Controller
         // return PriceSection::whereNull('price_section_id')->paginate(30);
         $items = [];
 
-        $top_level_price_sections = PriceSection::whereNull('price_section_id')->orderBy('position')->get();
+        $top_level_price_sections = PriceSection::topLevel()->get();
 
         foreach($top_level_price_sections as $section) {
             $items[] = $section->item;

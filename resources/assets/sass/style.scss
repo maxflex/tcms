@@ -4461,3 +4461,9 @@ select[multiple] {
         border-radius: 50%;
     }
 }
+
+#change-price-modal {
+    & .modal-dialog {
+        width: 400px;
+    }
+}

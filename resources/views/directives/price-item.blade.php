@@ -5,6 +5,7 @@
 </span>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/positions/create' style='margin-left: 20px'>+ позиция</a>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/create' style='margin-left: 5px'>+ раздел</a>
+<a class='show-on-hover pointer' ng-show='item.is_section' ng-click="controller_scope.changePriceDialog(item)" style='margin-left: 5px'>индексация</a>
 <span class="pull-right" ng-show="!item.is_section && item.model.price" style='width: 700px; white-space: nowrap'>
     <span style='display: inline-block; width: 175px; font-size: 10px'>от @{{ item.model.price | number }} руб.<span ng-show="item.model.unit">/@{{ findById(Units, item.model.unit).title }}</span></span>
     <span style='margin-left: 10px'>

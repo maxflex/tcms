@@ -62,31 +62,45 @@ class PriceSection extends Model
          ];
      }
 
+     public function scopeTopLevel($query)
+     {
+         return $query->whereNull('price_section_id')->orderBy('position');
+     }
+
     /**
      * Обновить цену у раздела
      */
     public static function changePrice($data)
     {
-        $section = self::find($data->section_id);
-        foreach($section->sections as $child_section) {
-            $clone_data = clone $data;
-            $clone_data->section_id = $child_section->id;
-            self::changePrice($clone_data);
-        }
-        foreach($section->positions as $position) {
-            if ($data->unit == 1) {
-                $coeff = $position->price * ($data->value / 100);
-            } else {
-                $coeff = $data->value;
+        if ($data->section_id == -1) {
+            $top_level_section_ids = self::topLevel()->pluck('id');
+            foreach($top_level_section_ids as $section_id) {
+                $clone_data = clone $data;
+                $clone_data->section_id = $section_id;
+                self::changePrice($clone_data);
             }
-            if ($data->type == 1) {
-                $new_price = $position->price - $coeff;
-            } else {
-                $new_price = $position->price + $coeff;
+        } else {
+            $section = self::find($data->section_id);
+            foreach($section->sections as $child_section) {
+                $clone_data = clone $data;
+                $clone_data->section_id = $child_section->id;
+                self::changePrice($clone_data);
             }
-            PricePosition::whereId($position->id)->update([
-                'price' => $new_price
-            ]);
+            foreach($section->positions as $position) {
+                if ($data->unit == 1) {
+                    $coeff = $position->price * ($data->value / 100);
+                } else {
+                    $coeff = $data->value;
+                }
+                if ($data->type == 1) {
+                    $new_price = $position->price - $coeff;
+                } else {
+                    $new_price = $position->price + $coeff;
+                }
+                PricePosition::whereId($position->id)->update([
+                    'price' => round($new_price)
+                ]);
+            }
         }
     }
 }
