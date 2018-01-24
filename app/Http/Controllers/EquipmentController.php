@@ -17,7 +17,8 @@ class EquipmentController extends Controller
     public function index(Request $request)
     {
         return view('equipment.index')->with(ngInit([
-            'current_page' => $request->page
+            'current_page'  => $request->page,
+            'class'         => Equipment::class,
         ]));
     }
 

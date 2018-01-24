@@ -52,6 +52,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
     Route::resource('videos', 'VideosController');
+
+    Route::resource('folders', 'FoldersController');
     Route::resource('allusers', 'AllUsersController');
 
     Route::resource('reviews', 'ReviewsController');

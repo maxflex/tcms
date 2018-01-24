@@ -3,6 +3,7 @@
 @section('controller', 'EquipmentIndex')
 
 @section('title-right')
+    <span ng-click="">создать папку</span>
     {{ link_to_route('equipment.create', 'добавить оборудование') }}
 @endsection
 
