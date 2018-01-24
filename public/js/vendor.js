@@ -56544,9 +56544,9 @@ return Vue;
 		}, 50)
 	}
 
-	function spRefresh(id) {
+	function spRefresh() {
 		setTimeout(function() {
-			$('#sp-' + id).selectpicker('refresh')
+			$('.selectpicker').selectpicker('refresh')
 		}, 50)
 	}
 

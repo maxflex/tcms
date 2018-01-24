@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTypeToFolders extends Migration
+class AddFolderIdToFolders extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddTypeToFolders extends Migration
     public function up()
     {
         Schema::table('folders', function (Blueprint $table) {
-            $table->string('class');
+            $table->integer('folder_id')->unsigned()->nullable()->index();
         });
     }
 

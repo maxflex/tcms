@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddTypeToFolders extends Migration
+class AddPositionToEquipment extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddTypeToFolders extends Migration
      */
     public function up()
     {
-        Schema::table('folders', function (Blueprint $table) {
-            $table->string('class');
+        Schema::table('equipment', function (Blueprint $table) {
+            $table->integer('position')->unsigned();
         });
     }
 
@@ -25,8 +25,8 @@ class AddTypeToFolders extends Migration
      */
     public function down()
     {
-        Schema::table('folders', function (Blueprint $table) {
-            //
+        Schema::table('equipment', function (Blueprint $table) {
+            $table->dropColumn('position');
         });
     }
 }

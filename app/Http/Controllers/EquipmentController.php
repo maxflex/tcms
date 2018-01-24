@@ -6,9 +6,17 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\Equipment;
+use App\Service\ControllerTemplate;
 
 class EquipmentController extends Controller
 {
+    private $template;
+
+    public function __construct()
+    {
+        $this->template = new ControllerTemplate(Equipment::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,9 +24,10 @@ class EquipmentController extends Controller
      */
     public function index(Request $request)
     {
-        return view('equipment.index')->with(ngInit([
+        return view($this->template->view('index'))->with(ngInit([
             'current_page'  => $request->page,
-            'class'         => Equipment::class,
+            'folder'        => $request->folder,
+            'template'      => $this->template,
         ]));
     }
 
@@ -29,8 +38,9 @@ class EquipmentController extends Controller
      */
     public function create()
     {
-        return view('equipment.create')->with(ngInit([
-            'model' => new Equipment,
+        return view($this->template->view('create'))->with(ngInit([
+            'model'     => new $this->template->getClass(),
+            'template'  => $this->template
         ]));
     }
 
@@ -64,7 +74,10 @@ class EquipmentController extends Controller
      */
     public function edit($id)
     {
-        return view('equipment.edit')->with(ngInit(compact('id')));
+        return view($this->template->view('edit'))->with(ngInit([
+            'id' => $id,
+            'template' => $this->template,
+        ]));
     }
 
     /**

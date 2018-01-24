@@ -19,6 +19,7 @@ angular.module 'Egecms'
         this.loadPage = ->
             p = {page: this.current_page}
             p.sort = this.sort if this.sort isnt undefined
+            p.folder = this.params.folder if this.params.folder
             $.each @params, (key, val) -> p[key] = val
             this.Resource.get p, (response) =>
                 this.page = response

@@ -6,18 +6,24 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\GalleryFolder;
+use App\Models\Folder;
 
-class GalleryFoldersController extends Controller
+class FoldersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return GalleryFolder::paginate(30);
+        $query = Folder::where('class', $request->class)->orderBy('position');
+
+        if ($request->current_folder) {
+            $query->where('folder_id', $request->current_folder);
+        }
+
+        return $query->get();
     }
 
     /**
@@ -38,7 +44,7 @@ class GalleryFoldersController extends Controller
      */
     public function store(Request $request)
     {
-        return GalleryFolder::create($request->input())->fresh();
+        return Folder::create($request->input())->fresh();
     }
 
     /**
@@ -49,7 +55,7 @@ class GalleryFoldersController extends Controller
      */
     public function show($id)
     {
-        return GalleryFolder::find($id)->append('tags');
+        return Folder::find($id);
     }
 
     /**
@@ -72,7 +78,7 @@ class GalleryFoldersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        GalleryFolder::find($id)->update($request->input());
+        Folder::find($id)->update($request->input());
     }
 
     /**
@@ -83,6 +89,6 @@ class GalleryFoldersController extends Controller
      */
     public function destroy($id)
     {
-        GalleryFolder::destroy($id);
+        Folder::destroy($id);
     }
 }

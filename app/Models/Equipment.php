@@ -12,6 +12,8 @@ class Equipment extends Model
     protected $fillable = [
         'name',
         'description',
-        'button'
+        'button',
+        'folder_id',
+        'position'
     ];
 }

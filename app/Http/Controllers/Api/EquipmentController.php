@@ -15,9 +15,17 @@ class EquipmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Equipment::with('photos')->paginate(30);
+        $query = Equipment::with('photos');
+
+        if ($request->folder) {
+            $query->where('folder_id', $request->folder);
+        } else {
+            $query->whereNull('folder_id');
+        }
+
+        return $query->orderBy('position', 'asc')->paginate(30);
     }
 
     /**
