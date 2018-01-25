@@ -22,6 +22,18 @@ Artisan::command('generate:version_control', function () {
     \App\Service\VersionControl::generate();
 })->describe('Generate version control table');
 
+Artisan::command('version:increase', function () {
+    \App\Service\Settings::set('version', uniqid());
+})->describe('Generate version control table');
+
+Artisan::command('generate:version_control_both', function () {
+    $this->line("\n************** RE-GENERATE PRODUCTION TABLE ************** \n");
+    shell_exec('envoy run generate:version_control');
+
+    $this->line("\n************** RE-GENERATE LOCALHOST TABLE ************** \n");
+    shell_exec('php artisan generate:version_control');
+})->describe('Generate version control table');
+
 Artisan::command('vars:not_used', function () {
     $variable_names = \App\Models\Variable::pluck('name');
     foreach($variable_names as $variable_name) {
