@@ -56,4 +56,6 @@ angular.module 'Egecms'
                 if result is true
                     Folder.delete {id: folder.id}, -> location.reload()
 
+        @isEmpty = (folder) -> not folder.item_count && not folder.folder_count
+
         @

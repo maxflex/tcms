@@ -2256,6 +2256,8 @@
         $scope.textOnly = $attrs.hasOwnProperty('textOnly');
         $scope.hideZero = $attrs.hasOwnProperty('hideZero');
         return $scope.when = {
+          'file': ['файл', 'файла', 'файлов'],
+          'folder': ['папка', 'папки', 'папок'],
           'age': ['год', 'года', 'лет'],
           'student': ['ученик', 'ученика', 'учеников'],
           'minute': ['минуту', 'минуты', 'минут'],
@@ -2967,6 +2969,9 @@
           }
         };
       })(this));
+    };
+    this.isEmpty = function(folder) {
+      return !folder.item_count && !folder.folder_count;
     };
     return this;
   });

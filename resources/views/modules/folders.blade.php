@@ -1,3 +1,35 @@
+<table class="table" style='margin: 0'>
+    <tbody ui-sortable='FolderService.sortableOptions' ng-model="FolderService.folders">
+        <tr ng-if='folder'>
+            <td colspan='4'>
+                <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>
+                <a class="pointer" onclick="window.history.back()">назад</a>
+            </td>
+        </tr>
+        <tr ng-repeat="folder in FolderService.folders">
+            <td width='10'>
+                @{{ folder.id }}
+            </td>
+            <td width='500'>
+                <i class="fa fa-folder text-success" aria-hidden="true" style='margin-right: 5px'></i>
+                <a href="@{{ template.table }}?folder=@{{ folder.id }}">@{{ folder.name }}</a>
+            </td>
+            <td>
+                <span ng-show="!FolderService.isEmpty(folder)">
+                    <plural count="folder.item_count" type='file' hide-zero></plural><span ng-show="folder.item_count && folder.folder_count">, </span>
+                    <plural count="folder.folder_count" type='folder' hide-zero></plural>
+                </span>
+                <span ng-show="FolderService.isEmpty(folder)" class="quater-black">пусто</span>
+            </td>
+            <td width='100'>
+                <a class="pointer" ng-click="FolderService.editModal(folder)">редактировать</a>
+            </td>
+            <td width='100' style='text-align: right'>
+                <a class="pointer" ng-click="FolderService.delete(folder)">удалить</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
 <!-- Modal -->
 <div id="folder-modal" class="modal" role="dialog" tabindex="-1">
   <div class="modal-dialog">

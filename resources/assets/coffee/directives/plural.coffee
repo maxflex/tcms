@@ -11,6 +11,8 @@ angular.module 'Egecms'
             $scope.hideZero = $attrs.hasOwnProperty('hideZero')
 
             $scope.when =
+                'file': ['файл', 'файла', 'файлов']
+                'folder': ['папка', 'папки', 'папок']
                 'age': ['год', 'года', 'лет']
                 'student': ['ученик', 'ученика', 'учеников']
                 'minute': ['минуту', 'минуты', 'минут']
