@@ -9,9 +9,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::group(['prefix' => 'variables'], function() {
         Route::resource('groups', 'VariableGroupsController');
     });
-    Route::group(['prefix' => 'pages'], function() {
-        Route::resource('groups', 'PageGroupsController');
-    });
 
     Route::post('account', 'PaymentsController@account');
 

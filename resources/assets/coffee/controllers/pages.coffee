@@ -36,8 +36,12 @@ angular
             FormService.beforeSave = ->
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> FormService.model[field] = AceService.getEditor("editor--#{field}").getValue()
                 if FormService.model.items then FormService.model.items.forEach (item, index) ->
-                    item.position = index
-                    PageItem.update({id: item.id}, item)
+                    item.href_page_id = null if not item.href_page_id
+                    PageItem.update {id: item.id}, item,  ->
+                        console.log('updated')
+                    , ->
+                        ajaxEnd()
+                        notifyError 'Несуществующий номер раздела'
             bindFileUpload()
 
         $scope.generateUrl = (event) ->
