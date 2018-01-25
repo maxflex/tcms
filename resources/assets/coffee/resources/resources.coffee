@@ -5,9 +5,6 @@ angular.module('Egecms')
     .factory 'VariableGroup', ($resource) ->
         $resource apiPath('variables/groups'), {id: '@id'}, updatable()
 
-    .factory 'PageGroup', ($resource) ->
-        $resource apiPath('pages/groups'), {id: '@id'}, updatable()
-
     .factory 'Page', ($resource) ->
         $resource apiPath('pages'), {id: '@id'},
             update:

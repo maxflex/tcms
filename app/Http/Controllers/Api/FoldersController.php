@@ -21,6 +21,8 @@ class FoldersController extends Controller
 
         if ($request->current_folder) {
             $query->where('folder_id', $request->current_folder);
+        } else {
+            $query->whereNull('folder_id');
         }
 
         return $query->get();

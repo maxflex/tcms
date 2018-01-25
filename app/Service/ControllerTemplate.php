@@ -10,7 +10,7 @@ use JsonSerializable;
 class ControllerTemplate implements JsonSerializable
 {
     private $table;
-    private $class;
+    public $class;
 
     public function __construct($class)
     {
@@ -21,11 +21,6 @@ class ControllerTemplate implements JsonSerializable
     public function view($name)
     {
         return $this->table . '.' . $name;
-    }
-
-    public function getClass()
-    {
-        return $this->class;
     }
 
     public function jsonSerialize() {

@@ -102,14 +102,5 @@ class Page extends Model
     protected static function boot()
     {
         parent::boot();
-
-        // @todo: присвоение группы перенести в интерфейс
-        static::creating(function($model) {
-            if (! isset($model->group_id)) {
-                $model->group_id = PageGroup::orderBy('position', 'desc')->value('id');
-            }
-
-            $model->position = static::where('group_id', $model->group_id)->max('position') + 1;
-        });
     }
 }

@@ -6,7 +6,6 @@ use DB;
 use App\Service\Api;
 use App\Models\Variable;
 use App\Models\VariableGroup;
-use App\Models\PageGroup;
 use App\Models\Page;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schema;

@@ -4,7 +4,7 @@
     use DB;
 
     /**
-     * Translit
+     * Settings
      */
     class Settings
     {

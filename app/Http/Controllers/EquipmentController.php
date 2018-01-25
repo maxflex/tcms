@@ -39,7 +39,7 @@ class EquipmentController extends Controller
     public function create()
     {
         return view($this->template->view('create'))->with(ngInit([
-            'model'     => new $this->template->getClass(),
+            'model'     => new $this->template->class,
             'template'  => $this->template
         ]));
     }
