@@ -8,19 +8,28 @@ use Excel;
 use DB;
 use App\Http\Requests;
 use App\Models\Page;
+use App\Service\ControllerTemplate;
 
 class PagesController extends Controller
 {
+    private $template;
+
+    public function __construct()
+    {
+        $this->template = new ControllerTemplate(Page::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     * $ngController [Search|Pages] – откуда перешли – с поиска или через меню
      */
     public function index(Request $request)
     {
-        return view('pages.index')->with(ngInit([
-            'current_page'      => $request->page,
+        return view($this->template->view('index'))->with(ngInit([
+            'current_page'  => $request->page,
+            'folder'        => $request->folder,
+            'template'      => $this->template,
             'exportable_fields' => Page::getExportableFields(),
         ]));
     }
@@ -32,8 +41,9 @@ class PagesController extends Controller
      */
     public function create()
     {
-        return view('pages.create')->with(ngInit([
-            'model' => new Page
+        return view($this->template->view('create'))->with(ngInit([
+            'model'     => new $this->template->getClass(),
+            'template'  => $this->template
         ]));
     }
 
@@ -45,7 +55,10 @@ class PagesController extends Controller
      */
     public function edit($id)
     {
-        return view('pages.edit')->with(ngInit(compact('id')));
+        return view($this->template->view('edit'))->with(ngInit([
+            'id' => $id,
+            'template' => $this->template,
+        ]));
     }
 
     /**

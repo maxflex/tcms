@@ -4,56 +4,58 @@
 
 @section('title-right')
     <span ng-click='ExportService.exportDialog()'>экспорт</span>
-    {{ link_to_route('pages.import', 'импорт', [], ['ng-click'=>'ExportService.import($event)']) }}
+    {{-- {{ link_to_route('pages.import', 'импорт', [], ['ng-click'=>'ExportService.import($event)']) }} --}}
+    <span ng-click="FolderService.createModal()">создать папку</span>
     {{ link_to_route('pages.create', 'добавить страницу') }}
-@stop
+@endsection
 
 @section('content')
-    <span ng-init='groups = {{ json_encode(\App\Models\PageGroup::get()) }}'></span>
-    <div ng-sortable='sortableGroupConf' class="nested-dnd">
-        <div class="layer group" ng-repeat="group in groups">
-            <div class="group-title">
-                <h4 class='inline-block' editable='@{{ group.id }}' ng-class="{'disable-events': !group.id}">@{{ group.title }}</h4>
-                <a ng-if='group.id' class='link-like text-danger show-on-hover' ng-click='removeGroup(group)'>удалить</a>
-            </div>
-            <ul ng-sortable="sortablePageConf"
-                ng-class="{'ng-hide': dnd.type == 'group', 'hovered': dnd.old_group_id != group.id && dnd.group_id == group.id }"
-                ng-dragenter="dragOver(group, $event)"
-                class="group-list"
-            >
-                <li class="group-item"
-                    ng-repeat="page in group.page"
-                    ng-dragstart="dnd.page_id = page.id; dnd.old_group_id = group.id;"
-                >
-                    <span style='width: 35px'>
-                        @{{ page.id }}
-                    </span>
-                    <a style="width:30%;" class="group-item-title" href="pages/@{{ page.id }}/edit">@{{ page.keyphrase || 'имя не указано' }}</a>
-                    <span style="width:20%;" class="link-like" ng-class="{'link-gray': 0 == +page.published}" ng-click="toggleEnumServer(page, 'published', Published, Page)">@{{ Published[page.published].title }}</span>
-                    <span style="width:20%;">@{{ formatDateTime(page.updated_at) }}</span>
-                    <a style="width:23%;" href="{{ config('app.web-url') }}@{{ page.url }}" target="_blank">просмотреть страницу на сайте</a>
-                </li>
-            </ul>
-        </div>
-
-        <div class="layer group" ng-show="dnd.page_id > 0">
-            <div class="group-title">
-                <h4 class="inline-block">{{ \App\Models\PageGroup::DEFAULT_TITLE }}</h4>
-            </div>
-            <ul ng-hide="dnd.type == 'group'" ng-sortable="sortablePageConf" class="group-list" ng-class="{'hovered': dnd.group_id == -1 }" ng-dragover="dnd.group_id = -1">
-                <li class="group-item"
-                    ng-repeat="i in [1, 2, 3]"
-                >
-                    <a class="group-item-title">
-                        <div class="fake-info"></div>
-                    </a>
-                    <span class="group-item-desc">
-                        <div class="fake-info"></div>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    @include('modules._export_dialog')
+    <table class="table" style='margin: 0' ng-show='true'>
+        <tbody ui-sortable='FolderService.sortableOptions' ng-model="FolderService.folders">
+            <tr ng-if='folder'>
+                <td colspan='4'>
+                    <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>
+                    <a class="pointer" onclick="window.history.back()">назад</a>
+                </td>
+            </tr>
+            <tr ng-repeat="folder in FolderService.folders">
+                <td width='10'>
+                    @{{ folder.id }}
+                </td>
+                <td>
+                    <i class="fa fa-folder text-success" aria-hidden="true" style='margin-right: 5px'></i>
+                    <a href="@{{ template.table }}?folder=@{{ folder.id }}">@{{ folder.name }}</a>
+                </td>
+                <td width='100'>
+                    <a class="pointer" ng-click="FolderService.editModal(folder)">редактировать</a>
+                </td>
+                <td width='100' style='text-align: right'>
+                    <a class="pointer" ng-click="FolderService.delete(folder)">удалить</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table vertical-align-table">
+        <tbody ui-sortable='sortableOptions' ng-model="IndexService.page.data">
+            <tr ng-repeat="model in IndexService.page.data">
+                <td width='10'>
+                    @{{ model.id }}
+                </td>
+                <td width='500'>
+                    <a href='@{{ template.table }}/@{{ model.id }}/edit'>@{{ model.keyphrase || 'имя не указано' }}</a>
+                </td>
+                <td>
+                    <span class="link-like" ng-class="{'link-gray': 0 == +page.published}" ng-click="toggleEnumServer(page, 'published', Published, Page)">@{{ Published[model.published].title }}</span>
+                </td>
+                <td>
+                    @{{ formatDateTime(model.updated_at) }}
+                </td>
+                <td width='250' style='text-align: right'>
+                    <a href="{{ config('app.web-url') }}@{{ model.url }}" target="_blank">просмотреть страницу на сайте</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    @include('modules.pagination')
+    @include('modules.folders')
 @stop

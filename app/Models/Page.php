@@ -28,7 +28,7 @@ class Page extends Model
         'html',
         'html_mobile',
         'variable_id',
-        'group_id',
+        'folder_id',
         'position',
         'seo_text',
         'tags'

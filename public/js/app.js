@@ -326,6 +326,94 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -815,156 +903,32 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('PagesIndex', function($scope, $attrs, $rootScope, $timeout, IndexService, Page, Published, ExportService, PageGroup) {
-    var dragEnd, l, moveToGroup, updatePositions;
-    l = function(e) {
-      return console.log(e);
-    };
-    angular.element(document).ready(function() {
-      return $(document).scroll(function(event) {
-        if ($(document).scrollTop() + $(window).height() === $(document).height()) {
-          $(document).scrollTop($(document).height() - 50);
-          return l('scrolled back');
-        }
-      });
-    });
-    $scope.$watchCollection('dnd', function(newVal) {
-      return l($scope.dnd);
-    });
+  angular.module('Egecms').controller('PagesIndex', function($scope, $attrs, $timeout, IndexService, Page, Published, ExportService, FolderService) {
     bindArguments($scope, arguments);
-    ExportService.init({
-      controller: 'pages'
+    $scope.sortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      update: function(event, ui) {
+        return $timeout(function() {
+          return IndexService.page.data.forEach(function(model, index) {
+            return Page.update({
+              id: model.id,
+              position: index
+            });
+          });
+        });
+      }
+    };
+    return angular.element(document).ready(function() {
+      IndexService.init(Page, $scope.current_page, $attrs, {
+        folder: $scope.folder
+      });
+      return FolderService.init($scope.template["class"], $scope.folder);
     });
-    updatePositions = function(group_ids) {
-      if (!_.isArray(group_ids)) {
-        group_ids = [group_ids];
-      }
-      return angular.forEach(group_ids, function(group_id) {
-        var group;
-        group = $rootScope.findById($scope.groups, group_id);
-        return angular.forEach(group.page, function(page, index) {
-          return Page.update({
-            id: page.id,
-            position: index
-          });
-        });
-      });
-    };
-    dragEnd = function() {
-      return $scope.dnd = {};
-    };
-    $scope.sortablePageConf = {
-      animation: 150,
-      group: {
-        name: 'variable',
-        put: 'variable'
-      },
-      fallbackTolerance: 5,
-      onUpdate: function(event) {
-        return updatePositions($scope.dnd.group_id);
-      },
-      onAdd: function(event) {
-        var page_id;
-        page_id = $scope.dnd.page_id;
-        if ($scope.dnd.group_id && $scope.dnd.page_id && ($scope.dnd.group_id !== $scope.dnd.old_group_id)) {
-          if ($scope.dnd.group_id === -1) {
-            return PageGroup.save({
-              page_id: $scope.dnd.page_id
-            }, function(response) {
-              $scope.groups.push(response);
-              moveToGroup($scope.dnd.page_id, response.id, $scope.dnd.old_group_id, true);
-              return dragEnd();
-            });
-          } else if ($scope.dnd.group_id) {
-            moveToGroup($scope.dnd.page_id, $scope.dnd.group_id, $scope.dnd.old_group_id);
-            return updatePositions([$scope.dnd.group_id, $scope.dnd.old_group_id]);
-          }
-        }
-      },
-      onEnd: function(event) {
-        if ($scope.dnd.group_id !== -1) {
-          return dragEnd();
-        }
-      }
-    };
-    $scope.dragOver = function(group) {
-      if ($scope.dnd.type !== 'group') {
-        return $scope.dnd.group_id = group.id;
-      }
-    };
-    $scope.sortableGroupConf = {
-      animation: 150,
-      handle: '.group-title',
-      dragClass: 'dragging-group',
-      onUpdate: function(event) {
-        return angular.forEach($scope.groups, function(group, index) {
-          group.position = index;
-          return PageGroup.update({
-            id: group.id,
-            position: index
-          });
-        });
-      },
-      onStart: function(event) {
-        return $scope.dnd.type = 'group';
-      },
-      onEnd: function(event) {
-        return $scope.dnd = {};
-      }
-    };
-    $scope.dnd = {};
-    moveToGroup = function(page_id, group_id, old_group_id, copy_item) {
-      var group_from, group_to, page;
-      if (copy_item == null) {
-        copy_item = false;
-      }
-      Page.update({
-        id: page_id,
-        group_id: group_id
-      });
-      group_from = _.find($scope.groups, {
-        id: old_group_id
-      });
-      page = _.clone(findById(group_from.page, page_id));
-      page.group_id = group_id;
-      group_from.page = removeById(group_from.page, page_id);
-      group_to = _.find($scope.groups, {
-        id: group_id
-      });
-      if (copy_item) {
-        return group_to.page.push(page);
-      } else {
-        page = $rootScope.findById(group_to.page, page_id);
-        return page.group_id = group_id;
-      }
-    };
-    $scope.removeGroup = function(group) {
-      return bootbox.confirm("Вы уверены, что хотите удалить группу «" + group.title + "»", function(response) {
-        var new_group_id;
-        if (response === true) {
-          PageGroup.remove({
-            id: group.id
-          });
-          new_group_id = (_.max(_.without($scope.groups, group), function(group) {
-            return group.position;
-          })).id;
-          if (group.page) {
-            angular.forEach(group.page, function(page) {
-              return moveToGroup(page.id, new_group_id, page.group_id, true);
-            });
-            updatePositions(new_group_id);
-          }
-          return $scope.groups = removeById($scope.groups, group.id);
-        }
-      });
-    };
-    return $scope.onEdit = function(id, event) {
-      return PageGroup.update({
-        id: id,
-        title: $(event.target).text()
-      });
-    };
-  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag) {
+  }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag, FolderService) {
     var bindFileUpload, empty_useful;
     bindArguments($scope, arguments);
     empty_useful = {
@@ -981,6 +945,7 @@
       });
     };
     angular.element(document).ready(function() {
+      FolderService.init($scope.template["class"]);
       FormService.init(Page, $scope.id, $scope.model);
       FormService.dataLoaded.promise.then(function() {
         if (!FormService.model.useful || !FormService.model.useful.length) {
@@ -1920,94 +1885,6 @@
     return angular.element(document).ready(function() {
       return FormService.init(Video, $scope.id, $scope.model);
     });
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
   });
 
 }).call(this);
