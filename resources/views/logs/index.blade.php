@@ -3,7 +3,7 @@
 @section('controller', 'LogsIndex')
 
 @section('title-right')
-    <span class='ng-hide' ng-show='data !== undefined'>всего результатов: @{{ data.total }}</span>
+    <span style='text-decoration: none; cursor: default' class='ng-hide' ng-show='data !== undefined'>всего результатов: @{{ data.total }}</span>
 @endsection
 
 @section('content')

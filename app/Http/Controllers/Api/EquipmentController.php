@@ -17,15 +17,7 @@ class EquipmentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Equipment::with('photos');
-
-        if ($request->folder) {
-            $query->where('folder_id', $request->folder);
-        } else {
-            $query->whereNull('folder_id');
-        }
-
-        return $query->orderBy('position', 'asc')->paginate(30);
+        return Equipment::with('photos')->searchByFolder($request->folder)->paginate(30);
     }
 
     /**

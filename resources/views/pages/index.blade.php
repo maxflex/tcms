@@ -3,8 +3,6 @@
 @section('controller', 'PagesIndex')
 
 @section('title-right')
-    <span ng-click='ExportService.exportDialog()'>экспорт</span>
-    {{-- {{ link_to_route('pages.import', 'импорт', [], ['ng-click'=>'ExportService.import($event)']) }} --}}
     <span ng-click="FolderService.createModal()">создать папку</span>
     {{ link_to_route('pages.create', 'добавить страницу') }}
 @endsection
@@ -12,7 +10,7 @@
 @section('content')
     @include('modules.folders')
     <table class="table vertical-align-table">
-        <tbody ui-sortable='sortableOptions' ng-model="IndexService.page.data">
+        <tbody ui-sortable='FolderService.itemsSortableOptions' ng-model="IndexService.page.data">
             <tr ng-repeat="model in IndexService.page.data">
                 <td width='10'>
                     @{{ model.id }}
@@ -32,5 +30,4 @@
             </tr>
         </tbody>
     </table>
-    @include('modules.pagination')
 @stop

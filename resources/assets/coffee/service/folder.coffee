@@ -2,7 +2,18 @@ angular.module 'Egecms'
     .service 'FolderService', ($http, $timeout, Folder) ->
         @folders = []
 
-        @sortableOptions =
+        @itemSortableOptions =
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
+            tolerance: "pointer"
+            axis: 'y'
+            update: (event, ui) =>
+                $timeout =>
+                    @IndexService.page.data.forEach (model, index) =>
+                        @Resource.update({id: model.id, position: index})
+
+        @folderSortableOptions =
             cursor: "move"
             opacity: 0.9,
             zIndex: 9999
@@ -16,9 +27,11 @@ angular.module 'Egecms'
         config =
             modalId: '#folder-modal'
 
-        @init = (modelClass, current_folder) ->
+        @init = (modelClass, current_folder, IndexService, Resource) ->
             @class = modelClass
             @current_folder = current_folder
+            @IndexService = IndexService
+            @Resource = Resource
             @folders = Folder.query
                 class: modelClass
                 current_folder: current_folder

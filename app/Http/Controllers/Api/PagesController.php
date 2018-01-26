@@ -17,15 +17,7 @@ class PagesController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Page::orderBy('position', 'asc');
-
-        if ($request->folder) {
-            $query->where('folder_id', $request->folder);
-        } else {
-            $query->whereNull('folder_id');
-        }
-
-        return $query->paginate(30);
+        return Page::searchByFolder($request->folder)->paginate(30);
     }
 
     /**

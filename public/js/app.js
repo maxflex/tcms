@@ -326,6 +326,94 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -333,28 +421,11 @@
 (function() {
   angular.module('Egecms').controller('EquipmentIndex', function($scope, $attrs, $timeout, IndexService, Equipment, FolderService) {
     bindArguments($scope, arguments);
-    $scope.sortableOptions = {
-      cursor: "move",
-      opacity: 0.9,
-      zIndex: 9999,
-      tolerance: "pointer",
-      axis: 'y',
-      update: function(event, ui) {
-        return $timeout(function() {
-          return IndexService.page.data.forEach(function(model, index) {
-            return Equipment.update({
-              id: model.id,
-              position: index
-            });
-          });
-        });
-      }
-    };
     return angular.element(document).ready(function() {
       IndexService.init(Equipment, $scope.current_page, $attrs, {
         folder: $scope.folder
       });
-      return FolderService.init($scope.template["class"], $scope.folder);
+      return FolderService.init($scope.template["class"], $scope.folder, IndexService, Equipment);
     });
   }).controller('EquipmentForm', function($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService) {
     bindArguments($scope, arguments);
@@ -815,30 +886,13 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('PagesIndex', function($scope, $attrs, $timeout, IndexService, Page, Published, ExportService, FolderService) {
+  angular.module('Egecms').controller('PagesIndex', function($scope, $attrs, $timeout, IndexService, Page, Published, FolderService) {
     bindArguments($scope, arguments);
-    $scope.sortableOptions = {
-      cursor: "move",
-      opacity: 0.9,
-      zIndex: 9999,
-      tolerance: "pointer",
-      axis: 'y',
-      update: function(event, ui) {
-        return $timeout(function() {
-          return IndexService.page.data.forEach(function(model, index) {
-            return Page.update({
-              id: model.id,
-              position: index
-            });
-          });
-        });
-      }
-    };
     return angular.element(document).ready(function() {
       IndexService.init(Page, $scope.current_page, $attrs, {
         folder: $scope.folder
       });
-      return FolderService.init($scope.template["class"], $scope.folder);
+      return FolderService.init($scope.template["class"], $scope.folder, IndexService, Page);
     });
   }).controller('PagesForm', function($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag, FolderService) {
     var bindFileUpload, empty_useful;
@@ -1804,94 +1858,6 @@
     return angular.element(document).ready(function() {
       return FormService.init(Video, $scope.id, $scope.model);
     });
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
   });
 
 }).call(this);
@@ -2882,7 +2848,26 @@
   angular.module('Egecms').service('FolderService', function($http, $timeout, Folder) {
     var config;
     this.folders = [];
-    this.sortableOptions = {
+    this.itemSortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      update: (function(_this) {
+        return function(event, ui) {
+          return $timeout(function() {
+            return _this.IndexService.page.data.forEach(function(model, index) {
+              return _this.Resource.update({
+                id: model.id,
+                position: index
+              });
+            });
+          });
+        };
+      })(this)
+    };
+    this.folderSortableOptions = {
       cursor: "move",
       opacity: 0.9,
       zIndex: 9999,
@@ -2904,9 +2889,11 @@
     config = {
       modalId: '#folder-modal'
     };
-    this.init = function(modelClass, current_folder) {
+    this.init = function(modelClass, current_folder, IndexService, Resource) {
       this["class"] = modelClass;
       this.current_folder = current_folder;
+      this.IndexService = IndexService;
+      this.Resource = Resource;
       this.folders = Folder.query({
         "class": modelClass,
         current_folder: current_folder

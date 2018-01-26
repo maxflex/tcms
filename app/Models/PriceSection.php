@@ -97,7 +97,7 @@ class PriceSection extends Model
                 } else {
                     $new_price = $position->price + $coeff;
                 }
-                PricePosition::whereId($position->id)->update([
+                PricePosition::find($position->id)->update([
                     'price' => round($new_price)
                 ]);
             }

@@ -9,10 +9,11 @@ use Shared\Model;
 use App\Service\VersionControl;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasTags;
+use App\Traits\Folderable;
 
 class Page extends Model
 {
-   use Exportable, SoftDeletes, HasTags;
+   use Exportable, SoftDeletes, HasTags, Folderable;
 
    protected $hidden = ['html', 'html_mobile', 'seo_text'];
    protected $dates = ['deleted_at'];
@@ -97,10 +98,5 @@ class Page extends Model
         }
 
         return $query;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
     }
 }

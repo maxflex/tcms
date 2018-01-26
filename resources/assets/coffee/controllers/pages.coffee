@@ -1,21 +1,10 @@
 angular
     .module 'Egecms'
-    .controller 'PagesIndex', ($scope, $attrs, $timeout, IndexService, Page, Published, ExportService, FolderService) ->
+    .controller 'PagesIndex', ($scope, $attrs, $timeout, IndexService, Page, Published, FolderService) ->
         bindArguments($scope, arguments)
-        $scope.sortableOptions =
-            cursor: "move"
-            opacity: 0.9,
-            zIndex: 9999
-            tolerance: "pointer"
-            axis: 'y'
-            update: (event, ui) ->
-                $timeout ->
-                    IndexService.page.data.forEach (model, index) ->
-                        Page.update({id: model.id, position: index})
-
         angular.element(document).ready ->
             IndexService.init(Page, $scope.current_page, $attrs, {folder: $scope.folder})
-            FolderService.init($scope.template.class, $scope.folder)
+            FolderService.init($scope.template.class, $scope.folder, IndexService, Page)
     .controller 'PagesForm', ($scope, $http, $attrs, $timeout, FormService, AceService, Page, Published, UpDown, PageItem, Tag, FolderService) ->
         bindArguments($scope, arguments)
 

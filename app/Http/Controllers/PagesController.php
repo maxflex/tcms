@@ -30,7 +30,6 @@ class PagesController extends Controller
             'current_page'  => $request->page,
             'folder'        => $request->folder,
             'template'      => $this->template,
-            'exportable_fields' => Page::getExportableFields(),
         ]));
     }
 
