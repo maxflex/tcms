@@ -99,4 +99,13 @@ class Page extends Model
 
         return $query;
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function($model) {
+            $model->seo_text = strip_tags($model->seo_text, '<br><p><ul><li>');
+        });
+    }
 }

@@ -116,9 +116,6 @@
     <div class="col-sm-12">
         <label ng-class="{'active link-like': !AceService.isShown('editor')}" ng-click="AceService.show('editor')">стационар</label>
         <label ng-class="{'active link-like': !AceService.isShown('editor-mobile')}" ng-click="AceService.show('editor-mobile')">мобильная</label>
-        <label class="pull-right" style='top: 3px; position: relative'>
-            <span class='link-like' ng-click='addLinkDialog()'>добавить ссылку</span>
-        </label>
         <div id='editor--html' ng-show="AceService.isShown('editor')" style="height: 500px">@{{ FormService.model.html }}</div>
         <div id='editor--html_mobile' ng-show="AceService.isShown('editor-mobile')" style="height: 500px">@{{ FormService.model.html_mobile }}</div>
     </div>
