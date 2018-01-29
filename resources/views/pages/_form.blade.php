@@ -108,6 +108,7 @@
 <div class="row mbb">
     <div class="col-sm-12">
         <label>сео текст</label>
+        <span class="hint-badge">разрешенные теги: {{ htmlspecialchars('<p>, <br>, <ul>, <li>') }} </span>
         <div id='editor--seo_text' style="height: 300px">@{{ FormService.model.seo_text }}</div>
     </div>
 </div>

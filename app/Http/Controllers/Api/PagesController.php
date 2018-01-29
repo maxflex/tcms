@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
+use App\Http\Requests\PageStoreRequest;
 
 class PagesController extends Controller
 {
@@ -36,7 +37,7 @@ class PagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PageStoreRequest $request)
     {
         return Page::create($request->input())->fresh();
     }
@@ -70,7 +71,7 @@ class PagesController extends Controller
      * @param  int  $id§
      * @return \Illumi§nate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PageStoreRequest $request, $id)
     {
         Page::find($id)->update($request->input());
     }

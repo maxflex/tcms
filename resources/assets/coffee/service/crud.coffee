@@ -101,7 +101,11 @@ angular.module 'Egecms'
                 this.saving = false
                 ajaxEnd()
             , (response) ->
-                notifyError response.data.message
+                if response.data.hasOwnProperty('message')
+                    notifyError response.data.message
+                else
+                    $.each response.data, (index, value) ->
+                        notifyError value
                 this.saving = false
                 ajaxEnd()
 

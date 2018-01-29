@@ -4467,3 +4467,12 @@ select[multiple] {
         width: 400px;
     }
 }
+
+.hint-badge {
+    background: rgba($brand-success, .1);
+    color: $brand-success;
+    padding: 1px 4px;
+    border-radius: 4px;
+    float: right;
+    font-size: 12px;
+}

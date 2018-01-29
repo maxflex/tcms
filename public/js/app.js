@@ -2744,7 +2744,13 @@
           return ajaxEnd();
         };
       })(this), function(response) {
-        notifyError(response.data.message);
+        if (response.data.hasOwnProperty('message')) {
+          notifyError(response.data.message);
+        } else {
+          $.each(response.data, function(index, value) {
+            return notifyError(value);
+          });
+        }
         this.saving = false;
         return ajaxEnd();
       });

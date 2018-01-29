@@ -104,10 +104,6 @@ class Page extends Model
     {
         parent::boot();
 
-        static::saving(function($model) {
-            $model->seo_text = strip_tags($model->seo_text, '<br><p><ul><li>');
-        });
-
         static::deleting(function($model) {
             DB::table($model->getTable())->whereId($model->id)->update(['url' => null]);
         });
