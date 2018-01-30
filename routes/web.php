@@ -48,8 +48,7 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
     Route::resource('prices/{id}/positions', 'PricePositionsController');
 
-    Route::get('gallery/folder/{folder_id}', 'GalleryController@index');
-    Route::resource('gallery', 'GalleryController');
+    Route::resource('galleries', 'GalleryController');
 
     Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
         Route::resource('expenditures', 'ExpendituresController');

@@ -17,15 +17,9 @@ class GalleryController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Gallery::orderBy('position');
-
-        if (isset($request->folder_id) && $request->folder_id) {
-            $query->where('folder_id', $request->folder_id);
-        } else {
-            $query->whereNull('folder_id');
-        }
-
-        return $query->paginate(9999);
+        return Gallery::searchByFolder($request->folder)
+            ->orderByPosition()
+            ->paginate(9999);
     }
 
     /**

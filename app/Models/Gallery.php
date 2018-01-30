@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTags;
 use App\Traits\HasPhotos;
+use App\Traits\Folderable;
 use PHPImageWorkshop\ImageWorkshop;
 use claviska\SimpleImage;
 
 class Gallery extends Model
 {
-    use HasTags, HasPhotos;
+    use HasTags, HasPhotos, Folderable;
 
     protected $fillable = [
         'date',

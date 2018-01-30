@@ -7,21 +7,28 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Gallery;
 use App\Models\Master;
-use App\Models\GalleryFolder;
+use App\Service\ControllerTemplate;
 
 class GalleryController extends Controller
 {
+    private $template;
+
+    public function __construct()
+    {
+        $this->template = new ControllerTemplate(Gallery::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $folder_id = null)
+    public function index(Request $request)
     {
-        return view('gallery.index')->with(ngInit([
+        return view($this->template->view('index'))->with(ngInit([
             'current_page' => $request->page,
-            'folder_id' => $folder_id,
-            'folders' => GalleryFolder::orderBy('position')->get()
+            'folder'       => $request->folder,
+            'template'     => $this->template,
         ]));
     }
 
@@ -32,11 +39,10 @@ class GalleryController extends Controller
      */
     public function create()
     {
-        $masters = Master::light()->get();
-        return view('gallery.create')->with(ngInit([
-            'model' => new Gallery,
-            'masters' => $masters,
-            'folders' => GalleryFolder::orderBy('position')->get()
+        return view($this->template->view('create'))->with(ngInit([
+            'model'     => new $this->template->class,
+            'masters'   => Master::light()->get(),
+            'template'  => $this->template
         ]));
     }
 
@@ -70,9 +76,11 @@ class GalleryController extends Controller
      */
     public function edit($id)
     {
-        $masters = Master::light()->get();
-        $folders = GalleryFolder::orderBy('position')->get();
-        return view('gallery.edit')->with(ngInit(compact('id', 'masters', 'folders')));
+        return view($this->template->view('edit'))->with(ngInit([
+            'id'        => $id,
+            'masters'   => Master::light()->get(),
+            'template'  => $this->template,
+        ]));
     }
 
     /**

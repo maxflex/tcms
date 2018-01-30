@@ -41,8 +41,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('prices/change', 'PricesController@change');
     Route::resource('prices', 'PricesController');
     Route::resource('prices/positions', 'PricePositionsController');
-    Route::resource('gallery/folders', 'GalleryFoldersController');
-    Route::resource('gallery', 'GalleryController');
+    Route::resource('galleries', 'GalleryController');
 
     Route::post('tags/checkExistance/{id?}', 'TagsController@checkExistance');
     Route::get('tags/autocomplete', 'TagsController@autocomplete');

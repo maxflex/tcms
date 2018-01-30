@@ -10,7 +10,7 @@
 @section('controller', 'GalleryForm')
 <div class="row">
     <div class="col-sm-12">
-        @include('gallery._form')
+        @include('galleries._form')
     </div>
 </div>
 @stop

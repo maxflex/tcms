@@ -60,23 +60,22 @@
         </div>
         <div class="mbb">
             <label class="no-margin-bottom label-opacity">папка</label>
-            <select class='form-control selectpicker' ng-model='FormService.model.folder_id' ng-change='changeFolder()' convert-to-number>
+            <select class='form-control selectpicker' ng-model='FormService.model.folder_id' convert-to-number>
                 <option value=''>не выбрано</option>
-                <option value='-1'>новая папка</option>
                 <option disabled>──────────────</option>
-                <option ng-repeat="folder in folders track by $index" value="@{{ folder.id }}">
+                <option ng-repeat="folder in FolderService.folders track by $index" value="@{{ folder.id }}">
                     @{{ folder.name }}
                 </option>
             </select>
         </div>
     </div>
 </div>
-@include('gallery._component', ['number' => 1])
-@include('gallery._component', ['number' => 2])
-@include('gallery._component', ['number' => 3])
-@include('gallery._component', ['number' => 4])
-@include('gallery._component', ['number' => 5])
-@include('gallery._component', ['number' => 6])
+@include('galleries._component', ['number' => 1])
+@include('galleries._component', ['number' => 2])
+@include('galleries._component', ['number' => 3])
+@include('galleries._component', ['number' => 4])
+@include('galleries._component', ['number' => 5])
+@include('galleries._component', ['number' => 6])
 <div class="row mb">
     <div class="col-sm-9"></div>
     <div class="col-sm-3">
@@ -104,4 +103,3 @@
         ])
     </div>
 </div>
-@include('gallery._modals')
