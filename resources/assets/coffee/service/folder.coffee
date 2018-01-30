@@ -1,6 +1,7 @@
 angular.module 'Egecms'
     .service 'FolderService', ($http, $timeout, Folder) ->
         @folders = []
+        @parent_folder = null
 
         @itemSortableOptions =
             cursor: "move"
@@ -27,14 +28,16 @@ angular.module 'Egecms'
         config =
             modalId: '#folder-modal'
 
-        @init = (modelClass, current_folder, IndexService, Resource) ->
+        @init = (modelClass, current_folder_id, IndexService, Resource) ->
             @class = modelClass
-            @current_folder = current_folder
+            @current_folder_id = current_folder_id
             @IndexService = IndexService
             @Resource = Resource
+            @parent_folder = Folder.get({id: current_folder_id}) if current_folder_id
             @folders = Folder.query
                 class: modelClass
-                current_folder: current_folder
+                current_folder_id: current_folder_id
+
             , -> spRefresh()
             @modal = $(config.modalId)
 
@@ -50,7 +53,7 @@ angular.module 'Egecms'
             Folder.save
                 class: @class
                 name: @popup_folder.name
-                folder_id: @current_folder
+                folder_id: @current_folder_id
             , (response) =>
                 @folders.push(response)
 

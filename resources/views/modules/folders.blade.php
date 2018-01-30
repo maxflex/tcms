@@ -3,7 +3,7 @@
         <tr ng-if='folder'>
             <td colspan='4'>
                 <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>
-                <a class="pointer" onclick="window.history.back()">назад</a>
+                <a href="@{{ template.table }}@{{ FolderService.parent_folder.id ? '?folder=' + FolderService.parent_folder.id : '' }}">назад</a>
             </td>
         </tr>
         <tr ng-repeat="folder in FolderService.folders">

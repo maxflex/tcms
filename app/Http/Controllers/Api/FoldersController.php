@@ -18,7 +18,7 @@ class FoldersController extends Controller
     public function index(Request $request)
     {
         return Folder::where('class', $request->class)
-            ->searchByFolder($request->current_folder)
+            ->searchByFolder($request->current_folder_id)
             ->orderByPosition()
             ->get();
     }
@@ -45,14 +45,16 @@ class FoldersController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Find parent folder
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return Folder::find($id);
+        $folder = Folder::find($id);
+        if ($folder->folder_id) {
+            return Folder::find($folder->folder_id);
+        }
+        return null;
     }
 
     /**
