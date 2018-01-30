@@ -17,15 +17,10 @@ class FoldersController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Folder::where('class', $request->class)->orderBy('position');
-
-        if ($request->current_folder) {
-            $query->where('folder_id', $request->current_folder);
-        } else {
-            $query->whereNull('folder_id');
-        }
-
-        return $query->get();
+        return Folder::where('class', $request->class)
+            ->searchByFolder($request->current_folder)
+            ->orderByPosition()
+            ->get();
     }
 
     /**

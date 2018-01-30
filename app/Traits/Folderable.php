@@ -17,10 +17,8 @@ trait Folderable
         return $query;
     }
 
-    protected static function boot()
+    public function scopeOrderByPosition($query)
     {
-        parent::boot();
-
-        static::addGlobalScope(new DraggableScope);
+        return $query->orderBy('position');
     }
 }

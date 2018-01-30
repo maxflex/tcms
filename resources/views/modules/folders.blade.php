@@ -1,5 +1,5 @@
 <table class="table" style='margin: 0'>
-    <tbody ui-sortable='FolderService.sortableOptions' ng-model="FolderService.folders">
+    <tbody ui-sortable='FolderService.folderSortableOptions' ng-model="FolderService.folders">
         <tr ng-if='folder'>
             <td colspan='4'>
                 <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>

@@ -18,7 +18,7 @@ class PagesController extends Controller
      */
     public function index(Request $request)
     {
-        return Page::searchByFolder($request->folder)->paginate(30);
+        return Page::searchByFolder($request->folder)->orderByPosition()->paginate(30);
     }
 
     /**

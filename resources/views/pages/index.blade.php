@@ -10,7 +10,7 @@
 @section('content')
     @include('modules.folders')
     <table class="table vertical-align-table">
-        <tbody ui-sortable='FolderService.itemsSortableOptions' ng-model="IndexService.page.data">
+        <tbody ui-sortable='FolderService.itemSortableOptions' ng-model="IndexService.page.data">
             <tr ng-repeat="model in IndexService.page.data">
                 <td width='10'>
                     @{{ model.id }}

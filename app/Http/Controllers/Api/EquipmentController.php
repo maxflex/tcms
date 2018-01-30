@@ -17,7 +17,10 @@ class EquipmentController extends Controller
      */
     public function index(Request $request)
     {
-        return Equipment::with('photos')->searchByFolder($request->folder)->paginate(30);
+        return Equipment::with('photos')
+            ->searchByFolder($request->folder)
+            ->orderByPosition()
+            ->paginate(30);
     }
 
     /**

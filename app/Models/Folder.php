@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Folderable;
 
 class Folder extends Model
 {
+    use Folderable;
+
     protected $fillable = ['name', 'class', 'position', 'folder_id'];
     protected $appends = ['item_count', 'folder_count'];
 

@@ -103,7 +103,6 @@ class Page extends Model
     protected static function boot()
     {
         parent::boot();
-
         static::deleting(function($model) {
             DB::table($model->getTable())->whereId($model->id)->update(['url' => null]);
         });
