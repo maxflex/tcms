@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Folder;
+use DateTime;
 
 class FoldersController extends Controller
 {
@@ -17,6 +18,7 @@ class FoldersController extends Controller
      */
     public function index(Request $request)
     {
+        setcookie(Folder::getCookieKey($request->class), $request->current_folder_id, (new DateTime)->modify('+1 year')->getTimestamp(), '/');
         return Folder::where('class', $request->class)
             ->searchByFolder($request->current_folder_id)
             ->orderByPosition()
