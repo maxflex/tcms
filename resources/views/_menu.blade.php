@@ -6,7 +6,7 @@
 <a href="tags" class="list-group-item">Теги</a>
 <a href="videos" class="list-group-item">Видео</a>
 <a href="reviews" class="list-group-item">Отзывы</a>
-<a href="gallery" class="list-group-item">Галерея</a>
+<a href="galleries" class="list-group-item">Галерея</a>
 <a href="prices" class="list-group-item">Прайс лист</a>
 <a class="list-group-item active">Сайт</a>
 <a href="variables" class="list-group-item">Переменные</a>
