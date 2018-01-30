@@ -37,6 +37,7 @@ angular.module 'Egecms'
             @folders = Folder.query
                 class: modelClass
                 current_folder_id: current_folder_id
+                save_visited_folder_id: current_folder_id isnt undefined # сохранять ли посещенную ID папки
 
             , -> spRefresh()
             @modal = $(config.modalId)
