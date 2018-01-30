@@ -18,9 +18,9 @@ class FoldersController extends Controller
      */
     public function index(Request $request)
     {
-        if (filter_var($request->save_visited_folder_id, FILTER_VALIDATE_BOOLEAN)) {
-            setcookie(Folder::getCookieKey($request->class), $request->current_folder_id, (new DateTime)->modify('+1 year')->getTimestamp(), '/');
-        }
+        // if (filter_var($request->save_visited_folder_id, FILTER_VALIDATE_BOOLEAN)) {
+        //     setcookie(Folder::getCookieKey($request->class), $request->current_folder_id, (new DateTime)->modify('+1 year')->getTimestamp(), '/');
+        // }
         return Folder::where('class', $request->class)
             ->searchByFolder($request->current_folder_id)
             ->orderByPosition()
