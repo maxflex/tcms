@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Tag;
 
 class PageStoreRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class PageStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'seo_text' => 'allow_tags:p,br,ul,li'
+            'seo_text' => 'allow_tags:' . implode(',', Tag::ALLOWED_TAGS)
         ];
     }
 

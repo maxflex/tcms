@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends Model
 {
+    const ALLOWED_TAGS = ['p', 'br', 'ul', 'li', 'a'];
     protected $visible = ['id', 'text'];
     protected $fillable = ['text', 'position'];
 }
