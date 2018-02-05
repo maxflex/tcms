@@ -16,7 +16,7 @@
                     @{{ model.id }}
                 </td>
                 <td>
-                    @{{ model.name }}
+                    @{{ model.name || 'имя не указано' }}
                 </td>
                 <td>
                     <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg' style='height: 50px'>

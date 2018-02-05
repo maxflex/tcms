@@ -11,10 +11,11 @@ angular
         $scope.version = makeId()
 
         angular.element(document).ready ->
+            FolderService.init($scope.template.class)
             FormService.init(Gallery, $scope.id, $scope.model)
+            FormService.model.folder_id = $.cookie('gallery_folder_id') if not FormService.model.id && $.cookie('gallery_folder_id')
             # PhotoService.afterSave = $scope.edit
             PhotoService.init(FormService, 'Gallery', $scope.id)
-            FolderService.init($scope.template.class)
 
         $scope.preview = ->
             window.open("/img/gallery/#{FormService.model.id}.jpg?v=" + makeId(), '_blank')

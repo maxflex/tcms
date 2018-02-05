@@ -342,9 +342,12 @@
   }).controller('EquipmentForm', function($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService) {
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
+      FolderService.init($scope.template["class"]);
       FormService.init(Equipment, $scope.id, $scope.model);
-      PhotoService.init(FormService, 'Equipment', $scope.id);
-      return FolderService.init($scope.template["class"]);
+      if (!FormService.model.id && $.cookie('equipment_folder_id')) {
+        FormService.model.folder_id = $.cookie('equipment_folder_id');
+      }
+      return PhotoService.init(FormService, 'Equipment', $scope.id);
     });
   });
 
@@ -519,9 +522,12 @@
     bindArguments($scope, arguments);
     $scope.version = makeId();
     angular.element(document).ready(function() {
+      FolderService.init($scope.template["class"]);
       FormService.init(Gallery, $scope.id, $scope.model);
-      PhotoService.init(FormService, 'Gallery', $scope.id);
-      return FolderService.init($scope.template["class"]);
+      if (!FormService.model.id && $.cookie('gallery_folder_id')) {
+        FormService.model.folder_id = $.cookie('gallery_folder_id');
+      }
+      return PhotoService.init(FormService, 'Gallery', $scope.id);
     });
     $scope.preview = function() {
       return window.open(("/img/gallery/" + FormService.model.id + ".jpg?v=") + makeId(), '_blank');
@@ -745,6 +751,9 @@
     angular.element(document).ready(function() {
       FolderService.init($scope.template["class"]);
       FormService.init(Page, $scope.id, $scope.model);
+      if (!FormService.model.id && $.cookie('page_folder_id')) {
+        FormService.model.folder_id = $.cookie('page_folder_id');
+      }
       FormService.dataLoaded.promise.then(function() {
         if (!FormService.model.useful || !FormService.model.useful.length) {
           FormService.model.useful = [angular.copy(empty_useful)];
@@ -1828,7 +1837,21 @@
   }).factory('Folder', function($resource) {
     return $resource(apiPath('folders'), {
       id: '@id'
-    }, updatable());
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      tree: {
+        method: 'POST',
+        url: apiPath('folders', 'tree'),
+        isArray: true
+      },
+      breadcrumbs: {
+        method: 'GET',
+        url: apiPath('folders', 'breadcrumbs'),
+        isArray: true
+      }
+    });
   }).factory('PageItem', function($resource) {
     return $resource(apiPath('pageitems'), {
       id: '@id'
@@ -1910,697 +1933,6 @@
       }
     };
   };
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('AceService', function() {
-    this.editors = {};
-    this.initEditor = function(FormService, minLines, id, mode) {
-      if (minLines == null) {
-        minLines = 30;
-      }
-      if (id == null) {
-        id = 'editor';
-      }
-      if (mode == null) {
-        mode = 'ace/mode/html';
-      }
-      this.editor = ace.edit(id);
-      this.editor.getSession().setMode(mode);
-      this.editor.getSession().setUseWrapMode(true);
-      this.editor.setOptions({
-        minLines: minLines,
-        maxLines: 2e308
-      });
-      this.editor.commands.addCommand({
-        name: 'save',
-        bindKey: {
-          win: 'Ctrl-S',
-          mac: 'Command-S'
-        },
-        exec: function(editor) {
-          return FormService.edit();
-        }
-      });
-      return this.editors[id] = this.editor;
-    };
-    this.getEditor = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      return this.editors[id];
-    };
-    this.show = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      this.shown_editor = id;
-      return localStorage.setItem('shown_editor', id);
-    };
-    this.isShown = function(id) {
-      if (id == null) {
-        id = 'editor';
-      }
-      if (!localStorage.getItem('shown_editor')) {
-        this.show('editor');
-      }
-      return id === localStorage.getItem('shown_editor');
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('IndexService', function($rootScope) {
-    this.filter = function() {
-      $.cookie(this.controller, JSON.stringify(this.search), {
-        expires: 365,
-        path: '/'
-      });
-      this.current_page = 1;
-      return this.pageChanged();
-    };
-    this.max_size = 10;
-    this.init = function(Resource, current_page, attrs, params) {
-      if (params == null) {
-        params = {};
-      }
-      $rootScope.frontend_loading = true;
-      this.Resource = Resource;
-      this.current_page = parseInt(current_page);
-      this.controller = attrs.ngController.toLowerCase().slice(0, -5);
-      this.search = $.cookie(this.controller) ? JSON.parse($.cookie(this.controller)) : {};
-      this.params = params;
-      return this.loadPage();
-    };
-    this.loadPage = function() {
-      var p;
-      p = {
-        page: this.current_page
-      };
-      if (this.sort !== void 0) {
-        p.sort = this.sort;
-      }
-      if (this.params.folder) {
-        p.folder = this.params.folder;
-      }
-      $.each(this.params, function(key, val) {
-        return p[key] = val;
-      });
-      return this.Resource.get(p, (function(_this) {
-        return function(response) {
-          _this.page = response;
-          return $rootScope.frontend_loading = false;
-        };
-      })(this));
-    };
-    this.pageChanged = function() {
-      $rootScope.frontend_loading = true;
-      this.loadPage();
-      return this.changeUrl();
-    };
-    this["delete"] = function(id, text) {
-      return bootbox.confirm("Вы уверены, что хотите удалить " + text + " #" + id + "?", (function(_this) {
-        return function(result) {
-          if (result === true) {
-            return _this.Resource["delete"]({
-              id: id
-            }, function() {
-              return location.reload();
-            });
-          }
-        };
-      })(this));
-    };
-    this.changeUrl = function() {
-      return window.history.pushState('', '', this.controller + '?page=' + this.current_page);
-    };
-    return this;
-  }).service('FormService', function($rootScope, $q, $timeout) {
-    var beforeSave, modelLoaded, modelName;
-    this.init = function(Resource, id, model) {
-      this.dataLoaded = $q.defer();
-      $rootScope.frontend_loading = true;
-      this.Resource = Resource;
-      this.saving = false;
-      if (id) {
-        return this.model = Resource.get({
-          id: id
-        }, (function(_this) {
-          return function() {
-            return modelLoaded();
-          };
-        })(this));
-      } else {
-        this.model = new Resource(model);
-        return modelLoaded();
-      }
-    };
-    modelLoaded = (function(_this) {
-      return function() {
-        $rootScope.frontend_loading = false;
-        return $timeout(function() {
-          _this.dataLoaded.resolve(true);
-          return $('.selectpicker').selectpicker('refresh');
-        });
-      };
-    })(this);
-    beforeSave = (function(_this) {
-      return function() {
-        if (_this.error_element === void 0) {
-          ajaxStart();
-          if (_this.beforeSave !== void 0) {
-            _this.beforeSave();
-          }
-          _this.saving = true;
-          return true;
-        } else {
-          $(_this.error_element).focus();
-          if (_this.error_text !== void 0) {
-            notifyError(_this.error_text);
-          }
-          return false;
-        }
-      };
-    })(this);
-    modelName = function() {
-      var l, model_name;
-      l = window.location.pathname.split('/');
-      model_name = l[l.length - 2];
-      if ($.isNumeric(model_name)) {
-        model_name = l[l.length - 3];
-      }
-      return model_name;
-    };
-    this["delete"] = function(event, callback) {
-      if (callback == null) {
-        callback = false;
-      }
-      return bootbox.confirm("Вы уверены, что хотите " + ($(event.target).text()) + " #" + this.model.id + "?", (function(_this) {
-        return function(result) {
-          if (result === true) {
-            beforeSave();
-            return _this.model.$delete().then(function() {
-              var url;
-              if (callback) {
-                callback();
-                _this.saving = false;
-                return ajaxEnd();
-              } else {
-                url = _this.redirect_url || modelName();
-                if (_this.prefix) {
-                  url = _this.prefix + url;
-                }
-                return redirect(url);
-              }
-            }, function(response) {
-              return notifyError(response.data.message);
-            });
-          }
-        };
-      })(this));
-    };
-    this.edit = function(callback) {
-      if (callback == null) {
-        callback = null;
-      }
-      if (!beforeSave()) {
-        return;
-      }
-      return this.model.$update().then((function(_this) {
-        return function() {
-          if (callback !== null) {
-            callback();
-          }
-          _this.saving = false;
-          return ajaxEnd();
-        };
-      })(this), function(response) {
-        if (response.data.hasOwnProperty('message')) {
-          notifyError(response.data.message);
-        } else {
-          $.each(response.data, function(index, value) {
-            return notifyError(value);
-          });
-        }
-        this.saving = false;
-        return ajaxEnd();
-      });
-    };
-    this.create = function() {
-      if (!beforeSave()) {
-        return;
-      }
-      return this.model.$save().then((function(_this) {
-        return function(response) {
-          var url;
-          url = _this.redirect_url || modelName() + ("/" + response.id + "/edit");
-          if (_this.prefix) {
-            url = _this.prefix + url;
-          }
-          return redirect(url);
-        };
-      })(this), (function(_this) {
-        return function(response) {
-          notifyError(response.data.message);
-          _this.saving = false;
-          ajaxEnd();
-          return _this.onCreateError(response);
-        };
-      })(this));
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('ExportService', function($rootScope, FileUploader) {
-    bindArguments(this, arguments);
-    this.init = function(options) {
-      var onWhenAddingFileFailed;
-      this.controller = options.controller;
-      this.FileUploader.FileSelect.prototype.isEmptyAfterSelection = function() {
-        return true;
-      };
-      return this.uploader = new this.FileUploader({
-        url: this.controller + "/import",
-        alias: 'imported_file',
-        autoUpload: true,
-        method: 'post',
-        removeAfterUpload: true,
-        onCompleteItem: function(i, response, status) {
-          if (status === 200) {
-            notifySuccess('Импортировано');
-          }
-          if (status !== 200) {
-            return notifyError(response.message);
-          }
-        }
-      }, onWhenAddingFileFailed = function(item, filter, options) {
-        if (filter.name === "queueLimit") {
-          this.clearQueue();
-          return this.addToQueue(item);
-        }
-      });
-    };
-    this["import"] = function(e) {
-      e.preventDefault();
-      $('#import-button').trigger('click');
-    };
-    this.exportDialog = function() {
-      $('#export-modal').modal('show');
-      return false;
-    };
-    this["export"] = function() {
-      window.location = "/" + this.controller + "/export?field=" + this.export_field;
-      $('#export-modal').modal('hide');
-      return false;
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('FactoryService', function($http) {
-    this.get = function(table, select, orderBy) {
-      if (select == null) {
-        select = null;
-      }
-      if (orderBy == null) {
-        orderBy = null;
-      }
-      return $http.post('api/factory', {
-        table: table,
-        select: select,
-        orderBy: orderBy
-      });
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('FolderService', function($http, $timeout, Folder) {
-    var config;
-    this.folders = [];
-    this.parent_folder = null;
-    this.itemSortableOptions = {
-      cursor: "move",
-      opacity: 0.9,
-      zIndex: 9999,
-      tolerance: "pointer",
-      axis: 'y',
-      update: (function(_this) {
-        return function(event, ui) {
-          return $timeout(function() {
-            return _this.IndexService.page.data.forEach(function(model, index) {
-              return _this.Resource.update({
-                id: model.id,
-                position: index
-              });
-            });
-          });
-        };
-      })(this)
-    };
-    this.folderSortableOptions = {
-      cursor: "move",
-      opacity: 0.9,
-      zIndex: 9999,
-      tolerance: "pointer",
-      axis: 'y',
-      update: (function(_this) {
-        return function(event, ui) {
-          return $timeout(function() {
-            return _this.folders.forEach(function(model, index) {
-              return Folder.update({
-                id: model.id,
-                position: index
-              });
-            });
-          });
-        };
-      })(this)
-    };
-    config = {
-      modalId: '#folder-modal'
-    };
-    this.init = function(modelClass, current_folder_id, IndexService, Resource) {
-      this["class"] = modelClass;
-      this.current_folder_id = current_folder_id;
-      this.IndexService = IndexService;
-      this.Resource = Resource;
-      if (current_folder_id) {
-        this.parent_folder = Folder.get({
-          id: current_folder_id
-        });
-      }
-      this.folders = Folder.query({
-        "class": modelClass,
-        current_folder_id: current_folder_id
-      }, function() {
-        return spRefresh();
-      });
-      return this.modal = $(config.modalId);
-    };
-    this.createModal = function() {
-      this.popup_folder = {
-        name: null
-      };
-      return this.modal.modal('show');
-    };
-    this.createOrUpdate = function() {
-      this.modal.modal('hide');
-      if (this.popup_folder.id) {
-        return this.edit();
-      } else {
-        return this.create();
-      }
-    };
-    this.create = function() {
-      return Folder.save({
-        "class": this["class"],
-        name: this.popup_folder.name,
-        folder_id: this.current_folder_id
-      }, (function(_this) {
-        return function(response) {
-          return _this.folders.push(response);
-        };
-      })(this));
-    };
-    this.editModal = function(folder) {
-      this.popup_folder = _.clone(folder);
-      return this.modal.modal('show');
-    };
-    this.edit = function() {
-      Folder.update(this.popup_folder);
-      this.modal.modal('hide');
-      if (this.popup_folder.id) {
-        return this.folders.forEach((function(_this) {
-          return function(folder, i) {
-            if (folder.id === _this.popup_folder.id) {
-              return _this.folders[i] = _.clone(_this.popup_folder);
-            }
-          };
-        })(this));
-      }
-    };
-    this["delete"] = function(folder) {
-      return bootbox.confirm("Вы уверены, что хотите удалить папку «" + folder.name + "»?", (function(_this) {
-        return function(result) {
-          if (result === true) {
-            return Folder["delete"]({
-              id: folder.id
-            }, function() {
-              return location.reload();
-            });
-          }
-        };
-      })(this));
-    };
-    this.isEmpty = function(folder) {
-      return !folder.item_count && !folder.folder_count;
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('PhotoService', function($rootScope, $http, $timeout, Photo) {
-    this.image = '';
-    this.cropped_image = '';
-    this.cripping = false;
-    this.aspect_ratio = null;
-    this.FormService = null;
-    this.methods = {};
-    this.selected_photo_index = null;
-    this.init = (function(_this) {
-      return function(FormService, type, id) {
-        _this.type = type;
-        _this.id = id;
-        _this.FormService = FormService;
-        return _this.bindFileUpload(type, id);
-      };
-    })(this);
-    this.crop = function() {
-      this.cropping = true;
-      return $timeout((function(_this) {
-        return function() {
-          return _this.methods.updateResultImage(function() {
-            return $timeout(function() {
-              var blob, fd;
-              fd = new FormData();
-              blob = dataURItoBlob(_this.cropped_image);
-              fd.append('cropped_image', blob);
-              fd.append('id', _this.getSelectedPhoto().id);
-              console.log('blob', blob);
-              return $http.post('upload/cropped', fd, {
-                transformRequest: angular.identity,
-                headers: {
-                  'Content-Type': void 0
-                }
-              }).then(function(response) {
-                _this.cropping = false;
-                _this.FormService.model.photos[_this.selected_photo_index] = response.data;
-                return _this.closeModal();
-              }, function(error) {
-                _this.cropping = false;
-                return notifyError("Ошибка при загрузке");
-              });
-            });
-          });
-        };
-      })(this));
-    };
-    this.closeModal = function() {
-      return $('#change-photo').modal('hide');
-    };
-    this.bindFileUpload = function(type, id) {
-      return $('#fileupload').fileupload({
-        formData: {
-          id: id,
-          type: type
-        },
-        send: function() {
-          return NProgress.configure({
-            showSpinner: true
-          });
-        },
-        progress: function(e, data) {
-          return NProgress.set(data.loaded / data.total);
-        },
-        always: function() {
-          NProgress.configure({
-            showSpinner: false
-          });
-          return ajaxEnd();
-        },
-        done: (function(_this) {
-          return function(i, response) {
-            if (response.result.hasOwnProperty('error')) {
-              notifyError(response.result.error);
-              return;
-            }
-            if (_this.photo_id) {
-              _this.FormService.model.photos[_this.selected_photo_index] = response.result;
-              _this.image = _this.getSelectedPhoto().original_url;
-              delete _this.photo_id;
-            } else {
-              _this.FormService.model.photos.push(response.result);
-              _this.edit(_this.FormService.model.photos.length - 1);
-            }
-            return $rootScope.$apply();
-          };
-        })(this)
-      });
-    };
-    this.getSelectedPhoto = function() {
-      return this.FormService.model.photos[this.selected_photo_index];
-    };
-    this.loadNew = function() {
-      this.photo_id = this.getSelectedPhoto().id;
-      $('#fileupload').bind('fileuploadsubmit', (function(_this) {
-        return function(e, data) {
-          return data.formData = {
-            id: _this.id,
-            type: _this.type,
-            photo_id: _this.photo_id,
-            count: _this.FormService.model.count
-          };
-        };
-      })(this));
-      return $('#fileupload').click();
-    };
-    this.edit = function(index) {
-      this.selected_photo_index = index;
-      this.image = this.getSelectedPhoto().original_url;
-      return $('#change-photo').modal('show');
-    };
-    this["delete"] = function() {
-      Photo["delete"]({
-        id: this.getSelectedPhoto().id
-      });
-      this.FormService.model.photos.splice(this.selected_photo_index, 1);
-      return $('#change-photo').modal('hide');
-    };
-    this.toggleAscpectRatio = function() {
-      console.log('aspect ratio');
-      if (this.aspect_ratio === null) {
-        return this.aspect_ratio = 7 / 4;
-      } else {
-        return this.aspect_ratio = null;
-      }
-    };
-    return this;
-  });
-
-}).call(this);
-
-(function() {
-  angular.module('Egecms').service('UserService', function(AllUser, $rootScope, $timeout) {
-    var system_user;
-    this.users = AllUser.query();
-    $timeout((function(_this) {
-      return function() {
-        return _this.current_user = $rootScope.$$childTail.user;
-      };
-    })(this));
-    system_user = {
-      color: '#999999',
-      login: 'system',
-      id: 0
-    };
-    this.get = function(user_id) {
-      return this.getUser(user_id);
-    };
-    this.getUser = function(user_id) {
-      return _.findWhere(this.users, {
-        id: parseInt(user_id)
-      }) || system_user;
-    };
-    this.getLogin = function(user_id) {
-      return this.getUser(parseInt(user_id)).login;
-    };
-    this.getColor = function(user_id) {
-      return this.getUser(parseInt(user_id)).color;
-    };
-    this.getWithSystem = function(only_active) {
-      var users;
-      if (only_active == null) {
-        only_active = true;
-      }
-      users = this.getAll(only_active);
-      users.unshift(system_user);
-      return users;
-    };
-    this.getAll = function(only_active) {
-      if (only_active == null) {
-        only_active = true;
-      }
-      if (only_active) {
-        return _.filter(this.users, function(user) {
-          return user.rights.length && user.rights.indexOf('35') === -1;
-        });
-      } else {
-        return this.users;
-      }
-    };
-    this.toggle = function(entity, user_id, Resource) {
-      var new_user_id, obj;
-      if (Resource == null) {
-        Resource = false;
-      }
-      new_user_id = entity[user_id] ? 0 : this.current_user.id;
-      if (Resource) {
-        return Resource.update((
-          obj = {
-            id: entity.id
-          },
-          obj["" + user_id] = new_user_id,
-          obj
-        ), function() {
-          return entity[user_id] = new_user_id;
-        });
-      } else {
-        return entity[user_id] = new_user_id;
-      }
-    };
-    this.getBannedUsers = function() {
-      return _.filter(this.users, function(user) {
-        return user.rights.length && user.rights.indexOf('35') !== -1;
-      });
-    };
-    this.getBannedHaving = function(condition_obj) {
-      return _.filter(this.users, function(user) {
-        return user.rights.indexOf('35') !== -1 && condition_obj && condition_obj[user.id];
-      });
-    };
-    this.getActiveInAnySystem = function(with_system) {
-      var users;
-      if (with_system == null) {
-        with_system = true;
-      }
-      users = _.chain(this.users).filter(function(user) {
-        return user.rights.indexOf('35') === -1 || user.rights.indexOf('34') === -1;
-      }).sortBy('login').value();
-      if (with_system) {
-        users.unshift(system_user);
-      }
-      return users;
-    };
-    this.getBannedInBothSystems = function() {
-      return _.chain(this.users).filter(function(user) {
-        return user.rights.indexOf('35') !== -1 && user.rights.indexOf('34') !== -1;
-      }).sortBy('login').value();
-    };
-    return this;
-  });
 
 }).call(this);
 
@@ -3123,6 +2455,736 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('AceService', function() {
+    this.editors = {};
+    this.initEditor = function(FormService, minLines, id, mode) {
+      if (minLines == null) {
+        minLines = 30;
+      }
+      if (id == null) {
+        id = 'editor';
+      }
+      if (mode == null) {
+        mode = 'ace/mode/html';
+      }
+      this.editor = ace.edit(id);
+      this.editor.getSession().setMode(mode);
+      this.editor.getSession().setUseWrapMode(true);
+      this.editor.setOptions({
+        minLines: minLines,
+        maxLines: 2e308
+      });
+      this.editor.commands.addCommand({
+        name: 'save',
+        bindKey: {
+          win: 'Ctrl-S',
+          mac: 'Command-S'
+        },
+        exec: function(editor) {
+          return FormService.edit();
+        }
+      });
+      return this.editors[id] = this.editor;
+    };
+    this.getEditor = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      return this.editors[id];
+    };
+    this.show = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      this.shown_editor = id;
+      return localStorage.setItem('shown_editor', id);
+    };
+    this.isShown = function(id) {
+      if (id == null) {
+        id = 'editor';
+      }
+      if (!localStorage.getItem('shown_editor')) {
+        this.show('editor');
+      }
+      return id === localStorage.getItem('shown_editor');
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('IndexService', function($rootScope) {
+    this.filter = function() {
+      $.cookie(this.controller, JSON.stringify(this.search), {
+        expires: 365,
+        path: '/'
+      });
+      this.current_page = 1;
+      return this.pageChanged();
+    };
+    this.max_size = 10;
+    this.init = function(Resource, current_page, attrs, params) {
+      if (params == null) {
+        params = {};
+      }
+      $rootScope.frontend_loading = true;
+      this.Resource = Resource;
+      this.current_page = parseInt(current_page);
+      this.controller = attrs.ngController.toLowerCase().slice(0, -5);
+      this.search = $.cookie(this.controller) ? JSON.parse($.cookie(this.controller)) : {};
+      this.params = params;
+      return this.loadPage();
+    };
+    this.loadPage = function() {
+      var p;
+      p = {
+        page: this.current_page
+      };
+      if (this.sort !== void 0) {
+        p.sort = this.sort;
+      }
+      if (this.params.folder) {
+        p.folder = this.params.folder;
+      }
+      $.each(this.params, function(key, val) {
+        return p[key] = val;
+      });
+      return this.Resource.get(p, (function(_this) {
+        return function(response) {
+          _this.page = response;
+          return $rootScope.frontend_loading = false;
+        };
+      })(this));
+    };
+    this.pageChanged = function() {
+      $rootScope.frontend_loading = true;
+      this.loadPage();
+      return this.changeUrl();
+    };
+    this["delete"] = function(id, text) {
+      return bootbox.confirm("Вы уверены, что хотите удалить " + text + " #" + id + "?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            return _this.Resource["delete"]({
+              id: id
+            }, function() {
+              return location.reload();
+            });
+          }
+        };
+      })(this));
+    };
+    this.changeUrl = function() {
+      return window.history.pushState('', '', this.controller + '?page=' + this.current_page);
+    };
+    return this;
+  }).service('FormService', function($rootScope, $q, $timeout) {
+    var beforeSave, modelLoaded, modelName;
+    this.init = function(Resource, id, model) {
+      this.dataLoaded = $q.defer();
+      $rootScope.frontend_loading = true;
+      this.Resource = Resource;
+      this.saving = false;
+      if (id) {
+        return this.model = Resource.get({
+          id: id
+        }, (function(_this) {
+          return function() {
+            return modelLoaded();
+          };
+        })(this));
+      } else {
+        this.model = new Resource(model);
+        return modelLoaded();
+      }
+    };
+    modelLoaded = (function(_this) {
+      return function() {
+        $rootScope.frontend_loading = false;
+        return $timeout(function() {
+          _this.dataLoaded.resolve(true);
+          return $('.selectpicker').selectpicker('refresh');
+        });
+      };
+    })(this);
+    beforeSave = (function(_this) {
+      return function() {
+        if (_this.error_element === void 0) {
+          ajaxStart();
+          if (_this.beforeSave !== void 0) {
+            _this.beforeSave();
+          }
+          _this.saving = true;
+          return true;
+        } else {
+          $(_this.error_element).focus();
+          if (_this.error_text !== void 0) {
+            notifyError(_this.error_text);
+          }
+          return false;
+        }
+      };
+    })(this);
+    modelName = function() {
+      var l, model_name;
+      l = window.location.pathname.split('/');
+      model_name = l[l.length - 2];
+      if ($.isNumeric(model_name)) {
+        model_name = l[l.length - 3];
+      }
+      return model_name;
+    };
+    this["delete"] = function(event, callback) {
+      if (callback == null) {
+        callback = false;
+      }
+      return bootbox.confirm("Вы уверены, что хотите " + ($(event.target).text()) + " #" + this.model.id + "?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            beforeSave();
+            return _this.model.$delete().then(function() {
+              var url;
+              if (callback) {
+                callback();
+                _this.saving = false;
+                return ajaxEnd();
+              } else {
+                url = _this.redirect_url || modelName();
+                if (_this.prefix) {
+                  url = _this.prefix + url;
+                }
+                return redirect(url);
+              }
+            }, function(response) {
+              return notifyError(response.data.message);
+            });
+          }
+        };
+      })(this));
+    };
+    this.edit = function(callback) {
+      if (callback == null) {
+        callback = null;
+      }
+      if (!beforeSave()) {
+        return;
+      }
+      return this.model.$update().then((function(_this) {
+        return function() {
+          if (callback !== null) {
+            callback();
+          }
+          _this.saving = false;
+          return ajaxEnd();
+        };
+      })(this), function(response) {
+        if (response.data.hasOwnProperty('message')) {
+          notifyError(response.data.message);
+        } else {
+          $.each(response.data, function(index, value) {
+            return notifyError(value);
+          });
+        }
+        this.saving = false;
+        return ajaxEnd();
+      });
+    };
+    this.create = function() {
+      if (!beforeSave()) {
+        return;
+      }
+      return this.model.$save().then((function(_this) {
+        return function(response) {
+          var url;
+          url = _this.redirect_url || modelName() + ("/" + response.id + "/edit");
+          if (_this.prefix) {
+            url = _this.prefix + url;
+          }
+          return redirect(url);
+        };
+      })(this), (function(_this) {
+        return function(response) {
+          notifyError(response.data.message);
+          _this.saving = false;
+          ajaxEnd();
+          return _this.onCreateError(response);
+        };
+      })(this));
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('ExportService', function($rootScope, FileUploader) {
+    bindArguments(this, arguments);
+    this.init = function(options) {
+      var onWhenAddingFileFailed;
+      this.controller = options.controller;
+      this.FileUploader.FileSelect.prototype.isEmptyAfterSelection = function() {
+        return true;
+      };
+      return this.uploader = new this.FileUploader({
+        url: this.controller + "/import",
+        alias: 'imported_file',
+        autoUpload: true,
+        method: 'post',
+        removeAfterUpload: true,
+        onCompleteItem: function(i, response, status) {
+          if (status === 200) {
+            notifySuccess('Импортировано');
+          }
+          if (status !== 200) {
+            return notifyError(response.message);
+          }
+        }
+      }, onWhenAddingFileFailed = function(item, filter, options) {
+        if (filter.name === "queueLimit") {
+          this.clearQueue();
+          return this.addToQueue(item);
+        }
+      });
+    };
+    this["import"] = function(e) {
+      e.preventDefault();
+      $('#import-button').trigger('click');
+    };
+    this.exportDialog = function() {
+      $('#export-modal').modal('show');
+      return false;
+    };
+    this["export"] = function() {
+      window.location = "/" + this.controller + "/export?field=" + this.export_field;
+      $('#export-modal').modal('hide');
+      return false;
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('FactoryService', function($http) {
+    this.get = function(table, select, orderBy) {
+      if (select == null) {
+        select = null;
+      }
+      if (orderBy == null) {
+        orderBy = null;
+      }
+      return $http.post('api/factory', {
+        table: table,
+        select: select,
+        orderBy: orderBy
+      });
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('FolderService', function($http, $timeout, Folder) {
+    var config, getTree;
+    this.folders = [];
+    this.breadcrumbs = null;
+    this.itemSortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      update: (function(_this) {
+        return function(event, ui) {
+          return $timeout(function() {
+            return _this.IndexService.page.data.forEach(function(model, index) {
+              return _this.Resource.update({
+                id: model.id,
+                position: index
+              });
+            });
+          });
+        };
+      })(this)
+    };
+    this.folderSortableOptions = {
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999,
+      tolerance: "pointer",
+      axis: 'y',
+      update: (function(_this) {
+        return function(event, ui) {
+          return $timeout(function() {
+            return _this.folders.forEach(function(model, index) {
+              return Folder.update({
+                id: model.id,
+                position: index
+              });
+            });
+          });
+        };
+      })(this)
+    };
+    config = {
+      modalId: '#folder-modal'
+    };
+    this.init = function(modelClass, current_folder_id, IndexService, Resource) {
+      this["class"] = modelClass;
+      this.current_folder_id = current_folder_id;
+      this.IndexService = IndexService;
+      this.Resource = Resource;
+      if (current_folder_id) {
+        this.breadcrumbs = Folder.breadcrumbs({
+          id: current_folder_id
+        });
+      }
+      if (!IndexService) {
+        Folder.tree({
+          "class": modelClass
+        }, (function(_this) {
+          return function(response) {
+            return _this.tree = getTree(response);
+          };
+        })(this));
+      }
+      this.folders = Folder.query({
+        "class": modelClass,
+        current_folder_id: current_folder_id,
+        save_visited_folder_id: current_folder_id !== void 0
+      }, function() {
+        return spRefresh();
+      });
+      return this.modal = $(config.modalId);
+    };
+    getTree = function(folders, level, parent_name) {
+      var items;
+      if (level == null) {
+        level = 0;
+      }
+      if (parent_name == null) {
+        parent_name = null;
+      }
+      items = [];
+      folders.forEach((function(_this) {
+        return function(item) {
+          var name;
+          name = '';
+          if (parent_name) {
+            name += "<span class='subfolders'>" + parent_name + " / </span>";
+          }
+          name += item.name;
+          items.push({
+            id: item.id,
+            name: name,
+            level: level
+          });
+          if (item.folders) {
+            return items = items.concat(getTree(item.folders, level + 1, name));
+          }
+        };
+      })(this));
+      return items;
+    };
+    this.createModal = function() {
+      this.popup_folder = {
+        name: null
+      };
+      return this.modal.modal('show');
+    };
+    this.createOrUpdate = function() {
+      this.modal.modal('hide');
+      if (this.popup_folder.id) {
+        return this.edit();
+      } else {
+        return this.create();
+      }
+    };
+    this.create = function() {
+      return Folder.save({
+        "class": this["class"],
+        name: this.popup_folder.name,
+        folder_id: this.current_folder_id
+      }, (function(_this) {
+        return function(response) {
+          return _this.folders.push(response);
+        };
+      })(this));
+    };
+    this.editModal = function(folder) {
+      this.popup_folder = _.clone(folder);
+      return this.modal.modal('show');
+    };
+    this.edit = function() {
+      Folder.update(this.popup_folder);
+      this.modal.modal('hide');
+      if (this.popup_folder.id) {
+        return this.folders.forEach((function(_this) {
+          return function(folder, i) {
+            if (folder.id === _this.popup_folder.id) {
+              return _this.folders[i] = _.clone(_this.popup_folder);
+            }
+          };
+        })(this));
+      }
+    };
+    this["delete"] = function(folder) {
+      return bootbox.confirm("Вы уверены, что хотите удалить папку «" + folder.name + "»?", (function(_this) {
+        return function(result) {
+          if (result === true) {
+            return Folder["delete"]({
+              id: folder.id
+            }, function() {
+              return location.reload();
+            });
+          }
+        };
+      })(this));
+    };
+    this.isEmpty = function(folder) {
+      return !folder.item_count && !folder.folder_count;
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('PhotoService', function($rootScope, $http, $timeout, Photo) {
+    this.image = '';
+    this.cropped_image = '';
+    this.cripping = false;
+    this.aspect_ratio = null;
+    this.FormService = null;
+    this.methods = {};
+    this.selected_photo_index = null;
+    this.init = (function(_this) {
+      return function(FormService, type, id) {
+        _this.type = type;
+        _this.id = id;
+        _this.FormService = FormService;
+        return _this.bindFileUpload(type, id);
+      };
+    })(this);
+    this.crop = function() {
+      this.cropping = true;
+      return $timeout((function(_this) {
+        return function() {
+          return _this.methods.updateResultImage(function() {
+            return $timeout(function() {
+              var blob, fd;
+              fd = new FormData();
+              blob = dataURItoBlob(_this.cropped_image);
+              fd.append('cropped_image', blob);
+              fd.append('id', _this.getSelectedPhoto().id);
+              console.log('blob', blob);
+              return $http.post('upload/cropped', fd, {
+                transformRequest: angular.identity,
+                headers: {
+                  'Content-Type': void 0
+                }
+              }).then(function(response) {
+                _this.cropping = false;
+                _this.FormService.model.photos[_this.selected_photo_index] = response.data;
+                return _this.closeModal();
+              }, function(error) {
+                _this.cropping = false;
+                return notifyError("Ошибка при загрузке");
+              });
+            });
+          });
+        };
+      })(this));
+    };
+    this.closeModal = function() {
+      return $('#change-photo').modal('hide');
+    };
+    this.bindFileUpload = function(type, id) {
+      return $('#fileupload').fileupload({
+        formData: {
+          id: id,
+          type: type
+        },
+        send: function() {
+          return NProgress.configure({
+            showSpinner: true
+          });
+        },
+        progress: function(e, data) {
+          return NProgress.set(data.loaded / data.total);
+        },
+        always: function() {
+          NProgress.configure({
+            showSpinner: false
+          });
+          return ajaxEnd();
+        },
+        done: (function(_this) {
+          return function(i, response) {
+            if (response.result.hasOwnProperty('error')) {
+              notifyError(response.result.error);
+              return;
+            }
+            if (_this.photo_id) {
+              _this.FormService.model.photos[_this.selected_photo_index] = response.result;
+              _this.image = _this.getSelectedPhoto().original_url;
+              delete _this.photo_id;
+            } else {
+              _this.FormService.model.photos.push(response.result);
+              _this.edit(_this.FormService.model.photos.length - 1);
+            }
+            return $rootScope.$apply();
+          };
+        })(this)
+      });
+    };
+    this.getSelectedPhoto = function() {
+      return this.FormService.model.photos[this.selected_photo_index];
+    };
+    this.loadNew = function() {
+      this.photo_id = this.getSelectedPhoto().id;
+      $('#fileupload').bind('fileuploadsubmit', (function(_this) {
+        return function(e, data) {
+          return data.formData = {
+            id: _this.id,
+            type: _this.type,
+            photo_id: _this.photo_id,
+            count: _this.FormService.model.count
+          };
+        };
+      })(this));
+      return $('#fileupload').click();
+    };
+    this.edit = function(index) {
+      this.selected_photo_index = index;
+      this.image = this.getSelectedPhoto().original_url;
+      return $('#change-photo').modal('show');
+    };
+    this["delete"] = function() {
+      Photo["delete"]({
+        id: this.getSelectedPhoto().id
+      });
+      this.FormService.model.photos.splice(this.selected_photo_index, 1);
+      return $('#change-photo').modal('hide');
+    };
+    this.toggleAscpectRatio = function() {
+      console.log('aspect ratio');
+      if (this.aspect_ratio === null) {
+        return this.aspect_ratio = 7 / 4;
+      } else {
+        return this.aspect_ratio = null;
+      }
+    };
+    return this;
+  });
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').service('UserService', function(AllUser, $rootScope, $timeout) {
+    var system_user;
+    this.users = AllUser.query();
+    $timeout((function(_this) {
+      return function() {
+        return _this.current_user = $rootScope.$$childTail.user;
+      };
+    })(this));
+    system_user = {
+      color: '#999999',
+      login: 'system',
+      id: 0
+    };
+    this.get = function(user_id) {
+      return this.getUser(user_id);
+    };
+    this.getUser = function(user_id) {
+      return _.findWhere(this.users, {
+        id: parseInt(user_id)
+      }) || system_user;
+    };
+    this.getLogin = function(user_id) {
+      return this.getUser(parseInt(user_id)).login;
+    };
+    this.getColor = function(user_id) {
+      return this.getUser(parseInt(user_id)).color;
+    };
+    this.getWithSystem = function(only_active) {
+      var users;
+      if (only_active == null) {
+        only_active = true;
+      }
+      users = this.getAll(only_active);
+      users.unshift(system_user);
+      return users;
+    };
+    this.getAll = function(only_active) {
+      if (only_active == null) {
+        only_active = true;
+      }
+      if (only_active) {
+        return _.filter(this.users, function(user) {
+          return user.rights.length && user.rights.indexOf('35') === -1;
+        });
+      } else {
+        return this.users;
+      }
+    };
+    this.toggle = function(entity, user_id, Resource) {
+      var new_user_id, obj;
+      if (Resource == null) {
+        Resource = false;
+      }
+      new_user_id = entity[user_id] ? 0 : this.current_user.id;
+      if (Resource) {
+        return Resource.update((
+          obj = {
+            id: entity.id
+          },
+          obj["" + user_id] = new_user_id,
+          obj
+        ), function() {
+          return entity[user_id] = new_user_id;
+        });
+      } else {
+        return entity[user_id] = new_user_id;
+      }
+    };
+    this.getBannedUsers = function() {
+      return _.filter(this.users, function(user) {
+        return user.rights.length && user.rights.indexOf('35') !== -1;
+      });
+    };
+    this.getBannedHaving = function(condition_obj) {
+      return _.filter(this.users, function(user) {
+        return user.rights.indexOf('35') !== -1 && condition_obj && condition_obj[user.id];
+      });
+    };
+    this.getActiveInAnySystem = function(with_system) {
+      var users;
+      if (with_system == null) {
+        with_system = true;
+      }
+      users = _.chain(this.users).filter(function(user) {
+        return user.rights.indexOf('35') === -1 || user.rights.indexOf('34') === -1;
+      }).sortBy('login').value();
+      if (with_system) {
+        users.unshift(system_user);
+      }
+      return users;
+    };
+    this.getBannedInBothSystems = function() {
+      return _.chain(this.users).filter(function(user) {
+        return user.rights.indexOf('35') !== -1 && user.rights.indexOf('34') !== -1;
+      }).sortBy('login').value();
+    };
+    return this;
+  });
 
 }).call(this);
 

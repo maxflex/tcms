@@ -16,9 +16,11 @@ angular
             .then (response) ->
                 console.log(response)
                 redirect("pages/#{response.data}/edit")
+
         angular.element(document).ready ->
             FolderService.init($scope.template.class)
             FormService.init(Page, $scope.id, $scope.model)
+            FormService.model.folder_id = $.cookie('page_folder_id') if not FormService.model.id && $.cookie('page_folder_id')
             FormService.dataLoaded.promise.then ->
                 FormService.model.useful = [angular.copy(empty_useful)] if (not FormService.model.useful or not FormService.model.useful.length)
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> AceService.initEditor(FormService, 15, "editor--#{field}")

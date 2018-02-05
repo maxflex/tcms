@@ -37,4 +37,18 @@ class Folder extends Model
     {
         return strtolower(last(explode("\\", $class))) . '_folder_id';
     }
+
+    /**
+     * Get tree at level $folder_id
+     */
+    public static function getLevel($class, $folder_id = null)
+    {
+        $folders = self::where('class', $class)->where('folder_id', $folder_id)->get()->all();
+        foreach($folders as $folder) {
+            if (self::where('folder_id', $folder->id)->exists()) {
+                $folder->folders = self::getLevel($class, $folder->id);
+            }
+        }
+        return $folders;
+    }
 }

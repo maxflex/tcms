@@ -20604,6 +20604,10 @@ select[multiple] {
   font-size: 12px;
 }
 
+.subfolders {
+  color: #b2b2b2;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }

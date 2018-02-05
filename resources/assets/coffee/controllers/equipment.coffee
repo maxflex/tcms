@@ -8,6 +8,7 @@ angular
     .controller 'EquipmentForm', ($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
-            FormService.init(Equipment, $scope.id, $scope.model)
-            PhotoService.init(FormService, 'Equipment', $scope.id)
             FolderService.init($scope.template.class)
+            FormService.init(Equipment, $scope.id, $scope.model)
+            FormService.model.folder_id = $.cookie('equipment_folder_id') if not FormService.model.id && $.cookie('equipment_folder_id')
+            PhotoService.init(FormService, 'Equipment', $scope.id)

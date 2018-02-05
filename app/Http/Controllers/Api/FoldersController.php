@@ -11,16 +11,11 @@ use DateTime;
 
 class FoldersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
-        // if (filter_var($request->save_visited_folder_id, FILTER_VALIDATE_BOOLEAN)) {
-        //     setcookie(Folder::getCookieKey($request->class), $request->current_folder_id, (new DateTime)->modify('+1 year')->getTimestamp(), '/');
-        // }
+        if (filter_var($request->save_visited_folder_id, FILTER_VALIDATE_BOOLEAN)) {
+            setcookie(Folder::getCookieKey($request->class), $request->current_folder_id, (new DateTime)->modify('+1 year')->getTimestamp(), '/');
+        }
         return Folder::where('class', $request->class)
             ->searchByFolder($request->current_folder_id)
             ->orderByPosition()
@@ -28,13 +23,11 @@ class FoldersController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Get folder tree
      */
-    public function create()
+    public function tree(Request $request)
     {
-        //
+        return Folder::getLevel($request->class);
     }
 
     /**
@@ -52,13 +45,22 @@ class FoldersController extends Controller
      * Find parent folder
      *
      */
-    public function show($id)
+    public function breadcrumbs($id)
     {
-        $folder = Folder::find($id);
-        if ($folder->folder_id) {
-            return Folder::find($folder->folder_id);
+        $breadcrumbs = [];
+        $current_folder = Folder::find($id);
+        while (true) {
+            $breadcrumbs[] = [
+                'id'    => $current_folder->id,
+                'name'  => $current_folder->name,
+            ];
+            if ($current_folder->folder_id) {
+                $current_folder = Folder::find($current_folder->folder_id);
+            } else {
+                break;
+            }
         }
-        return null;
+        return array_reverse($breadcrumbs);
     }
 
     /**

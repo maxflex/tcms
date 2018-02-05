@@ -59,14 +59,7 @@
             @include('modules.input', ['title' => 'срок выполнения, дней', 'model' => 'days_to_complete'])
         </div>
         <div class="mbb">
-            <label class="no-margin-bottom label-opacity">папка</label>
-            <select class='form-control selectpicker' ng-model='FormService.model.folder_id' convert-to-number>
-                <option value=''>не выбрано</option>
-                <option disabled>──────────────</option>
-                <option ng-repeat="folder in FolderService.folders track by $index" value="@{{ folder.id }}">
-                    @{{ folder.name }}
-                </option>
-            </select>
+            @include('modules.folder-select')
         </div>
     </div>
 </div>

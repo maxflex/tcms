@@ -51,7 +51,7 @@ class Page extends Model
         'html',
         'html_mobile'
     ];
-
+    
     public function items()
     {
         return $this->hasMany(PageItem::class)->orderBy('position');

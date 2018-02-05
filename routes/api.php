@@ -49,6 +49,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('users', 'UsersController');
     Route::resource('videos', 'VideosController');
 
+    Route::get('folders/breadcrumbs/{id}', 'FoldersController@breadcrumbs');
+    Route::post('folders/tree', 'FoldersController@tree');
     Route::resource('folders', 'FoldersController');
     Route::resource('allusers', 'AllUsersController');
 

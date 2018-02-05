@@ -1,7 +1,8 @@
 angular.module 'Egecms'
     .service 'FolderService', ($http, $timeout, Folder) ->
         @folders = []
-        @parent_folder = null
+
+        @breadcrumbs = null
 
         @itemSortableOptions =
             cursor: "move"
@@ -33,14 +34,31 @@ angular.module 'Egecms'
             @current_folder_id = current_folder_id
             @IndexService = IndexService
             @Resource = Resource
-            @parent_folder = Folder.get({id: current_folder_id}) if current_folder_id
+            @breadcrumbs = Folder.breadcrumbs({id: current_folder_id}) if current_folder_id
+            if not IndexService then Folder.tree {class: modelClass}, (response) =>
+                @tree = getTree(response)
+
             @folders = Folder.query
                 class: modelClass
                 current_folder_id: current_folder_id
-                # save_visited_folder_id: current_folder_id isnt undefined # сохранять ли посещенную ID папки
+                save_visited_folder_id: current_folder_id isnt undefined # сохранять ли посещенную ID папки
 
             , -> spRefresh()
             @modal = $(config.modalId)
+
+        # получить все папки с уровнями
+        getTree = (folders, level = 0, parent_name = null) ->
+            items = []
+            folders.forEach (item) =>
+                name = ''
+                name += "<span class='subfolders'>#{parent_name} / </span>" if parent_name
+                name += item.name
+                items.push
+                    id: item.id
+                    name: name
+                    level: level
+                items = items.concat(getTree(item.folders, level + 1, name)) if item.folders
+            items
 
         @createModal = ->
             @popup_folder = {name: null}

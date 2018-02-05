@@ -29,7 +29,17 @@ angular.module('Egecms')
         $resource apiPath('photos'), {id: '@id'}, updatable()
 
     .factory 'Folder', ($resource) ->
-        $resource apiPath('folders'), {id: '@id'}, updatable()
+        $resource apiPath('folders'), {id: '@id'},
+            update:
+                method: 'PUT'
+            tree:
+                method: 'POST'
+                url: apiPath('folders', 'tree')
+                isArray: true
+            breadcrumbs:
+                method: 'GET'
+                url: apiPath('folders', 'breadcrumbs')
+                isArray: true
 
     .factory 'PageItem', ($resource) ->
         $resource apiPath('pageitems'), {id: '@id'}, updatable()

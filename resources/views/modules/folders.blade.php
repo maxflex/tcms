@@ -2,8 +2,15 @@
     <tbody ui-sortable='FolderService.folderSortableOptions' ng-model="FolderService.folders">
         <tr ng-if='folder'>
             <td colspan='4'>
-                <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>
-                <a href="@{{ template.table }}@{{ FolderService.parent_folder.id ? '?folder=' + FolderService.parent_folder.id : '' }}">назад</a>
+                <a href="@{{ template.table }}"><i class="fa fa-folder-open" aria-hidden="true"></i></a>
+                <span> / </span>
+                <span ng-repeat="b in FolderService.breadcrumbs">
+                    <a ng-if="!$last" href="@{{ template.table }}?folder=@{{ b.id }}">@{{ b.name }}</a>
+                    <span ng-if="$last">@{{ b.name }}</span>
+                    <span ng-show="!$last"> / </span>
+                </span>
+                {{-- <i class="fa fa-long-arrow-left text-success" aria-hidden="true" style='margin-right: 3px'></i>
+                <a href="@{{ template.table }}@{{ FolderService.parent_folder.id ? '?folder=' + FolderService.parent_folder.id : '' }}">назад</a> --}}
             </td>
         </tr>
         <tr ng-repeat="folder in FolderService.folders">
