@@ -1,7 +1,7 @@
 <table class="table" style='margin: 0'>
     <tbody ui-sortable='FolderService.folderSortableOptions' ng-model="FolderService.folders">
         <tr ng-if='folder'>
-            <td colspan='4'>
+            <td colspan='5'>
                 <a href="@{{ template.table }}"><i class="fa fa-folder-open" aria-hidden="true"></i></a>
                 <span> / </span>
                 <span ng-repeat="b in FolderService.breadcrumbs">
