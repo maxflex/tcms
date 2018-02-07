@@ -63,6 +63,18 @@
         </div>
     </div>
 </div>
+<div class="row mb">
+    <div class="col-sm-9">
+           @include('modules.input', [
+               'title' => 'описание для главной',
+               'model' => 'description',
+               'textarea' => true,
+               'attributes' => [
+                   'maxlength' => 500,
+               ]
+           ])
+    </div>
+</div>
 @include('galleries._component', ['number' => 1])
 @include('galleries._component', ['number' => 2])
 @include('galleries._component', ['number' => 3])

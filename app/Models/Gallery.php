@@ -15,6 +15,7 @@ class Gallery extends Model
 
     protected $fillable = [
         'date',
+        'description',
         'days_to_complete',
         'price_1', 'price_2', 'price_3', 'price_4', 'price_5', 'price_6',
         'component_1', 'component_2', 'component_3', 'component_4', 'component_5', 'component_6',
