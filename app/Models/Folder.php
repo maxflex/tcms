@@ -15,11 +15,7 @@ class Folder extends Model
     public function getItemCountAttribute()
     {
         $class = $this->class;
-        $query = $class::where('folder_id', $this->id);
-        if ($class == Page::class) {
-            $query->whereNull('deleted_at');
-        }
-        return $query->count();
+        return $class::where('folder_id', $this->id)->count();
     }
 
     public function getFolderCountAttribute()
