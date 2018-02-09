@@ -20,7 +20,7 @@ class EquipmentController extends Controller
         return Equipment::with('photos')
             ->searchByFolder($request->folder)
             ->orderByPosition()
-            ->paginate(30);
+            ->paginate(9999);
     }
 
     /**
