@@ -32,6 +32,7 @@ angular.module 'Egecms'
         @init = (modelClass, current_folder_id, IndexService, Resource) ->
             @class = modelClass
             @current_folder_id = current_folder_id
+            @current_folder = Folder.get({id: current_folder_id})
             @IndexService = IndexService
             @Resource = Resource
             @breadcrumbs = Folder.breadcrumbs({id: current_folder_id}) if current_folder_id
@@ -76,8 +77,9 @@ angular.module 'Egecms'
             , (response) =>
                 @folders.push(response)
 
-        @editModal = (folder) ->
-            @popup_folder = _.clone(folder)
+        @editModal = ->
+            # @popup_folder = _.clone(folder)
+            @popup_folder = @current_folder
             @modal.modal('show')
 
         @edit = ->
@@ -87,9 +89,9 @@ angular.module 'Egecms'
                 @folders[i] = _.clone(@popup_folder) if folder.id == @popup_folder.id
 
         @delete = (folder) ->
-            bootbox.confirm "Вы уверены, что хотите удалить папку «#{folder.name}»?", (result) =>
+            bootbox.confirm "Вы уверены, что хотите удалить папку «#{@current_folder.name}»?", (result) =>
                 if result is true
-                    Folder.delete {id: folder.id}, -> location.reload()
+                    Folder.delete {id: @current_folder.id}, -> history.back()
 
         @isEmpty = (folder) -> not folder.item_count && not folder.folder_count
 

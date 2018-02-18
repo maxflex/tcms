@@ -3,7 +3,7 @@
 @section('controller', 'PagesIndex')
 
 @section('title-right')
-    <span ng-click="FolderService.createModal()">создать папку</span>
+    @include('modules.folder-controls')
     {{ link_to_route('pages.create', 'добавить страницу') }}
 @endsection
 

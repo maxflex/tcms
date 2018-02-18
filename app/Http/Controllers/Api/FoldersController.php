@@ -41,6 +41,12 @@ class FoldersController extends Controller
         return Folder::create($request->input())->fresh();
     }
 
+
+    public function show($id)
+    {
+        return Folder::find($id);
+    }
+
     /**
      * Find parent folder
      *
