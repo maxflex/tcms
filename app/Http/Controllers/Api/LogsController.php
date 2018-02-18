@@ -20,7 +20,7 @@ class LogsController extends Controller
     public function index()
     {
         $search = isset($_COOKIE['logs']) ? json_decode($_COOKIE['logs']) : (object)[];
-        $data = Log::search($search)->paginate(30);
+        $data = Log::search($search)->paginate(200);
         $data->getCollection()->map(function ($log) {
             if (in_array($log->table, ['attachments', 'archives', 'clients', 'request_lists', 'tutors']) && $log->type != 'delete') {
                 switch ($log->table) {
