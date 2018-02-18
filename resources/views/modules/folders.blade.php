@@ -28,12 +28,6 @@
                 </span>
                 <span ng-show="FolderService.isEmpty(folder)" class="quater-black">пусто</span>
             </td>
-            <td width='100'>
-                <a class="pointer" ng-click="FolderService.editModal(folder)">редактировать</a>
-            </td>
-            <td width='100' style='text-align: right'>
-                <a class="pointer" ng-click="FolderService.delete(folder)">удалить</a>
-            </td>
         </tr>
     </tbody>
 </table>
