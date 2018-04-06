@@ -4482,9 +4482,10 @@ select[multiple] {
 }
 
 .color-circle {
-  height: 22px;
-  width: 22px;
+  height: 16px;
+  width: 16px;
+  margin-right: 6px;
   border-radius: 50%;
-  border: 1px solid gray;
+  // border: 1px solid gray;
   display: inline-block;
 }
