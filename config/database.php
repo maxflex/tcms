@@ -76,6 +76,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'unix_socket' => env('DB_SOCKET', ''),
+            'port' => env('DB_PORT', '3306'),
         ],
 
         'egerep' => [
@@ -87,6 +88,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'unix_socket' => env('DB_SOCKET', ''),
+            'port' => env('DB_PORT', '3306'),
         ],
 
         'factory' => [
@@ -98,6 +100,7 @@ return [
             'charset'   => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'unix_socket' => env('DB_SOCKET', ''),
+            'port' => env('DB_PORT', '3306'),
         ],
 
         'pgsql' => [

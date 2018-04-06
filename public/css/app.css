@@ -15861,6 +15861,178 @@ tags-input.ti-input-sm .tags .input, .input-group-sm tags-input .tags .input {
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s cubic-bezier(0.71, 1.7, 0.77, 1.24), -webkit-transform 0.3s cubic-bezier(0.71, 1.7, 0.77, 1.24);
 }
 
+.common-eq {
+  width: 960px;
+  margin: 0 auto;
+  -webkit-box-flex: 1;
+  flex: 1;
+  -webkit-transform: scale(0.7);
+  transform: scale(0.7);
+  position: relative;
+  top: -26px;
+}
+
+.common-eq .btn-border {
+  line-height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  color: black;
+  font-size: 12px;
+  text-decoration: none;
+  padding: 5px 12px 6px;
+  border-radius: 16px;
+  border: 0;
+  position: relative;
+  background: transparent;
+  border: 1px solid #ae4037;
+  margin-top: 20px;
+}
+
+.full-width-wrapper, .equipment-item-full .equipment-image, .equipment-item-full .equipment-additional-block {
+  width: calc(100vw);
+  margin-left: calc((100vw - 960px) / 2 * -1);
+}
+
+.equipment-item-full {
+  position: relative;
+}
+
+.equipment-item-full.black .equipment-text-block {
+  color: white;
+}
+
+.equipment-item-full.black .equipment-text-block button {
+  color: white;
+  border-color: white;
+}
+
+.equipment-item-full.black .equipment-overlay {
+  background: -webkit-linear-gradient(left, #303030 33%, transparent 95%);
+  background: linear-gradient(to right, #303030 33%, transparent 95%);
+}
+
+.equipment-item-full.black .equipment-additional-block {
+  background: #303030;
+}
+
+.equipment-item-full.white .equipment-text-block {
+  color: black;
+}
+
+.equipment-item-full.white .equipment-text-block button {
+  color: black;
+  border-color: black;
+}
+
+.equipment-item-full.white .equipment-overlay {
+  background: -webkit-linear-gradient(left, white 33%, transparent 95%);
+  background: linear-gradient(to right, white 33%, transparent 95%);
+}
+
+.equipment-item-full.white .equipment-additional-block {
+  background: white;
+}
+
+.equipment-item-full.right.white .equipment-overlay {
+  background: -webkit-linear-gradient(right, white 33%, transparent 95%);
+  background: linear-gradient(to left, white 33%, transparent 95%);
+}
+
+.equipment-item-full.right.black .equipment-overlay {
+  background: -webkit-linear-gradient(right, #303030 33%, transparent 95%);
+  background: linear-gradient(to left, #303030 33%, transparent 95%);
+}
+
+.equipment-item-full.right .equipment-text-block {
+  text-align: right;
+}
+
+.equipment-item-full.right .equipment-text-block button {
+  display: inline;
+}
+
+.equipment-item-full.right .equipment-overlay {
+  left: auto;
+  right: 0;
+}
+
+.equipment-item-full.right .equipment-overlay > div {
+  float: right;
+}
+
+.equipment-item-full.right .equipment-text-block {
+  left: auto;
+  right: 0;
+}
+
+.equipment-item-full.right .equipment-text-block > div {
+  padding-left: 10%;
+}
+
+.equipment-item-full.right .equipment-additional-block {
+  right: 0;
+  margin-right: calc((100vw - 960px) / 2 * -1);
+}
+
+.equipment-item-full.right .equipment-image {
+  margin-left: calc((100vw - 960px) / 2 * -1) !important;
+}
+
+.equipment-item-full.left .equipment-text-block > div {
+  padding-right: 10%;
+}
+
+.equipment-item-full .equipment-overlay {
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  left: 0;
+}
+
+.equipment-item-full .equipment-image {
+  margin-left: 33% !important;
+  width: calc(100vw - 33% - ((100vw - 960px) / 2)) !important;
+}
+
+.equipment-item-full .equipment-image img {
+  width: 100%;
+}
+
+.equipment-item-full .equipment-additional-block {
+  width: calc((100vw - 960px) / 2) !important;
+  height: 100%;
+  position: absolute;
+}
+
+.equipment-item-full .equipment-text-block {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 9;
+  height: 100%;
+  margin: 0;
+  width: 50%;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: start;
+  align-items: flex-start;
+  padding-top: 30px;
+  color: white;
+}
+
+.equipment-item-full .equipment-text-block b {
+  font-size: 28px;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.equipment-item-full .equipment-text-block button {
+  display: block;
+  margin-top: 20px;
+}
+
 .place_mark {
   display: inline-block;
   border-width: 1px;

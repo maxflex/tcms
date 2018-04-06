@@ -15,6 +15,7 @@ class Equipment extends Model
         'description',
         'button',
         'folder_id',
-        'position'
+        'position',
+        'color'
     ];
 }

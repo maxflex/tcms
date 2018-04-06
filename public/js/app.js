@@ -326,94 +326,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -428,15 +340,42 @@
       return FolderService.init($scope.template["class"], $scope.folder, IndexService, Equipment);
     });
   }).controller('EquipmentForm', function($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService) {
+    var hexToDec;
     bindArguments($scope, arguments);
-    return angular.element(document).ready(function() {
+    angular.element(document).ready(function() {
       FolderService.init($scope.template["class"]);
       FormService.init(Equipment, $scope.id, $scope.model);
       if (!FormService.model.id && $.cookie('equipment_folder_id')) {
         FormService.model.folder_id = $.cookie('equipment_folder_id');
       }
-      return PhotoService.init(FormService, 'Equipment', $scope.id);
+      PhotoService.init(FormService, 'Equipment', $scope.id);
+      $scope.align_preview = 'right';
+      return $('#color-picker').colorpicker({
+        hexNumberSignPrefix: false
+      });
     });
+    $scope.getContrast = function() {
+      var c;
+      c = hexToDec(FormService.model.color);
+      if ((c.r * 0.299 + c.g * 0.587 + c.b * 0.114) > 186) {
+        return 'white';
+      } else {
+        return 'black';
+      }
+    };
+    return hexToDec = function(hex) {
+      var result;
+      result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      if (result) {
+        return {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        };
+      } else {
+        return null;
+      }
+    };
   });
 
 }).call(this);
@@ -2310,6 +2249,94 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
 
 }).call(this);
 
