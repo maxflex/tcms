@@ -49,21 +49,21 @@
             <input type="text" class="form-control" id='color-picker' placeholder="000000" aria-describedby="basic-addon1" maxlength="6" ng-model="FormService.model.color">
           </div>
         </div>
+        <div class="btn-group" role="group" style='margin-left: 60px'>
+            <button type="button" class="btn btn-default" ng-click="align_preview = 'left'">
+                <span class="glyphicon glyphicon-align-left"></span>
+              </button>
+            <button type="button" class="btn btn-default" ng-click="align_preview = 'right'">
+                <span class="glyphicon glyphicon-align-right"></span>
+              </button>
+        </div>
+        <div style='margin-left: 5px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
+            (функция положения только для превью)
+        </div>
     </div>
 </div>
 
 <div ng-show="FormService.model.photos[0].cropped_url && FormService.model.color && FormService.model.color.length >= 6">
-  <hr />
-  <center style='position: absolute; width: 100%'>
-      <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default" ng-click="align_preview = 'left'">
-              <span class="glyphicon glyphicon-align-left"></span>
-            </button>
-          <button type="button" class="btn btn-default" ng-click="align_preview = 'right'">
-              <span class="glyphicon glyphicon-align-right"></span>
-            </button>
-      </div>
-  </center>
   <div class="common-eq">
     <div class="equipment-item-full @{{ align_preview }} @{{ getContrast() }}">
       <div class="equipment-additional-block" ng-style="{background: '#' + FormService.model.color}"></div>

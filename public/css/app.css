@@ -15866,8 +15866,8 @@ tags-input.ti-input-sm .tags .input, .input-group-sm tags-input .tags .input {
   margin: 0 auto;
   -webkit-box-flex: 1;
   flex: 1;
-  -webkit-transform: scale(0.7);
-  transform: scale(0.7);
+  -webkit-transform: scale(0.6);
+  transform: scale(0.6);
   position: relative;
   top: -26px;
 }
@@ -15890,7 +15890,7 @@ tags-input.ti-input-sm .tags .input, .input-group-sm tags-input .tags .input {
 
 .full-width-wrapper, .equipment-item-full .equipment-image, .equipment-item-full .equipment-additional-block {
   width: calc(100vw);
-  margin-left: calc((100vw - 960px) / 2 * -1);
+  margin-left: calc((100vw - 960px) / 5 * -1);
 }
 
 .equipment-item-full {
@@ -15971,11 +15971,15 @@ tags-input.ti-input-sm .tags .input, .input-group-sm tags-input .tags .input {
 
 .equipment-item-full.right .equipment-additional-block {
   right: 0;
-  margin-right: calc((100vw - 960px) / 2 * -1);
+  margin-right: calc((100vw - 960px) / 5 * -1);
 }
 
 .equipment-item-full.right .equipment-image {
   margin-left: calc((100vw - 960px) / 2 * -1) !important;
+}
+
+.equipment-item-full.left {
+  left: -214px;
 }
 
 .equipment-item-full.left .equipment-text-block > div {
@@ -20778,6 +20782,14 @@ select[multiple] {
 
 .subfolders {
   color: #b2b2b2;
+}
+
+.color-circle {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  display: inline-block;
 }
 
 .program-container h2 {

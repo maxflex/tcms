@@ -22,6 +22,9 @@
                     <img class="inline-photo" ng-show='model.photos.length && model.photos[0].cropped' src='@{{ model.photos[0].cropped_url}}'>
                     <img class="inline-photo" ng-show='!model.photos.length || !model.photos[0].cropped' src='/img/icons/nocropped.png'>
                 </td>
+                <td>
+                    {{-- <span class="color-circle" ng-style="{'background': ''}"></span> --}}
+                </td>
                 <td width='100' style='text-align: right'>
                     <a href='@{{ template.table }}/@{{ model.id }}/edit'>редактировать</a>
                 </td>

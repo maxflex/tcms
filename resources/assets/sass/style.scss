@@ -4480,3 +4480,11 @@ select[multiple] {
 .subfolders {
     color: #b2b2b2;
 }
+
+.color-circle {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  display: inline-block;
+}
