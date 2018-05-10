@@ -54,6 +54,9 @@ class UploadController extends Controller
 
     public function original(Request $request)
     {
+        if ($request->file('photo')->getClientSize() > (1024 * 1024 * 15)) {
+            return response()->json(['error' => 'максимальный объём файла – 15 Мб']);
+        }
         $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
         $request->file('photo')->move(Photo::getDir('originals'), $filename);
         if ( isset($request->photo_id)) {
