@@ -1,10 +1,38 @@
 angular
     .module 'Egecms'
-    .controller 'GalleryIndex', ($scope, $attrs, $timeout, IndexService, Gallery, FolderService) ->
+    .controller 'GalleryIndex', ($scope, $attrs, $timeout, $http, IndexService, Gallery, FolderService) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             IndexService.init(Gallery, $scope.current_page, $attrs, {folder: $scope.folder})
             FolderService.init($scope.template.class, $scope.folder, IndexService, Gallery)
+
+        clearChangePrice = ->
+            $scope.change_price =
+                type: '1'
+                unit: '1'
+                value: null
+                folder_id: FolderService.current_folder_id
+            $timeout -> $('.selectpicker').selectpicker('refresh')
+
+        $scope.changePriceDialog = ->
+            clearChangePrice()
+            $scope.changePrice(true) if not $scope.rows_affected
+            $('#change-price-modal').modal('show')
+
+        $scope.changePrice = (get_rows_affected = false)->
+            ajaxStart()
+            $scope.changing_price = true
+            $scope.change_price.get_rows_affected = get_rows_affected
+            $http.post 'api/galleries/change', $scope.change_price
+            .then (response) ->
+                ajaxEnd()
+                $scope.changing_price = false
+                if get_rows_affected
+                    $scope.rows_affected = response.data
+                else
+                    $('#change-price-modal').modal('hide')
+                    notifySuccess($scope.rows_affected + ' обновлено')
+
     .controller 'GalleryForm', ($scope, $attrs, $timeout, FormService, Gallery, PhotoService, Tag, FolderService) ->
         bindArguments($scope, arguments)
 

@@ -89,4 +89,10 @@ class GalleryController extends Controller
     {
         Gallery::destroy($id);
     }
+
+
+    public function change(Request $request)
+    {
+        return Gallery::changePrice((object)$request->all());
+    }
 }

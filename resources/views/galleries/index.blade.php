@@ -4,6 +4,7 @@
 
 @section('title-right')
     @include('modules.folder-controls')
+    <a class="pointer" ng-click="changePriceDialog()">индексация</a>
     {{ link_to_route('galleries.create', 'добавить фото') }}
 @endsection
 
@@ -38,6 +39,8 @@
         </tbody>
     </table>
 @stop
+
+@include('galleries._modals')
 
 <style>
     .table tr td {

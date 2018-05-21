@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasTags;
 use App\Traits\HasPhotos;
 use App\Traits\Folderable;
+use App\Models\Folder;
 use PHPImageWorkshop\ImageWorkshop;
 use claviska\SimpleImage;
 
@@ -122,5 +123,49 @@ class Gallery extends Model
         static::saving(function($model) {
             $model->createImage();
         });
+    }
+
+    /**
+     * Обновить цену у раздела
+     */
+    public static function changePrice($data)
+    {
+        $rows_affected = 0;
+
+        $items = self::where('folder_id', $data->folder_id)->get();
+
+        $rows_affected += count($items);
+
+        if (! $data->get_rows_affected) {
+            foreach($items as $item) {
+                $new_prices = [];
+                foreach(range(1, 6) as $i) {
+                    $price = $item->{"price_{$i}"};
+                    if ($data->unit == 1) {
+                        $coeff = $price * ($data->value / 100);
+                    } else {
+                        $coeff = $data->value;
+                    }
+                    if ($data->type == 1) {
+                        $new_price = $price - $coeff;
+                    } else {
+                        $new_price = $price + $coeff;
+                    }
+                    $new_prices["price_{$i}"] = $new_price;
+                }
+
+                self::whereId($item->id)->update($new_prices);
+            }
+        }
+
+        $folder_ids = Folder::where('folder_id', $data->folder_id)->pluck('id');
+
+        foreach($folder_ids as $folder_id) {
+            $new_data = clone $data;
+            $new_data->folder_id = $folder_id;
+            $rows_affected += self::changePrice($new_data);
+        }
+
+        return $rows_affected;
     }
 }
