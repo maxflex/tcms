@@ -20,7 +20,7 @@
             'model' => 'description',
             'textarea' => true,
             'attributes' => [
-                'maxlength' => 500
+                'maxlength' => 150
             ]
         ])
     </div>
