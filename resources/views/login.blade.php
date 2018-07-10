@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html style='height: 100%'>
+<html>
   <head>
     <title>Ателье «Талисман» | Вход</title>
     <meta charset="utf-8">
