@@ -4,7 +4,6 @@ namespace App\Models;
 
 use \Shared\Model;
 use App\Service\Rights;
-use App\Service\Sms;
 use App\Traits\HasPhotos;
 use App\Service\Log;
 use Illuminate\Support\Facades\Redis;
@@ -56,24 +55,6 @@ class User extends Model
 
         if ($User->exists()) {
             $user = $User->first();
-            // Дополнительная СМС-проверка, если пользователь логинится если не из офиса
-            if (! User::fromOffice()) {
-                $sent_code = Redis::get("tcms:codes:{$user->id}");
-                // если уже был отправлен – проверяем
-                if (! empty($sent_code)) {
-                    if (@$data['code'] != $sent_code) {
-                        self::log($user->id, 'failed_login', 'неверный смс-код');
-                        return false;
-                    } else {
-                        Redis::del("tcms:codes:{$user->id}");
-                    }
-                } else {
-                    // иначе отправляем код
-                    self::log($user->id, 'sms_code_sent');
-                    Sms::verify($user);
-                    return 'sms';
-                }
-            }
             self::log($user->id, 'success_login');
             $_SESSION['user'] = $user;
             return true;
@@ -172,24 +153,6 @@ class User extends Model
         return User::whereId(User::fromSession()->id)
                 ->whereRaw('FIND_IN_SET(' . Rights::BANNED . ', rights)')
                 ->exists();
-    }
-
-    /**
-     * Логин из офиса
-     */
-    public static function fromOffice()
-    {
-        return true;
-        if (app('env') === 'local') {
-            return true;
-        }
-        $current_ip = @$_SERVER['HTTP_X_REAL_IP'];
-        foreach(['213.184.130.', '77.37.220.250'] as $ip) {
-            if (strpos($current_ip, $ip) === 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
