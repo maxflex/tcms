@@ -13,6 +13,9 @@
                 <a href='reviews/@{{ model.id }}/edit'>@{{ model.signature || 'не указано' }}</a>
             </td>
             <td>
+                <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
+            </td>
+            <td>
                 @{{ model.date }}
             </td>
             <td>

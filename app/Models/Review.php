@@ -19,6 +19,8 @@ class Review extends Model
         'tags'
     ];
 
+    public $appends = ['tags'];
+
     public function setDateAttribute($value)
     {
         $this->attributes['date'] = fromDotDate($value);
