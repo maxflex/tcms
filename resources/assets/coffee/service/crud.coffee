@@ -96,9 +96,14 @@ angular.module 'Egecms'
 
         this.edit = (callback = null) ->
             return if not beforeSave()
+            # preserve tags bugfix
+            tags = this.model.tags if this.model.hasOwnProperty('tags')
+            console.log('tags 1', tags)
             this.model.$update().then =>
                 callback() if callback isnt null
                 this.saving = false
+                # preserve tags bugfix
+                this.model.tags = tags if tags
                 ajaxEnd()
             , (response) ->
                 if response.data.hasOwnProperty('message')
