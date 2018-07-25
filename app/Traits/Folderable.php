@@ -19,6 +19,6 @@ trait Folderable
 
     public function scopeOrderByPosition($query)
     {
-        return $query->orderBy('position');
+        return $query->orderBy('position', 'asc')->orderBy('id', 'asc');
     }
 }
