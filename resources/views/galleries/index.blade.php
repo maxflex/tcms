@@ -17,7 +17,7 @@
                     @{{ model.id }}
                 </td>
                 <td>
-                    @{{ model.name || 'имя не указано' }}
+                    <a href='@{{ template.table }}/@{{ model.id }}/edit'>@{{ model.name || 'имя не указано' }}</a>
                 </td>
                 <td>
                     <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg' style='height: 50px'>
@@ -29,11 +29,8 @@
                 <td>
                     @{{ model.file_size }}
                 </td>
-                <td width='100'>
-                    <a href='@{{ template.table }}/@{{ model.id }}/edit'>редактировать</a>
-                </td>
-                <td width='100' style='text-align: right'>
-                    <a class="pointer" ng-click="IndexService.delete(model.id, 'фото')">удалить</a>
+                <td>
+                    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
                 </td>
             </tr>
         </tbody>

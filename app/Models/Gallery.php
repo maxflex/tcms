@@ -30,7 +30,7 @@ class Gallery extends Model
         'folder_id'
     ];
 
-    protected $appends = ['file_size', 'has_photo', 'image_size'];
+    protected $appends = ['file_size', 'has_photo', 'image_size', 'tags'];
 
     protected $casts = [
         'watermark' => 'boolean',

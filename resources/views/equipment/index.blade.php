@@ -30,8 +30,8 @@
                         </div>
                     </span>
                 </td>
-                <td width='100' style='text-align: right'>
-                    <a href='@{{ template.table }}/@{{ model.id }}/edit'>редактировать</a>
+                <td>
+                    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
                 </td>
             </tr>
         </tbody>

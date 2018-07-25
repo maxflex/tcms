@@ -21,8 +21,8 @@
                 <img class="inline-photo circle" ng-show='model.photos.length && model.photos[0].cropped' src='@{{ model.photos[0].cropped_url}}'>
                 <img class="inline-photo circle" ng-show='!model.photos.length || !model.photos[0].cropped' src='/img/icons/nocropped.png'>
             </td>
-            <td width='100' style='text-align: right'>
-                <a href='masters/@{{ model.id }}/edit'>редактировать</a>
+            <td>
+                <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
             </td>
         </tr>
     </table>

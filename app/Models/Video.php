@@ -3,8 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTags;
 
 class Video extends Model
 {
-    protected $fillable = ['code', 'title'];
+    use HasTags;
+
+    protected $fillable = ['code', 'title', 'tags'];
+    protected $appends = ['tags'];
 }

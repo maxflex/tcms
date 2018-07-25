@@ -18,6 +18,7 @@ class Page extends Model
    protected $hidden = ['html', 'html_mobile', 'seo_text'];
    protected $dates = ['deleted_at'];
    protected $commaSeparated = ['subjects'];
+   protected $appends = ['tags'];
    protected $fillable = [
         'keyphrase',
         'url',
@@ -51,7 +52,7 @@ class Page extends Model
         'html',
         'html_mobile'
     ];
-    
+
     public function items()
     {
         return $this->hasMany(PageItem::class)->orderBy('position');

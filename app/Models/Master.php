@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasPhotos;
+use App\Traits\{HasPhotos, HasTags};
 
 class Master extends Model
 {
     use HasPhotos;
+    use HasTags;
 
     protected $fillable = [
         'first_name',
@@ -15,7 +16,10 @@ class Master extends Model
         'middle_name',
         'description',
         'video',
+        'tags'
     ];
+
+    public $appends = ['tags'];
 
     public function scopeLight($query)
     {

@@ -13,9 +13,6 @@
                 <a href='reviews/@{{ model.id }}/edit'>@{{ model.signature || 'не указано' }}</a>
             </td>
             <td>
-                <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
-            </td>
-            <td>
                 @{{ model.date }}
             </td>
             <td>
@@ -24,8 +21,8 @@
             <td>
                 @{{ model.published ? 'опубликован' : 'не опубликован' }}
             </td>
-            <td width='100' style='text-align: right'>
-                <a href='reviews/@{{ model.id }}/edit'>редактировать</a>
+            <td>
+                <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
             </td>
         </tr>
     </table>

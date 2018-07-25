@@ -4,8 +4,11 @@ angular
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             IndexService.init(Master, $scope.current_page, $attrs)
-    .controller 'MastersForm', ($scope, $attrs, $timeout, $http, FormService, Master, Photo, PhotoService) ->
+    .controller 'MastersForm', ($scope, $attrs, $timeout, $http, FormService, Master, Photo, Tag, PhotoService) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             FormService.init(Master, $scope.id, $scope.model)
             PhotoService.init(FormService, 'Master', $scope.id)
+
+        $scope.loadTags = (text) ->
+            Tag.autocomplete({text: text}).$promise

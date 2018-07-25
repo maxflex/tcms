@@ -5,8 +5,12 @@ angular
         angular.element(document).ready ->
             IndexService.init(Equipment, $scope.current_page, $attrs, {folder: $scope.folder})
             FolderService.init($scope.template.class, $scope.folder, IndexService, Equipment)
-    .controller 'EquipmentForm', ($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService) ->
+    .controller 'EquipmentForm', ($scope, $attrs, $timeout, FormService, Equipment, PhotoService, FolderService, Tag) ->
         bindArguments($scope, arguments)
+        
+        $scope.loadTags = (text) ->
+            Tag.autocomplete({text: text}).$promise
+
         angular.element(document).ready ->
             FolderService.init($scope.template.class)
             FormService.init(Equipment, $scope.id, $scope.model)

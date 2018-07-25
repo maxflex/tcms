@@ -50,7 +50,7 @@ class PagesController extends Controller
      */
     public function show($id)
     {
-        return Page::with('items')->find($id)->append('tags')->makeVisible(['html', 'html_mobile', 'seo_text']);
+        return Page::with('items')->find($id)->makeVisible(['html', 'html_mobile', 'seo_text']);
     }
 
     /**

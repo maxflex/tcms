@@ -22,10 +22,12 @@
                     <span class="link-like" ng-class="{'link-gray': 0 == +page.published}" ng-click="toggleEnumServer(page, 'published', Published, Page)">@{{ Published[model.published].title }}</span>
                 </td>
                 <td>
-                    @{{ formatDateTime(model.updated_at) }}
+                    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
                 </td>
-                <td width='250' style='text-align: right'>
-                    <a href="{{ config('app.web-url') }}@{{ model.url }}" target="_blank">просмотреть страницу на сайте</a>
+                <td style='text-align: right'>
+                    <a href="{{ config('app.web-url') }}@{{ model.url }}" target="_blank">
+                        <span class="glyphicon glyphicon-eye-open"></span>
+                    </a>
                 </td>
             </tr>
         </tbody>

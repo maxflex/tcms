@@ -51,7 +51,7 @@ class GalleryController extends Controller
      */
     public function show($id)
     {
-        return Gallery::with('photos')->find($id)->append('tags');
+        return Gallery::with('photos')->find($id);
     }
 
     /**

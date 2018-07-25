@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasPhotos;
-use App\Traits\Folderable;
+use App\Traits\{HasPhotos, HasTags, Folderable};
 
 class Equipment extends Model
 {
-    use HasPhotos, Folderable;
+    use HasPhotos, HasTags, Folderable;
 
     protected $fillable = [
         'name',
@@ -16,6 +15,9 @@ class Equipment extends Model
         'button',
         'folder_id',
         'position',
-        'color'
+        'color',
+        'tags'
     ];
+
+    protected $appends = ['tags'];
 }
