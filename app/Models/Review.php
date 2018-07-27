@@ -17,6 +17,7 @@ class Review extends Model
         'published',
         'master_id',
         'folder_id',
+        'position',
         'tags'
     ];
 
