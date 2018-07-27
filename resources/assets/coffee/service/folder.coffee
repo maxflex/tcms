@@ -38,6 +38,7 @@ angular.module 'Egecms'
             @breadcrumbs = Folder.breadcrumbs({id: current_folder_id}) if current_folder_id
             if not IndexService then Folder.tree {class: modelClass}, (response) =>
                 @tree = getTree(response)
+                $timeout => $('.folder-selectpicker').selectpicker('refresh')
 
             @folders = Folder.query
                 class: modelClass
