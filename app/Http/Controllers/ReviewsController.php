@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Models\Review;
 use App\Models\Master;
+use App\Service\ControllerTemplate;
 
 class ReviewsController extends Controller
 {
+    public function __construct()
+    {
+        $this->template = new ControllerTemplate(Review::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +24,9 @@ class ReviewsController extends Controller
     public function index(Request $request)
     {
         return view('reviews.index')->with(ngInit([
-            'current_page' => $request->page
+            'current_page' => $request->page,
+            'folder'       => $request->folder,
+            'template'     => $this->template,
         ]));
     }
 
@@ -32,7 +40,8 @@ class ReviewsController extends Controller
         $masters = Master::light()->get();
         return view('reviews.create')->with(ngInit([
             'model' => new Review,
-            'masters' => $masters
+            'masters' => $masters,
+            'template'  => $this->template
         ]));
     }
 
@@ -67,7 +76,8 @@ class ReviewsController extends Controller
     public function edit($id)
     {
         $masters = Master::light()->get();
-        return view('reviews.edit')->with(ngInit(compact('id', 'masters')));
+        $template = $this->template;
+        return view('reviews.edit')->with(ngInit(compact('id', 'masters', 'template')));
     }
 
     /**

@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use \Shared\Model;
-use App\Traits\HasTags;
+use App\Traits\{HasTags, Folderable};
 
 class Review extends Model
 {
-    use HasTags;
+    use HasTags, Folderable;
 
     protected $fillable = [
         'date',
@@ -16,6 +16,7 @@ class Review extends Model
         'score',
         'published',
         'master_id',
+        'folder_id',
         'tags'
     ];
 

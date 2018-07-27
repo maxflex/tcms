@@ -3,10 +3,12 @@
 @section('controller', 'ReviewsIndex')
 
 @section('title-right')
+    @include('modules.folder-controls')
     {{ link_to_route('reviews.create', 'добавить отзыв') }}
 @endsection
 
 @section('content')
+    @include('modules.folders')
     <table class="table">
         <tr ng-repeat="model in IndexService.page.data">
             <td>

@@ -1518,15 +1518,22 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').controller('ReviewsIndex', function($scope, $attrs, IndexService, Review) {
+  angular.module('Egecms').controller('ReviewsIndex', function($scope, $attrs, IndexService, Review, FolderService) {
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
-      return IndexService.init(Review, $scope.current_page, $attrs);
+      IndexService.init(Review, $scope.current_page, $attrs, {
+        folder: $scope.folder
+      });
+      return FolderService.init($scope.template["class"], $scope.folder, IndexService, Review);
     });
-  }).controller('ReviewsForm', function($scope, $attrs, $timeout, FormService, Review, Published, Scores, Tag) {
+  }).controller('ReviewsForm', function($scope, $attrs, $timeout, FormService, Review, Published, Scores, Tag, FolderService) {
     bindArguments($scope, arguments);
     angular.element(document).ready(function() {
-      return FormService.init(Review, $scope.id, $scope.model);
+      FolderService.init($scope.template["class"]);
+      FormService.init(Review, $scope.id, $scope.model);
+      if (!FormService.model.id && $.cookie('review_folder_id')) {
+        return FormService.model.folder_id = $.cookie('review_folder_id');
+      }
     });
     return $scope.loadTags = function(text) {
       return Tag.autocomplete({

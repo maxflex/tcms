@@ -15,9 +15,9 @@ class ReviewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Review::paginate(30);
+        return Review::searchByFolder($request->folder)->paginate(999);
     }
 
     /**
