@@ -18,7 +18,7 @@
                         ng-checked="controller_scope.isChecked(model)"
                         ng-click="controller_scope.check(model)" />
                 </td>
-                <td style='width: 33px'>
+                <td style='width: 41px'>
                     @{{ model.id }}
                 </td>
                 <td width='400'>

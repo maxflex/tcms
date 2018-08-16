@@ -1,4 +1,4 @@
-<td style='width: 33px'>
+<td style='width: 41px'>
     @{{ model.id }}
 </td>
 <td width='400'>
