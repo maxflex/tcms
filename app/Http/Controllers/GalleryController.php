@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\Gallery;
-use App\Models\Master;
+use App\Models\{Gallery, Master};
+use App\Traits\TagsMassEditable;
 use App\Service\ControllerTemplate;
 
 class GalleryController extends Controller
 {
-    private $template;
+    use TagsMassEditable;
+
+    const CLASS_NAME = Gallery::class;
+    const ITEM_DIRECTIVE = 'gallery-item';
 
     public function __construct()
     {
@@ -47,28 +50,6 @@ class GalleryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -83,26 +64,4 @@ class GalleryController extends Controller
         ]));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

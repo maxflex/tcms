@@ -3626,7 +3626,26 @@ margin: 0 auto;
 color: $green-main !important;
 }
 .fake-cell {
-border: none!important;
+    border: none!important;
+}
+
+.fake-td {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    line-height: 1.42857143;
+}
+
+.id-cell {
+    width: 30px;
+    display: inline-block;
+}
+
+.mass-tags-checkbox {
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    margin: 0 !important;
 }
 
 .cursor-default {
@@ -4487,4 +4506,8 @@ select[multiple] {
   margin-right: 6px;
   border-radius: 50%;
   display: inline-block;
+}
+
+.table > tbody + tbody {
+    border:none;
 }

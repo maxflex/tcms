@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\PriceSection;
+use App\Models\{PriceSection, PricePosition, Tag};
 
 class PricesController extends Controller
 {
@@ -35,27 +35,6 @@ class PricesController extends Controller
         ]));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -69,26 +48,34 @@ class PricesController extends Controller
         return view('prices.edit')->with(ngInit(compact('id', 'price_sections')));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function tag(Request $request, $id)
     {
-        //
+        $tag = Tag::find($id);
+
+        $items = self::getFolderItems(null);
+
+        return view('tags.mass-edit')->with(ngInit([
+            'items'        => $items,
+            'tag'          => $tag,
+            'class' => PricePosition::class,
+        ]))->with([
+            'tag' => $tag,
+            'directive' => 'price-item-tag'
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    private static function getFolderItems($folder_id)
     {
-        //
+        $folders = PriceSection::where('price_section_id', $folder_id)->orderBy('position')->get()->all();
+
+        $items = [];
+        foreach($folders as $folder) {
+            $folder->items = self::getFolderItems($folder->id);
+            $items[] = $folder;
+        }
+
+        $folder_items = PricePosition::where('price_section_id', $folder_id)->orderBy('position')->get()->all();
+
+        return array_merge($items, $folder_items);
     }
 }

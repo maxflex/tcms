@@ -35,3 +35,25 @@ angular
                 else
                     FormService.error_element = undefined
                     element.removeClass('has-error')
+
+    .controller 'TagsMassEdit', ($scope, $timeout, Tag, Review, Gallery, PricePosition) ->
+        bindArguments($scope, arguments)
+
+        Resource = null
+
+        $timeout ->
+            switch $scope.class
+                when 'App\\Models\\Gallery' then Resource = Gallery
+                when 'App\\Models\\Review' then Resource = Review
+                when 'App\\Models\\PricePosition' then Resource = PricePosition
+
+        $scope.isChecked = (item) ->
+            tag = item.tags.find (t) -> t.id == $scope.tag.id
+            return tag isnt undefined
+
+        $scope.check = (item) ->
+            if $scope.isChecked(item)
+                item.tags = item.tags.filter (t) -> t.id != $scope.tag.id
+            else
+                item.tags.push($scope.tag)
+            Resource.update({id: item.id}, {tags: item.tags})

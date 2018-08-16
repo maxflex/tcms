@@ -12,21 +12,7 @@
     <table class="table">
         <tbody ui-sortable='FolderService.itemSortableOptions' ng-model="IndexService.page.data">
             <tr ng-repeat="model in IndexService.page.data">
-                <td>
-                    <a href='reviews/@{{ model.id }}/edit'>@{{ model.signature || 'не указано' }}</a>
-                </td>
-                <td>
-                    @{{ model.date }}
-                </td>
-                <td>
-                    оценка @{{ model.score || 'не установлена' }}
-                </td>
-                <td>
-                    @{{ model.published ? 'опубликован' : 'не опубликован' }}
-                </td>
-                <td>
-                    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
-                </td>
+                @include('reviews._item')
             </tr>
         </tbody>
     </table>

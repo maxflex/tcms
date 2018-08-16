@@ -63,7 +63,7 @@ class TagsController extends Controller
      */
     public function edit($id)
     {
-        return view('tags.edit')->with(ngInit(compact('id')));
+        return view('tags.edit')->with(ngInit(compact('id')))->with(compact('id'));
     }
 
     /**

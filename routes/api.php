@@ -19,24 +19,9 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('pages', 'PagesController');
     Route::resource('pageitems', 'PageitemsController');
 
-    #pr
-    Route::resource('programs', 'ProgramsController');
-
     # Translit
     Route::post('translit/to-url', 'TranslitController@toUrl');
 
-    Route::get('sass/{file}', 'SassController@edit')->where('file', '.*.scss$');
-    Route::post('sass/{file}', 'SassController@update')->where('file', '.*.scss$');
-    Route::get('sass/{current_path?}', 'SassController@index')->where('current_path', '.*');
-
-    Route::resource('photos', 'PhotosController');
-    Route::group(['prefix' => 'photos'], function() {
-        Route::resource('groups', 'PhotoGroupsController');
-    });
-
-
-    Route::resource('photos/updateAll', 'PhotosController@updateAll');
-    Route::resource('photos', 'PhotosController');
     Route::resource('masters', 'MastersController');
     Route::post('prices/change', 'PricesController@change');
     Route::resource('prices', 'PricesController');
@@ -47,6 +32,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::post('tags/checkExistance/{id?}', 'TagsController@checkExistance');
     Route::get('tags/autocomplete', 'TagsController@autocomplete');
+    Route::delete('tags/deleteByParams', 'TagsController@deleteByParams');
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
     Route::resource('videos', 'VideosController');
@@ -60,15 +46,6 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('equipment', 'EquipmentController');
 
     Route::resource('logs', 'LogsController');
-
-    Route::resource('faq', 'FaqController');
-
-    Route::group(['prefix' => 'faq'], function() {
-        Route::resource('groups', 'FaqGroupsController');
-    });
-
-    # Factory
-    Route::post('factory', 'FactoryController@get');
 
     # Sync
     Route::group(['prefix' => 'sync'], function() {

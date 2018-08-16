@@ -23,31 +23,28 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
 
     Route::resource('logs', 'LogsController');
 
-    Route::resource('programs', 'ProgramsController');
-
-    Route::get('sass/{file}', 'SassController@edit')->where('file', '.*.scss$');
-    Route::get('sass/{directory?}', 'SassController@index')->where('directory', '.*');
-
-    Route::resource('photos', 'PhotosController');
-
     Route::post('uploadPageitem', 'UploadController@pageItem');
     Route::post('galleryUpload', 'UploadController@galleryOriginal');
     Route::post('upload', 'UploadController@original');
     Route::post('upload/cropped', 'UploadController@cropped');
 
-    Route::resource('faq', 'FaqController');
     Route::resource('masters', 'MastersController');
     Route::resource('equipment', 'EquipmentController');
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
+
+    Route::get('reviews/tag/{id}', 'ReviewsController@tag')->name('reviews.tag');
     Route::resource('reviews', 'ReviewsController');
+
     Route::resource('videos', 'VideosController');
 
+    Route::get('prices/tag/{id}', 'PricesController@tag')->name('prices.tag');
     Route::get('prices/{id}/create', 'PricesController@create');
     Route::resource('prices', 'PricesController');
     Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
     Route::resource('prices/{id}/positions', 'PricePositionsController');
 
+    Route::get('galleries/tag/{id}', 'GalleryController@tag')->name('galleries.tag');
     Route::resource('galleries', 'GalleryController');
 
     Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
