@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use App\Models\Video;
+use App\Models\{Video, Master};
 
 class VideosController extends Controller
 {
@@ -28,31 +28,11 @@ class VideosController extends Controller
      */
     public function create()
     {
+        $masters = Master::light()->get();
         return view('videos.create')->with(ngInit([
             'model' => new Video,
+            'masters' => $masters
         ]));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -63,7 +43,8 @@ class VideosController extends Controller
      */
     public function edit($id)
     {
-        return view('videos.edit')->with(ngInit(compact('id')));
+        $masters = Master::light()->get();
+        return view('videos.edit')->with(ngInit(compact('id', 'masters')));
     }
 
     /**
