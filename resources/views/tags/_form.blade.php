@@ -5,6 +5,7 @@
         ]])
     </div>
 </div>
+@if (isset($id))
 <div class="row mb" ng-if="FormService.model.id">
     <div class="col-sm-12">
         <p style='display: inline-block; font-weight: bold; margin-top: 30px'>Пакетное редактирование:</p>
@@ -19,3 +20,4 @@
         </p>
     </div>
 </div>
+@endif
