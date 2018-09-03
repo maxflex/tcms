@@ -23,10 +23,16 @@
 </div>
 
 <div class="row mbs">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         @include('modules.input', [
             'title' => 'title',
             'model' => 'title'
+        ])
+    </div>
+    <div class="col-sm-6">
+        @include('modules.input', [
+            'title' => 'SEO номера страниц',
+            'model' => 'seo_page_ids'
         ])
     </div>
 </div>
@@ -91,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div class="page-item page-item-add" ng-show="FormService.model.items.length < 6" ng-click="addService()">
+            <div class="page-item page-item-add" ng-click="addService()">
                 добавить
             </div>
         </div>

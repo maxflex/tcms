@@ -33,7 +33,8 @@ class Page extends Model
         'folder_id',
         'position',
         'seo_text',
-        'tags'
+        'tags',
+        'seo_page_ids'
     ];
 
     protected static $hidden_on_export = [
