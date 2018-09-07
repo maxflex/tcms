@@ -16,4 +16,13 @@ class PageItem extends Model
         'file',
         'position'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model) {
+            $model->position = self::where('page_id', $model->page_id)->max('position') + 1;
+        });
+    }
 }
