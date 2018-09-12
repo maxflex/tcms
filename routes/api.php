@@ -1,4 +1,8 @@
 <?php
+
+use Illuminate\Http\Request;
+use App\Service\Settings;
+
 URL::forceSchema('https');
 
 Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
@@ -8,6 +12,10 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('variables', 'VariablesController');
     Route::group(['prefix' => 'variables'], function() {
         Route::resource('groups', 'VariableGroupsController');
+    });
+
+    Route::post('header', function(Request $request) {
+        Settings::set('header', $request->header);
     });
 
     Route::post('account', 'PaymentsController@account');

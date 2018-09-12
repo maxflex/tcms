@@ -11,6 +11,7 @@
 <a class="list-group-item active">Сайт</a>
 <a href="variables" class="list-group-item">Переменные</a>
 <a href="pages" class="list-group-item">Страницы</a>
+<a href="header" class="list-group-item">Заголовок</a>
 <a class="list-group-item active">Настройки</a>
 @if (allowed(\Rights::EDIT_USERS))
     <a href="users" class="list-group-item">Пользователи</a>

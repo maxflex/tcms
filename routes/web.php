@@ -1,5 +1,6 @@
 <?php
 use App\Http\Middleware\LogUrlOpen;
+use App\Service\Settings;
 
 URL::forceSchema('https');
 
@@ -55,6 +56,10 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::get('payments/export', 'PaymentsController@export');
     Route::post('payments/import', 'PaymentsController@import');
     Route::resource('payments', 'PaymentsController');
+
+    Route::get('header', function() {
+        return view('header.index')->with(ngInit(['header' => Settings::get('header')]));
+    });
 });
 
 # Templates for angular directives
