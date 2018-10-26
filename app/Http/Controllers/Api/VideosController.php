@@ -17,7 +17,7 @@ class VideosController extends Controller
      */
     public function index()
     {
-        return Video::paginate(30);
+        return Video::orderBy('position', 'asc')->orderBy('id', 'asc')->paginate(9999);
     }
 
     /**

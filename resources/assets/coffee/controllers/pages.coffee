@@ -106,6 +106,10 @@ angular
             zIndex: 9999
             containment: "parent"
             tolerance: "pointer"
+            update: (event, ui) =>
+                $timeout =>
+                    FormService.model.items.forEach (item, index) =>
+                        PageItem.update({id: item.id, position: index})
 
         $scope.addService = ->
             PageItem.save
