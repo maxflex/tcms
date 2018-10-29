@@ -993,6 +993,7 @@
         return function(event, ui) {
           return $timeout(function() {
             return FormService.model.items.forEach(function(item, index) {
+              item.position = index;
               return PageItem.update({
                 id: item.id,
                 position: index

@@ -109,6 +109,8 @@ angular
             update: (event, ui) =>
                 $timeout =>
                     FormService.model.items.forEach (item, index) =>
+                        # FormService.model.items.find(e => e.id == item.id).position = index
+                        item.position = index
                         PageItem.update({id: item.id, position: index})
 
         $scope.addService = ->
