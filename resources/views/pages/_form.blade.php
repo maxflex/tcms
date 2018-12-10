@@ -92,7 +92,7 @@
                             'textarea' => true,
                             'attributes' => [
                                 'ng-model' => 'item.description',
-                                'maxlength' => 110
+                                'maxlength' => 500
                             ]
                         ])
                     </div>
