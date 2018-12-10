@@ -77,6 +77,10 @@
                 </div>
                 <div style='position: relative'>
                     <span class="link-like small" style='position: absolute; right: 0' ng-click="removeService(item)">удалить</span>
+                    <div ng-show='$index == 0' style='position: absolute; left: 149px; top: -1px'>
+                      <input type="checkbox" id="oneline" name="oneline" ng-model="item.is_one_line" ng-checked="item.is_one_line == 1" ng-true-value='1' ng-false-value='0'>
+                      <label for="oneline" style='padding-left: 5px'>в одну строку</label>
+                    </div>
                     <div>
                         <div>
                             @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title', 'maxlength' => 45]])

@@ -14,7 +14,8 @@ class PageItem extends Model
         'title',
         'description',
         'file',
-        'position'
+        'position',
+        'is_one_line'
     ];
 
     public static function boot()
