@@ -28,6 +28,7 @@ angular
                 ['html', 'html_mobile', 'seo_text'].forEach (field) -> FormService.model[field] = AceService.getEditor("editor--#{field}").getValue()
                 if FormService.model.items then FormService.model.items.forEach (item, index) ->
                     item.href_page_id = null if not item.href_page_id
+                    item.position = index
                     PageItem.update {id: item.id}, item,  ->
                         console.log('updated')
                     , ->
@@ -106,12 +107,12 @@ angular
             zIndex: 9999
             containment: "parent"
             tolerance: "pointer"
-            update: (event, ui) =>
-                $timeout =>
-                    FormService.model.items.forEach (item, index) =>
-                        # FormService.model.items.find(e => e.id == item.id).position = index
-                        item.position = index
-                        PageItem.update({id: item.id, position: index})
+            # update: (event, ui) =>
+            #     $timeout =>
+            #         FormService.model.items.forEach (item, index) =>
+            #             # FormService.model.items.find(e => e.id == item.id).position = index
+            #             item.position = index
+            #             # PageItem.update({id: item.id, position: index})
 
         $scope.addService = ->
             PageItem.save

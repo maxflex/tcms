@@ -87,14 +87,10 @@
                         </div>
                     </div>
                     <div>
-                        @include('modules.input', [
-                            'title' => 'описание',
-                            'textarea' => true,
-                            'attributes' => [
-                                'ng-model' => 'item.description',
-                                'maxlength' => 500
-                            ]
-                        ])
+                        <div class="field-container">
+                          <textarea rows="4" class="field form-control" maxlength='@{{ item.is_one_line ? 500 : 110 }}' required placeholder="описание" ng-model='item.description' ng-model-options="{ allowInvalid: true }"></textarea>
+                          <label style='position: absolute; top: -18px' ng-counter-dynamic min='110' max='500' ng-model='item.is_one_line'>описание</label>
+                        </div>
                     </div>
                     <div>
                         @include('modules.input', ['title' => 'номер раздела', 'class' => 'digits-only', 'attributes' => ['ng-model' => 'item.href_page_id']])
