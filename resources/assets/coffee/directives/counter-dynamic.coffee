@@ -21,7 +21,7 @@ angular.module('Egecms').directive 'ngCounterDynamic', ($timeout) ->
         getInputLengthOnlyAllowed = ->
             val = input.val()
             m = val.match(rx)
-            return if m then (val.length - m.length) else 0
+            return if m then (val.length - m.length) else val.length
 
         $scope.$watch 'ngModel', (newVal, oldVal) -> update()
         input.on 'keyup', -> update()
