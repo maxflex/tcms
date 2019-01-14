@@ -66,3 +66,5 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
 Route::get('directives/{directive}', function($directive) {
     return view("directives.{$directive}");
 });
+
+Route::get('/sitemap.xml', 'PagesController@sitemap');

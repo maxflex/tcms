@@ -83,5 +83,6 @@ class PagesController extends Controller
      {
          return $this->index($request, 'Search');
      }
+	
 
 }
