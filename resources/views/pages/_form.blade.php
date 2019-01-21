@@ -87,9 +87,19 @@
                         </div>
                     </div>
                     <div>
-                        <div class="field-container">
+                        <div class="field-container" ng-if='$index === 0'>
                           <textarea rows="4" class="field form-control" required placeholder="описание" ng-model='item.description' ng-model-options="{ allowInvalid: true }"></textarea>
                           <label style='position: absolute; top: -18px' ng-counter-dynamic min='110' max='500' ng-model='item.is_one_line'>описание</label>
+                        </div>
+                        <div class="field-container" ng-if='$index > 0'>
+                            @include('modules.input', [
+                                'title' => 'описание',
+                                'textarea' => true,
+                                'attributes' => [
+                                    'ng-model' => 'item.description',
+                                    'maxlength' => 110
+                                ]
+                            ])
                         </div>
                     </div>
                     <div>
