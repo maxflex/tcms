@@ -1891,151 +1891,6 @@
 }).call(this);
 
 (function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('galleries'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Folder', function($resource) {
-    return $resource(apiPath('folders'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      tree: {
-        method: 'POST',
-        url: apiPath('folders', 'tree'),
-        isArray: true
-      },
-      breadcrumbs: {
-        method: 'GET',
-        url: apiPath('folders', 'breadcrumbs'),
-        isArray: true
-      }
-    });
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('AllUser', function($resource) {
-    return $resource(apiPath('allusers'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Payment', function($resource) {
-    return $resource(apiPath('payments'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentSource', function($resource) {
-    return $resource(apiPath('payments/sources'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditure', function($resource) {
-    return $resource(apiPath('payments/expenditures'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditureGroup', function($resource) {
-    return $resource(apiPath('payments/expendituregroups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('tags', 'checkExistance')
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Video', function($resource) {
-    return $resource(apiPath('videos'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -2060,27 +1915,35 @@
         $($element).append("<span class='input-counter'></span>");
         counter = $($element).find('.input-counter');
         input = $($element).parent().find('textarea, input');
+        $scope.text = input.val();
         rx = /[a-zA-Z1-9\[\]\|]/gi;
         update = function() {
           var maxlength;
           maxlength = parseInt($scope.ngModel ? $scope.max : $scope.min);
           counter.html(getInputLengthOnlyAllowed() + "/<span class='text-primary'>" + maxlength + "</span>");
-          return input.attr('maxlength', maxlength + (input.val().length - getInputLengthOnlyAllowed()));
+          return input.attr('maxlength', maxlength + ($scope.text.length - getInputLengthOnlyAllowed()));
         };
         getInputLengthOnlyAllowed = function() {
-          var m, val;
-          val = input.val();
-          m = val.match(rx);
+          var m;
+          m = $scope.text.match(rx);
           if (m) {
-            return val.length - m.length;
+            return $scope.text.length - m.length;
           } else {
-            return val.length;
+            return $scope.text.length;
           }
         };
         $scope.$watch('ngModel', function(newVal, oldVal) {
           return update();
         });
-        return input.on('keyup', function() {
+        $timeout(function() {
+          return input.trigger('input');
+        });
+        input.on('input', function(e) {
+          $scope.text = $(e.target).val();
+          return update();
+        });
+        return input.on('paste', function(e) {
+          $scope.text = e.originalEvent.clipboardData.getData('text');
           return update();
         });
       }
@@ -2742,6 +2605,151 @@
     authorization: 'авторизация',
     url: 'просмотр URL'
   });
+
+}).call(this);
+
+(function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('galleries'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Folder', function($resource) {
+    return $resource(apiPath('folders'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      tree: {
+        method: 'POST',
+        url: apiPath('folders', 'tree'),
+        isArray: true
+      },
+      breadcrumbs: {
+        method: 'GET',
+        url: apiPath('folders', 'breadcrumbs'),
+        isArray: true
+      }
+    });
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('AllUser', function($resource) {
+    return $resource(apiPath('allusers'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Payment', function($resource) {
+    return $resource(apiPath('payments'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentSource', function($resource) {
+    return $resource(apiPath('payments/sources'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditure', function($resource) {
+    return $resource(apiPath('payments/expenditures'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditureGroup', function($resource) {
+    return $resource(apiPath('payments/expendituregroups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('tags', 'checkExistance')
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Video', function($resource) {
+    return $resource(apiPath('videos'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
 
 }).call(this);
 

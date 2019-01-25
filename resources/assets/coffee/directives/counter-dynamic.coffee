@@ -9,6 +9,7 @@ angular.module('Egecms').directive 'ngCounterDynamic', ($timeout) ->
         $($element).append "<span class='input-counter'></span>"
         counter = $($element).find('.input-counter')
         input = $($element).parent().find('textarea, input')
+        $scope.text = input.val()
 
         # not counted
         rx = /[a-zA-Z1-9\[\]\|]/gi
@@ -16,12 +17,24 @@ angular.module('Egecms').directive 'ngCounterDynamic', ($timeout) ->
         update = ->
             maxlength = parseInt(if $scope.ngModel then $scope.max else $scope.min)
             counter.html getInputLengthOnlyAllowed() + "/<span class='text-primary'>" + maxlength + "</span>"
-            input.attr('maxlength', maxlength + (input.val().length - getInputLengthOnlyAllowed()))
+            input.attr('maxlength', maxlength + ($scope.text.length - getInputLengthOnlyAllowed()))
 
         getInputLengthOnlyAllowed = ->
-            val = input.val()
-            m = val.match(rx)
-            return if m then (val.length - m.length) else val.length
+            # debugger
+            m = $scope.text.match(rx) 
+            return if m then ($scope.text.length - m.length) else $scope.text.length
 
         $scope.$watch 'ngModel', (newVal, oldVal) -> update()
-        input.on 'keyup', -> update()
+
+        $timeout -> input.trigger('input')
+
+        input.on 'input', (e) -> 
+            # console.log($(e.target).val())
+            $scope.text = $(e.target).val()
+            update()
+
+        input.on 'paste', (e) ->
+            # console.log('%cpaste', 'color:LightCoral')
+            # console.log(e.originalEvent.clipboardData.getData('text'))
+            $scope.text = e.originalEvent.clipboardData.getData('text')
+            update()
