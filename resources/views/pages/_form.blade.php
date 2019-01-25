@@ -69,7 +69,7 @@
 </div>
 <div class="row mbs">
     <div class="col-sm-12">
-        <input type="file" name="pageitem" id="fileupload" style='display: none'/ data-url="uploadPageitem">
+        <input type="file" name="pageitem" id="fileupload" style='display: none' data-url="uploadPageitem">
         <div ui-sortable='sortableOptions' ng-model="FormService.model.items" class="page-items-wrapper">
             <div class="page-item page-item-draggable" ng-repeat="item in FormService.model.items">
                 <div class="photo-dashed" ng-click="uploadSvg(item)">
@@ -87,19 +87,9 @@
                         </div>
                     </div>
                     <div>
-                        <div class="field-container" ng-if='$index === 0'>
+                        <div class="field-container">
                           <textarea rows="4" class="field form-control" required placeholder="описание" ng-model='item.description' ng-model-options="{ allowInvalid: true }"></textarea>
                           <label style='position: absolute; top: -18px' ng-counter-dynamic min='110' max='500' ng-model='item.is_one_line'>описание</label>
-                        </div>
-                        <div class="field-container" ng-if='$index > 0'>
-                            @include('modules.input', [
-                                'title' => 'описание',
-                                'textarea' => true,
-                                'attributes' => [
-                                    'ng-model' => 'item.description',
-                                    'maxlength' => 110
-                                ]
-                            ])
                         </div>
                     </div>
                     <div>
