@@ -67,6 +67,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::post('payments/stats', 'PaymentsController@stats');
     Route::post('payments/delete', 'PaymentsController@delete');
 
+    Route::delete('photos/{id}', 'PhotosController@destroy');
+
     Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
         Route::resource('sources', 'SourcesController');
         Route::resource('expendituregroups', 'ExpenditureGroupsController');
