@@ -81,6 +81,15 @@
                       <input type="checkbox" id="oneline" name="oneline" ng-model="item.is_one_line" ng-checked="item.is_one_line == 1" ng-true-value='1' ng-false-value='0'>
                       <label for="oneline" style='padding-left: 5px'>в одну строку</label>
                     </div>
+                    <div ng-show='$index == 0' style='position: absolute; left: 270px; top: -1px'>
+                      <input type="checkbox" id="oneline" name="oneline"
+                        ng-model="FormService.model.no_icons"
+                        ng-checked="FormService.model.no_icons == 1"
+                        ng-true-value='1'
+                        ng-false-value='0'
+                        >
+                      <label for="oneline" style='padding-left: 5px'>без иконок</label>
+                    </div>
                     <div>
                         <div>
                             @include('modules.input', ['title' => 'заголовок', 'attributes' => ['ng-model' => 'item.title', 'maxlength' => 45]])
