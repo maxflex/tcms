@@ -34,7 +34,8 @@ class Page extends Model
         'position',
         'seo_text',
         'tags',
-        'seo_page_ids'
+        'seo_page_ids',
+        'no_icons'
     ];
 
     protected static $hidden_on_export = [
