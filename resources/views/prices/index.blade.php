@@ -1,5 +1,5 @@
 @extends('app')
-@section('title', 'Прайс лист')
+@section('title', 'Прайс-лист')
 @section('controller', 'PricesIndex')
 
 @section('title-right')

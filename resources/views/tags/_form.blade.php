@@ -16,7 +16,7 @@
             <a href="{{ route('reviews.tag', compact('id')) }}">Отзывы</a>
         </p>
         <p>
-            <a href="{{ route('prices.tag', compact('id')) }}">Прайс лист</a>
+            <a href="{{ route('prices.tag', compact('id')) }}">Прайс-лист</a>
         </p>
     </div>
 </div>
