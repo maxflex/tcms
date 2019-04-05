@@ -20563,6 +20563,13 @@ select[multiple] {
   display: flex;
 }
 
+.flex-items-center {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
 .gallery-fullscreen .modal-dialog {
   width: 98% !important;
 }
@@ -20813,6 +20820,32 @@ select[multiple] {
 
 .table > tbody + tbody {
   border: none;
+}
+
+.mobile-menu ul {
+  list-style: none;
+}
+
+.mobile-menu ul li {
+  padding: 5px 0;
+}
+
+.mobile-menu-title {
+  font-size: 14px;
+  cursor: move;
+}
+
+.mobile-menu-extra {
+  color: #999999;
+  font-size: 12px;
+}
+
+.mobile-menu-section {
+  border-bottom: 1px solid #eee;
+}
+
+.mobile-menu-section h4 {
+  cursor: move;
 }
 
 .program-container h2 {

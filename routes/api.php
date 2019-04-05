@@ -79,4 +79,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     # Search
     Route::post('search', 'SearchController@search');
+
+    Route::resource('mobile-menu', 'MobileMenuController');
+    Route::resource('mobile-menu-sections', 'MobileMenuSectionsController');
 });
