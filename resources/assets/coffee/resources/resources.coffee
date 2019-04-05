@@ -80,6 +80,9 @@ angular.module('Egecms')
     .factory 'Review', ($resource) ->
         $resource apiPath('reviews'), {id: '@id'}, updatable()
 
+    .factory 'MobileMenu', ($resource) ->
+        $resource apiPath('mobile-menu'), {id: '@id'}, updatable()
+
     .factory 'Video', ($resource) ->
         $resource apiPath('videos'), {id: '@id'}, updatable()
 

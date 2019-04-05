@@ -60,6 +60,10 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::get('header', function() {
         return view('header.index')->with(ngInit(['header' => Settings::get('header')]));
     });
+
+    Route::get('mobile-menu', function() {
+        return view('mobile-menu.index');
+    });
 });
 
 # Templates for angular directives

@@ -4268,6 +4268,11 @@ select[multiple] {
     display: flex;
 }
 
+.flex-items-center {
+    display: flex;
+    align-items: center;
+}
+
 .gallery-fullscreen {
     & .modal-dialog {
         width: 98% !important;
@@ -4511,3 +4516,37 @@ select[multiple] {
 .table > tbody + tbody {
     border:none;
 }
+
+.mobile-menu {
+    & ul {
+        list-style: none;
+        & li {
+            padding: 5px 0;
+            // &:not(:last-child) {
+            //     border-bottom: 1px solid rgba(164, 0, 0, 0.25);
+            // }
+            // &:first-child {
+            //     border-top: 1px solid rgba(164, 0, 0, 0.25);
+            // }
+        }
+    }
+}
+
+.mobile-menu-title {
+    font-size: 14px;
+    cursor: move;
+    // padding: 5px 0;
+}
+
+.mobile-menu-extra {
+    color: $gray;
+    font-size: 12px;
+}
+
+.mobile-menu-section {
+    border-bottom: 1px solid $hr_gray;
+    & h4 {
+        cursor: move;
+    }
+}
+
