@@ -14,7 +14,7 @@ class Log extends Model
     // не включать эти таблицы в список полей
     const EXCEPT_TABLES = ['logs', 'distances', 'graph_distances', 'migrations', 'phone_duplicates', 'stations'];
 
-    const EXCEPT_USERS = [2];
+    const EXCEPT_USERS = [1];
 
     protected $appends = ['user'];
 
