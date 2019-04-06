@@ -23,7 +23,7 @@ class Log extends Model
      */
     public static function custom($type, $user_id, $data = [])
     {
-        if (! in_array($user_id, self::EXCEPT_USERS)) {
+        if (! in_array((int) $user_id, self::EXCEPT_USERS)) {
             DB::table('logs')->insert([
                 'table'     => null,
                 'user_id'   => $user_id,
