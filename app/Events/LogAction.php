@@ -27,7 +27,7 @@ class LogAction
     {
         try {
             if ($model->getDirty() || $model->wasRecentlyDeleted) {
-                if (! in_array(userIdOrSystem(), Log::EXCEPT_USERS)) {
+                if (! in_array((int) userIdOrSystem(), Log::EXCEPT_USERS)) {
                     DB::table('logs')->insert([
                         'user_id'   => userIdOrSystem(),
                         'row_id'    => $model->id,
