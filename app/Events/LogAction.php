@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use App\Service\Log;
 
 
 class LogAction
@@ -26,14 +27,16 @@ class LogAction
     {
         try {
             if ($model->getDirty() || $model->wasRecentlyDeleted) {
-                DB::table('logs')->insert([
-                    'user_id'   => userIdOrSystem(),
-                    'row_id'    => $model->id,
-                    'data'      => static::_generateData($model),
-                    'table'     => $model->getTable(),
-                    'type'      => static::_getType($model),
-                    'ip'        => @$_SERVER['HTTP_X_REAL_IP'],
-                ]);
+                if (! in_array((int) userIdOrSystem(), Log::EXCEPT_USERS)) {
+                    DB::table('logs')->insert([
+                        'user_id'   => userIdOrSystem(),
+                        'row_id'    => $model->id,
+                        'data'      => static::_generateData($model),
+                        'table'     => $model->getTable(),
+                        'type'      => static::_getType($model),
+                        'ip'        => @$_SERVER['HTTP_X_REAL_IP'],
+                    ]);
+                }
             }
         } catch (\Exception $e) {
             \Log::info(get_class($this));
