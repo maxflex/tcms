@@ -14,6 +14,8 @@ class Log extends Model
     // не включать эти таблицы в список полей
     const EXCEPT_TABLES = ['logs', 'distances', 'graph_distances', 'migrations', 'phone_duplicates', 'stations'];
 
+    const EXCEPT_USERS = [2];
+
     protected $appends = ['user'];
 
     /**
@@ -21,13 +23,15 @@ class Log extends Model
      */
     public static function custom($type, $user_id, $data = [])
     {
-        DB::table('logs')->insert([
-            'table'     => null,
-            'user_id'   => $user_id,
-            'data'      => json_encode($data),
-            'type'      => $type,
-            'ip'        => @$_SERVER['HTTP_X_REAL_IP'],
-        ]);
+        if (! in_array($user_id, self::EXCEPT_USERS)) {
+            DB::table('logs')->insert([
+                'table'     => null,
+                'user_id'   => $user_id,
+                'data'      => json_encode($data),
+                'type'      => $type,
+                'ip'        => @$_SERVER['HTTP_X_REAL_IP'],
+            ]);
+        }
     }
 
     public function getUserAttribute()
