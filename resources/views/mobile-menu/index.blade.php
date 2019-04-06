@@ -2,10 +2,6 @@
 @section('title', 'Мобильное меню')
 @section('controller', 'MobileMenuIndex')
 
-@section('title-center')
-    <span ng-click="save()">сохранить</span>
-@stop
-
 @section('title-right')
     <a class="pointer" ng-click="openDialog({}, 'menu-section-dialog')">добавить раздел</a>
 @endsection
