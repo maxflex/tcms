@@ -15,6 +15,8 @@ angular
 
 
         $timeout ->
+            $scope.collapsedMobileMenu = if $.cookie("collapsedMobileMenu") then JSON.parse($.cookie("collapsedMobileMenu")) else []
+            $scope.collapsedMobileMenuSection = if $.cookie("collapsedMobileMenuSection") then JSON.parse($.cookie("collapsedMobileMenuSection")) else []
             loadData()
 
         $scope.openDialog = (item = {}, id = 'menu-item-dialog') ->
@@ -67,8 +69,23 @@ angular
             cursor: "move"
             opacity: 0.9,
             zIndex: 9999
+        
+        $scope.toggleCollapse = (item) ->
+            id = item.id
+            if id in $scope.collapsedMobileMenu
+                $scope.collapsedMobileMenu = _.without($scope.collapsedMobileMenu, id)
+            else
+                $scope.collapsedMobileMenu.push(id)
+            $.cookie("collapsedMobileMenu", JSON.stringify($scope.collapsedMobileMenu), { expires: 365, path: '/' })
 
-        # $scope.save = ->
-        #     ajaxStart()
-        #     $http.post '/api/header', {header: $scope.header}
-        #     .then -> ajaxEnd()
+        $scope.isCollapsed = (item) -> item.id in $scope.collapsedMobileMenu
+
+        $scope.toggleCollapseSection = (item) ->
+            id = item.id
+            if id in $scope.collapsedMobileMenuSection
+                $scope.collapsedMobileMenuSection = _.without($scope.collapsedMobileMenuSection, id)
+            else
+                $scope.collapsedMobileMenuSection.push(id)
+            $.cookie("collapsedMobileMenuSection", JSON.stringify($scope.collapsedMobileMenuSection), { expires: 365, path: '/' })
+
+        $scope.isCollapsedSection = (item) -> item.id in $scope.collapsedMobileMenuSection
