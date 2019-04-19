@@ -9,6 +9,6 @@ class Video extends Model
 {
     use HasTags;
 
-    protected $fillable = ['code', 'title', 'tags', 'master_id', 'position'];
+    protected $fillable = ['code', 'title', 'tags', 'master_id', 'position', 'duration'];
     protected $appends = ['tags'];
 }
