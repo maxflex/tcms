@@ -23,7 +23,8 @@
         "predis/predis": "^1.1",
         "google/recaptcha": "~1.1",
         "claviska/simpleimage": "^3.3",
-        "sybio/image-workshop": "^2.0"
+        "sybio/image-workshop": "^2.0",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
