@@ -9,6 +9,7 @@ use App\Traits\Folderable;
 use App\Models\Folder;
 use PHPImageWorkshop\ImageWorkshop;
 use claviska\SimpleImage;
+use WebPConvert\WebPConvert;
 
 class Gallery extends Model
 {
@@ -120,8 +121,16 @@ class Gallery extends Model
 
     public static function boot()
     {
+        parent::boot();
+
         static::saving(function($model) {
             $model->createImage();
+        });
+
+        static::saved(function($model) {
+            $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
+            $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
+            WebPConvert::convert($source, $destination);
         });
     }
 
