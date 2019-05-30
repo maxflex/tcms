@@ -39,12 +39,23 @@ class ConvertImages extends Command
      */
     public function handle()
     {
+        $image = new \claviska\SimpleImage();
         $ids = Gallery::where('id', '>', 0)->pluck('id');
         $bar = $this->output->createProgressBar(count($ids));
         foreach($ids as $id) {
             $source = public_path() . '/img/gallery/' . $id . '.jpg';
+            $thumb = public_path() . '/img/gallery/' . $id . '_thumb.jpg';
+            $image
+                ->fromFile($source)
+                ->resize(288 * 2, 144 * 2)
+                ->toFile($thumb , 'image/jpeg', 90);
+
             $destination = public_path() . '/img/gallery/' . $id . '.webp';
             WebPConvert::convert($source, $destination);
+
+            $destination = public_path() . '/img/gallery/' . $id . '_thumb.webp';
+            WebPConvert::convert($thumb, $destination);
+
             $bar->advance();
         }
         $bar->finish();
