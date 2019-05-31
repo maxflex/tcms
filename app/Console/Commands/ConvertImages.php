@@ -70,7 +70,7 @@ class ConvertImages extends Command
                 if ($photo->cropped && file_exists($photo->getFullPath())) {
                     $image
                         ->fromFile($photo->getFullPath())
-                        ->resize(420, null)
+                        ->resize(300, null)
                         ->toFile(Photo::getDir('small') . $photo->id . '.jpg', 'image/jpeg', 80);
                 }
             }
