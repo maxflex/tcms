@@ -2,6 +2,7 @@
 /public/storage
 /public/photos
 /public/img/gallery
+/public/img/video
 /vendor
 /.idea
 /resources/assets/bower
