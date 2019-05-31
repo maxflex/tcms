@@ -18,7 +18,11 @@ class Video extends Model
         parent::boot();
 
         static::saved(function ($model) {
-            Storage::disk('spaces')->put('/img/video/' . $model->id . '.jpg', file_get_contents('https://img.youtube.com/vi/' . $model->code . '/mqdefault.jpg'));
+            $image = new \claviska\SimpleImage();
+            $image
+            ->fromFile('https://img.youtube.com/vi/' . $model->code . '/mqdefault.jpg')
+            ->toFile(public_path() . '/img/video/' . $model->id . '.jpg', 'image/jpeg', 90);
+            // Storage::disk('spaces')->put('/img/video/' . $model->id . '.jpg', file_get_contents('https://img.youtube.com/vi/' . $model->code . '/mqdefault.jpg'));
         });
     }
 }
