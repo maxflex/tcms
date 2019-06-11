@@ -85,7 +85,7 @@ class UploadController extends Controller
         $image
             ->fromFile($request->file('cropped_image'))
             ->resize(420, null)
-            ->toFile(Photo::getDir('small') . $request->id, 'image/jpeg', 80);
+            ->toFile(Photo::getDir('small') . $request->id . '.jpg', 'image/jpeg', 80);
 
         // $request->file('cropped_image')->move(Photo::getDir('cropped'), $filename);
         $photo = Photo::find($request->id);
