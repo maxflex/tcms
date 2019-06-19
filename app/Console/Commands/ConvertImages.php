@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use WebPConvert\WebPConvert;
 use App\Models\Gallery;
 use App\Models\Master;
+use App\Models\Equipment;
 use App\Models\Photo;
 
 class ConvertImages extends Command
@@ -63,7 +64,7 @@ class ConvertImages extends Command
         // $bar->finish();
 
         // convert master images
-        $masters = Master::all();
+        $masters = Equipment::all();
         $bar = $this->output->createProgressBar(count($masters));
         foreach($masters as $master) {
             foreach($master->photos as $photo) {

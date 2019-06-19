@@ -1,3 +1,6 @@
+#ExpiresActive On
+#ExpiresDefault A1
+#Header append Cache-Control must-revalidate
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -56,8 +59,8 @@
 	  ExpiresDefault "access 1 month"
 	</IfModule>
 	<IfModule mod_headers.c>
-	  <filesmatch "\.(ico|flv|jpg|jpeg|png|gif|css|swf)$">
-	  Header set Cache-Control "max-age=2678400, public"
+	  <filesmatch "\.(ico|flv|jpg|jpeg|png|webp|svg|gif|css|swf)$">
+	  Header set Cache-Control "max-age=31557600, public"
 	  </filesmatch>
 	  <filesmatch "\.(html|htm)$">
 	  Header set Cache-Control "max-age=7200, private, must-revalidate"
