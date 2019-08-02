@@ -8,7 +8,7 @@
             style='margin-left: 8px'
             ng-click='controller_scope.remove(item.id)'>удалить</a>
     </div>
-    <div>
+    <div ng-show='!item.is_link'>
         <div class='mobile-menu-title'>
             <div class='flex-items-center'>
                 <a ng-show="item.children.length > 0" class="pointer" style='position: absolute; margin-left: -15px'>
@@ -34,10 +34,10 @@
             </div>
             <div ng-if="item.extra" class='mobile-menu-extra'>@{{ item.extra }}</div>
         </div>
-        <ul ui-sortable='sortableOptions' ng-model="item.children" ng-hide="controller_scope.isCollapsed(item)">
-            <li ng-repeat="item in item.children" class='menu-item-@{{ $parent.$id }}'>
-                <mobile-menu-item item='item'></mobile-menu-item>
-            </li>
-        </ul>
     </div>
+    <ul ui-sortable='sortableOptions' ng-model="item.children" ng-hide="controller_scope.isCollapsed(item)">
+        <li ng-repeat="item in item.children" class='menu-item-@{{ $parent.$id }}'>
+            <mobile-menu-item item='item'></mobile-menu-item>
+        </li>
+    </ul>
 </div>
