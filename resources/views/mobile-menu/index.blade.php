@@ -1,5 +1,5 @@
 @extends('app')
-@section('title', 'Мобильное меню')
+@section('title', ($type === 'mobile' ? 'Мобильное меню' : 'Стационарное меню'))
 @section('controller', 'MobileMenuIndex')
 
 @section('title-right')
@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+    <span ng-init="type = '{{ $type }}'"></span>
     <div class="frontend-loading animate-fadeIn" ng-if='sections === null'>
         <span>загрузка...</span>
     </div>

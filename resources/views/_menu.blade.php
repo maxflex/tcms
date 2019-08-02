@@ -8,7 +8,9 @@
 <a href="reviews" class="list-group-item">Отзывы</a>
 <a href="galleries" class="list-group-item">Галерея</a>
 <a href="prices" class="list-group-item">Прайс-лист</a>
-<a href="mobile-menu" class="list-group-item">Мобильное меню</a>
+<a class="list-group-item active">Меню</a>
+<a href="menu/desktop" class="list-group-item">Стационарное</a>
+<a href="menu/mobile" class="list-group-item">Мобильное</a>
 <a class="list-group-item active">Сайт</a>
 <a href="variables" class="list-group-item">Переменные</a>
 <a href="pages" class="list-group-item">Страницы</a>

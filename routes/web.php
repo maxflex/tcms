@@ -61,8 +61,8 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
         return view('header.index')->with(ngInit(['header' => Settings::get('header')]));
     });
 
-    Route::get('mobile-menu', function() {
-        return view('mobile-menu.index');
+    Route::get('menu/{type}', function($type) {
+        return view('mobile-menu.index')->with(compact('type'));
     });
 });
 

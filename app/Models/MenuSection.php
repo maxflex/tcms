@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MobileMenuSection extends Model
+class MenuSection extends Model
 {
-    protected $fillable = ['title', 'position'];
+    protected $fillable = ['title', 'position', 'type', 'is_link', 'extra'];
 
     protected $with = ['items'];
 
@@ -14,7 +14,7 @@ class MobileMenuSection extends Model
 
     public function items()
     {
-        return $this->hasMany(MobileMenu::class, 'section_id')->whereNull('menu_id')->orderBy('position', 'asc');
+        return $this->hasMany(Menu::class, 'section_id')->whereNull('menu_id')->orderBy('position', 'asc');
     }
 
     public static function boot()

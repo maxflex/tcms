@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MobileMenu extends Model
+class Menu extends Model
 {
     public $timestamps = false;
-    protected $table = 'mobile_menu';
+    protected $table = 'menu';
     protected $with = ['children'];
 
     protected $fillable = [
@@ -16,12 +16,12 @@ class MobileMenu extends Model
 
     public function parent()
     {
-        return $this->belongsTo(self::class, 'menu_id');
+        return $this->belongsTo(self::class);
     }
 
     public function children()
     {
-        return $this->hasMany(self::class, 'menu_id')->orderBy('position', 'asc');
+        return $this->hasMany(self::class)->orderBy('position', 'asc');
     }
 
     public static function boot()

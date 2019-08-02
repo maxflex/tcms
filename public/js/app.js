@@ -326,6 +326,243 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
+
+}).call(this);
+
+(function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('galleries'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Folder', function($resource) {
+    return $resource(apiPath('folders'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      tree: {
+        method: 'POST',
+        url: apiPath('folders', 'tree'),
+        isArray: true
+      },
+      breadcrumbs: {
+        method: 'GET',
+        url: apiPath('folders', 'breadcrumbs'),
+        isArray: true
+      }
+    });
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('AllUser', function($resource) {
+    return $resource(apiPath('allusers'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Payment', function($resource) {
+    return $resource(apiPath('payments'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentSource', function($resource) {
+    return $resource(apiPath('payments/sources'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditure', function($resource) {
+    return $resource(apiPath('payments/expenditures'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditureGroup', function($resource) {
+    return $resource(apiPath('payments/expendituregroups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('tags', 'checkExistance')
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Menu', function($resource) {
+    return $resource(apiPath('menu'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Video', function($resource) {
+    return $resource(apiPath('videos'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -846,14 +1083,14 @@
 (function() {
   var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  angular.module('Egecms').controller('MobileMenuIndex', function($rootScope, $scope, $timeout, $http, MobileMenu) {
+  angular.module('Egecms').controller('MobileMenuIndex', function($rootScope, $scope, $timeout, $http, Menu) {
     var loadData;
     bindArguments($scope, arguments);
     $scope.sections = null;
     $scope.dialogItem = {};
     loadData = function() {
       ajaxStart();
-      return $http.get('api/mobile-menu-sections').then(function(r) {
+      return $http.get('api/menu-sections?type=' + $scope.type).then(function(r) {
         $scope.sections = r.data;
         return ajaxEnd();
       });
@@ -871,15 +1108,16 @@
         id = 'menu-item-dialog';
       }
       $scope.dialogItem = _.clone(item);
+      $scope.dialogItem.type = $scope.type;
       return $('#' + id).modal('show');
     };
     $scope.save = function() {
       if ($scope.dialogItem.id) {
-        MobileMenu.update($scope.dialogItem, function(r) {
+        Menu.update($scope.dialogItem, function(r) {
           return loadData();
         });
       } else {
-        MobileMenu.save($scope.dialogItem, function(r) {
+        Menu.save($scope.dialogItem, function(r) {
           return loadData();
         });
       }
@@ -888,7 +1126,7 @@
     $scope.remove = function(id) {
       return bootbox.confirm('Вы уверены, что хотите удалить пункт меню?', function(result) {
         if (result === true) {
-          return MobileMenu.remove({
+          return Menu.remove({
             id: id
           }, function(r) {
             return loadData();
@@ -899,7 +1137,7 @@
     $scope.removeSection = function(id) {
       return bootbox.confirm('Вы уверены, что хотите удалить раздел?', function(result) {
         if (result === true) {
-          return $http["delete"]('api/mobile-menu-sections/' + id).then(function(r) {
+          return $http["delete"]('api/menu-sections/' + id).then(function(r) {
             return loadData();
           });
         }
@@ -907,11 +1145,11 @@
     };
     $scope.saveSection = function() {
       if ($scope.dialogItem.id) {
-        $http.put('api/mobile-menu-sections/' + $scope.dialogItem.id, $scope.dialogItem).then(function(r) {
+        $http.put('api/menu-sections/' + $scope.dialogItem.id, $scope.dialogItem).then(function(r) {
           return loadData();
         });
       } else {
-        $http.post('api/mobile-menu-sections', $scope.dialogItem).then(function(r) {
+        $http.post('api/menu-sections', $scope.dialogItem).then(function(r) {
           return loadData();
         });
       }
@@ -922,7 +1160,7 @@
         return $timeout(function() {
           return $scope.sections.forEach(function(section, index) {
             return section.items.forEach(function(item, index) {
-              return MobileMenu.update({
+              return Menu.update({
                 id: item.id,
                 position: index
               });
@@ -940,13 +1178,13 @@
       update: function(event, ui) {
         return $timeout(function() {
           return $scope.sections.forEach(function(section, index) {
-            return $http.put('api/mobile-menu-sections/' + section.id, {
+            return $http.put('api/menu-sections/' + section.id, {
               position: index
             });
           });
         });
       },
-      items: '.mobile-menu-section',
+      items: '.menu-section',
       axis: 'y',
       cursor: "move",
       opacity: 0.9,
@@ -2038,243 +2276,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('galleries'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Folder', function($resource) {
-    return $resource(apiPath('folders'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      tree: {
-        method: 'POST',
-        url: apiPath('folders', 'tree'),
-        isArray: true
-      },
-      breadcrumbs: {
-        method: 'GET',
-        url: apiPath('folders', 'breadcrumbs'),
-        isArray: true
-      }
-    });
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('AllUser', function($resource) {
-    return $resource(apiPath('allusers'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Payment', function($resource) {
-    return $resource(apiPath('payments'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentSource', function($resource) {
-    return $resource(apiPath('payments/sources'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditure', function($resource) {
-    return $resource(apiPath('payments/expenditures'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditureGroup', function($resource) {
-    return $resource(apiPath('payments/expendituregroups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('tags', 'checkExistance')
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  }).factory('MobileMenu', function($resource) {
-    return $resource(apiPath('mobile-menu'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Video', function($resource) {
-    return $resource(apiPath('videos'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -2476,14 +2477,14 @@
       scope: {
         item: '='
       },
-      controller: function($scope, $timeout, $rootScope, MobileMenu) {
+      controller: function($scope, $timeout, $rootScope, Menu) {
         $scope.findById = $rootScope.findById;
         $scope.controller_scope = scope;
         return $scope.sortableOptions = {
           update: function(event, ui) {
             return $timeout(function() {
               return $scope.item.children.forEach(function(item, index) {
-                return MobileMenu.update({
+                return Menu.update({
                   id: item.id,
                   position: index
                 });

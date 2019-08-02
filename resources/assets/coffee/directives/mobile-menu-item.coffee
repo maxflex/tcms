@@ -5,7 +5,7 @@ angular.module 'Egecms'
         templateUrl: 'directives/mobile-menu-item'
         scope:
             item:   '='
-        controller: ($scope, $timeout, $rootScope, MobileMenu) ->
+        controller: ($scope, $timeout, $rootScope, Menu) ->
             $scope.findById = $rootScope.findById
             $scope.controller_scope = scope
             
@@ -13,7 +13,7 @@ angular.module 'Egecms'
                 update: (event, ui) ->
                     $timeout ->
                         $scope.item.children.forEach (item, index) ->
-                            MobileMenu.update({id: item.id, position: index})
+                            Menu.update({id: item.id, position: index})
                 items: '.menu-item-' + $scope.$id
                 axis: 'y'
                 cursor: "move"
