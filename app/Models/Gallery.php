@@ -128,21 +128,23 @@ class Gallery extends Model
         });
 
         static::saved(function($model) {
-            $image = new \claviska\SimpleImage();
+	        try {
+				$image = new \claviska\SimpleImage();
 
-            $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
-            $thumb = public_path() . '/img/gallery/' . $id . '_thumb.jpg';
-
-            $image
-                ->fromFile($source)
-                ->resize(288 * 2, 144 * 2)
-                ->toFile($thumb , 'image/jpeg', 90);
-
-            $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
-            WebPConvert::convert($source, $destination);
-
-            $destination = public_path() . '/img/gallery/' . $id . '_thumb.webp';
-            WebPConvert::convert($thumb, $destination);
+	            $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
+	            $thumb = public_path() . '/img/gallery/' . $model->id . '_thumb.jpg';
+	
+	            $image
+	                ->fromFile($source)
+	                ->resize(288 * 2, 144 * 2)
+	                ->toFile($thumb , 'image/jpeg', 90);
+	
+	            $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
+	            WebPConvert::convert($source, $destination);
+	
+	            $destination = public_path() . '/img/gallery/' . $model->id . '_thumb.webp';
+	            WebPConvert::convert($thumb, $destination);		        
+	        } catch (\Exception $e) {}
         });
     }
 
