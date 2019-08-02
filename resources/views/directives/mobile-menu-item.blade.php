@@ -23,7 +23,7 @@
                 style='margin-left: 8px'
                 ng-click='controller_scope.remove(item.id)'>удалить</a>
         </div>
-        <div ng-if="item.extra" class='mobile-menu-extra'>@{{ item.extra }}</div>
+        <div ng-if="item.extra && !item.is_link" class='mobile-menu-extra'>@{{ item.extra }}</div>
     </div>
     <ul ui-sortable='sortableOptions' ng-model="item.children" ng-hide="controller_scope.isCollapsed(item)">
         <li ng-repeat="item in item.children" class='menu-item-@{{ $parent.$id }}'>
