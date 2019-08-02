@@ -8,7 +8,7 @@
             style='margin-left: 8px'
             ng-click='controller_scope.remove(item.id)'>удалить</a>
     </div>
-    <div ng-show='!item.is_link'>
+    <div>
         <div class='mobile-menu-title'>
             <div class='flex-items-center'>
                 <a ng-show="item.children.length > 0" class="pointer" style='position: absolute; margin-left: -15px'>
