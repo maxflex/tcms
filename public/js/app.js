@@ -950,16 +950,11 @@
       }
     };
     $scope.goLogin = function() {
-      if ($scope.preview) {
-        return;
-      }
       return $http.post('login', {
         login: $scope.login,
         password: $scope.password,
-        code: $scope.code,
-        captcha: grecaptcha.getResponse()
+        code: $scope.code
       }).then(function(response) {
-        grecaptcha.reset();
         if (response.data === true) {
           $.removeCookie('login_data');
           location.reload();
@@ -983,16 +978,9 @@
       });
     };
     return $scope.checkFields = function() {
-      if ($scope.preview) {
-        return;
-      }
       $scope.l.start();
       $scope.in_process = true;
-      if (grecaptcha.getResponse() === '') {
-        return grecaptcha.execute();
-      } else {
-        return $scope.goLogin();
-      }
+      return $scope.goLogin();
     };
   });
 

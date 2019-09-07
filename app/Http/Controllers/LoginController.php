@@ -7,7 +7,7 @@ use App\Models\User;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use ReCaptcha\ReCaptcha;
+# use ReCaptcha\ReCaptcha;
 
 class LoginController extends Controller
 {
@@ -16,12 +16,12 @@ class LoginController extends Controller
         /**
          * Проверка капчи
          */
-        $recaptcha = new ReCaptcha(config('captcha.secret'));
-        $resp = $recaptcha->verify($request->captcha, @$_SERVER['HTTP_X_REAL_IP']);
-        if (! $resp->isSuccess()) {
-            User::log(null, 'failed_login', 'попытка обхода captcha');
-            return $resp->getErrorCodes();
-        }
+        # $recaptcha = new ReCaptcha(config('captcha.secret'));
+        # $resp = $recaptcha->verify($request->captcha, @$_SERVER['HTTP_X_REAL_IP']);
+        # if (! $resp->isSuccess()) {
+        #     User::log(null, 'failed_login', 'попытка обхода captcha');
+        #     return $resp->getErrorCodes();
+        # }
 
         return response()->json(User::login($request));
     }

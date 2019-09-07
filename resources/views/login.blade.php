@@ -13,18 +13,6 @@
 
     <script src="{{ asset('/js/vendor.js', isProduction()) }}"></script>
     <script src="{{ config('app.url') }}{{ elixir('js/app.js', isProduction()) }}"></script>
-    <script src='https://www.google.com/recaptcha/api.js?hl=ru'></script>
-
-    <style>
-        .grecaptcha-badge {
-            visibility: hidden;
-        }
-    </style>
-    <script>
-        function captchaChecked() {
-            scope.goLogin()
-        }
-    </script>
   </head>
 
   <body class="content animated fadeIn" ng-app="Egecms" ng-controller="LoginCtrl"

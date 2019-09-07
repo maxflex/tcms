@@ -38,15 +38,14 @@ angular
                 $scope.checkFields()
 
         $scope.goLogin = ->
-            return if $scope.preview
             # $('center').removeClass('invalid')
             $http.post 'login',
                 login: $scope.login
                 password: $scope.password
                 code: $scope.code
-                captcha: grecaptcha.getResponse()
+                # captcha: grecaptcha.getResponse()
             .then (response) ->
-                grecaptcha.reset()
+                # grecaptcha.reset()
                 if response.data is true
                     $.removeCookie('login_data')
                     location.reload()
@@ -63,8 +62,7 @@ angular
                 $scope.$apply()
 
         $scope.checkFields = ->
-            return if $scope.preview
             $scope.l.start()
             $scope.in_process = true
-            # $scope.goLogin()
-            if grecaptcha.getResponse() is '' then grecaptcha.execute() else $scope.goLogin()
+            $scope.goLogin()
+            # if grecaptcha.getResponse() is '' then grecaptcha.execute() else $scope.goLogin()
