@@ -25,7 +25,12 @@
                         aria-hidden="true"
                     ></i>
                 </a>
-                @{{ section.title }}
+                <a ng-if="section.is_link" href="{{ config('app.web-url') }}@{{ section.extra }}" href="_blank">
+                    @{{ section.title }}
+                </a>
+                <span ng-if="!section.is_link">
+                    @{{ section.title }}
+                </span>
                 <a class='pointer table-small show-on-hover'
                     style='margin-left: 8px; font-weight: normal'
                     ng-click='openDialog({section_id: section.id})'>добавить</a>
