@@ -13,7 +13,6 @@
     @yield('scripts')
     <script src="{{ asset('/js/vendor.js', true) }}"></script>
     <script src="{{ asset('/js/app.js', true) }}"></script>
-    <script src="https://unpkg.com/microtip/microtip.css"></script>
     @yield('scripts_after')
     @include('server_variables')
   </head>

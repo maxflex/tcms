@@ -18,7 +18,12 @@
 </div>
 <div class="row mb">
     <div class="col-sm-12">
-         <label class="no-margin-bottom label-opacity">тэги</label>
+        <label class="no-margin-bottom label-opacity flex-items-center" style='padding-bottom: 2px'>
+            <span style='margin-right: 5px; top: -1px; position: relative'>тэги</span>
+            <span aria-label="Доступно после сохранения записи" data-microtip-position="bottom" role="tooltip">
+                <i class='fa fa-info-circle'></i>
+            </span>
+        </label>
         <tags-input ng-model="FormService.model.tags" display-property="text" replace-spaces-with-dashes='false' add-from-autocomplete-only="true" placeholder="добавьте тэг">
            <auto-complete source="loadTags($query)"></auto-complete>
        </tags-input>

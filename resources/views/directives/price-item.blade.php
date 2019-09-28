@@ -1,6 +1,6 @@
 <a ng-show="item.is_section" ng-class="{'invisible': !item.items.length}" class="pointer" style='margin-right: 3px'><i  class="pointer fa" ng-class="{'fa-plus': controller_scope.isCollapsed(item), 'fa-minus': !controller_scope.isCollapsed(item)}" ng-click="controller_scope.toggleCollapse(item)" aria-hidden="true"></i></a>
 <span ng-class="{'price-section': item.is_section, 'price-section-item': !item.is_section}">
-    <span style='margin-right: 5px' ng-show='!item.is_section' class='link-like show-on-hover pointer copiable' data-clipboard-text="@{{ item.model.name }}"><span aria-label="Скопировать название" data-microtip-position="bottom" role="tooltip"><i class="fa fa-clipboard" aria-hidden="true"></i></span></span>
+    <span style='margin-right: 5px' ng-show='!item.is_section' class='link-like show-on-hover pointer copiable' data-clipboard-text="@{{ item.model.name }}"><i class="fa fa-clipboard" aria-hidden="true"></i></span>
     <span style='width: 41px; font-weight: normal; display: inline-block'>@{{ item.model.id }}</span>
     <a href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'>@{{ (item.model.name || 'имя не указано') | cut:false:40 }}</a>
 </span>
