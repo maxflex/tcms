@@ -21,6 +21,11 @@ class Master extends Model
 
     public $appends = ['tags'];
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function scopeLight($query)
     {
         return $query->selectRaw("id, concat(last_name, ' ', left(first_name, 1), '. ', left(middle_name, 1), '.') as name");

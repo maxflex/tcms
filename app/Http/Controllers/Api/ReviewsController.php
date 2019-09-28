@@ -85,4 +85,9 @@ class ReviewsController extends Controller
     {
         Review::destroy($id);
     }
+
+    public function massUpdate(Request $request)
+    {
+        Review::whereIn('id', $request->ids)->update($request->payload);
+    }
 }

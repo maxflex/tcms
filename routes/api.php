@@ -50,6 +50,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('folders', 'FoldersController');
     Route::resource('allusers', 'AllUsersController');
 
+    Route::post('reviews/mass-update', 'ReviewsController@massUpdate');
     Route::resource('reviews', 'ReviewsController');
     Route::resource('equipment', 'EquipmentController');
 

@@ -2,7 +2,7 @@
     @{{ model.id }}
 </td>
 <td width='300'>
-    <a href='reviews/@{{ model.id }}/edit'>@{{ model.signature || 'не указано' }}</a>
+    <a target="_blank" href='reviews/@{{ model.id }}/edit'>@{{ model.signature || 'не указано' }}</a>
 </td>
 <td width='150'>
     @{{ model.date }}

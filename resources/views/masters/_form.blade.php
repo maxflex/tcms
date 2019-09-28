@@ -25,10 +25,31 @@
         ])
 
         <div style='margin-top: 14px'>
-             <label class="no-margin-bottom label-opacity">тэги</label>
+            <label class="no-margin-bottom label-opacity">тэги</label>
             <tags-input ng-model="FormService.model.tags" display-property="text" replace-spaces-with-dashes='false' add-from-autocomplete-only="true" placeholder="добавьте тэг">
                <auto-complete source="loadTags($query)"></auto-complete>
            </tags-input>
         </div>
     </div>
 </div>
+
+<div class='row' ng-show='FormService.model.reviews.length > 0'>
+    <div class='col-sm-12'>
+        <h4 class='mb'>Отзывы:</h4>
+        <table class='table'>
+            <tr ng-repeat='model in FormService.model.reviews'>
+                <td width='20'>
+                    <input type='checkbox' ng-model='selectedReviewIds[model.id]'>
+                </td>
+                @include('reviews/_item')
+            </tr>
+        </table>
+        <button class='btn btn-primary'
+            ng-disabled='getSelectedReviewIds().length === 0'
+            ng-click='openChangeMasterDialog()'>
+            изменить мастера
+        </button>
+    </div>
+</div>
+
+@include('masters.modals')

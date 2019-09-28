@@ -28,8 +28,11 @@ class MastersController extends Controller
      */
     public function create()
     {
+        $masters = Master::light()->get();
+
         return view('masters.create')->with(ngInit([
             'model' => new Master,
+            'masters' => $masters,
         ]));
     }
 
@@ -41,6 +44,11 @@ class MastersController extends Controller
      */
     public function edit($id)
     {
-        return view('masters.edit')->with(ngInit(compact('id')));
+        $masters = Master::light()->get();
+
+        return view('masters.edit')->with(ngInit([
+            'id' => $id,
+            'masters' => $masters,
+        ]));
     }
 }
