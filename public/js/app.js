@@ -823,9 +823,19 @@
       return PhotoService.init(FormService, 'Master', $scope.id);
     });
     $scope.selectedReviewIds = {};
+    $scope.editingReviewId = null;
     $scope.changeMasterId = null;
     $scope.openChangeMasterDialog = function() {
+      $scope.changeMasterId = null;
       return $('#change-master-dialog').modal('show');
+    };
+    $scope.editReview = function(reviewId) {
+      $scope.editingReviewId = reviewId;
+      return $scope.openChangeMasterDialog();
+    };
+    $scope.massReviewEdit = function() {
+      $scope.editingReviewId = null;
+      return $scope.openChangeMasterDialog();
     };
     $scope.getSelectedReviewIds = function() {
       var ids;
@@ -838,23 +848,25 @@
       return ids;
     };
     $scope.changeReviewMaster = function() {
+      var ids;
+      ids = $scope.editingReviewId !== null ? [$scope.editingReviewId] : $scope.getSelectedReviewIds();
       return $http.post('/api/reviews/mass-update', {
-        ids: $scope.getSelectedReviewIds(),
+        ids: ids,
         payload: {
           master_id: $scope.changeMasterId
         }
       }).then(function(response) {
-        notifySuccess($scope.getSelectedReviewIds().length + ' отзывов успешно обновлено');
+        notifySuccess(ids.length + ' отзывов успешно обновлено');
         $('#change-master-dialog').modal('hide');
-        $scope.getSelectedReviewIds().forEach(function(reviewId) {
+        ids.forEach(function(reviewId) {
           var index;
           index = $scope.FormService.model.reviews.findIndex(function(e) {
             return e.id === reviewId;
           });
           return $scope.FormService.model.reviews.splice(index, 1);
         });
-        $scope.FormService.model.reviews;
         $scope.selectedReviewIds = {};
+        $scope.editingReviewId = null;
         return $scope.$apply();
       });
     };
@@ -2151,6 +2163,155 @@
 }).call(this);
 
 (function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('galleries'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Folder', function($resource) {
+    return $resource(apiPath('folders'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      tree: {
+        method: 'POST',
+        url: apiPath('folders', 'tree'),
+        isArray: true
+      },
+      breadcrumbs: {
+        method: 'GET',
+        url: apiPath('folders', 'breadcrumbs'),
+        isArray: true
+      }
+    });
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('AllUser', function($resource) {
+    return $resource(apiPath('allusers'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Payment', function($resource) {
+    return $resource(apiPath('payments'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentSource', function($resource) {
+    return $resource(apiPath('payments/sources'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditure', function($resource) {
+    return $resource(apiPath('payments/expenditures'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditureGroup', function($resource) {
+    return $resource(apiPath('payments/expendituregroups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('tags', 'checkExistance')
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Menu', function($resource) {
+    return $resource(apiPath('menu'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Video', function($resource) {
+    return $resource(apiPath('videos'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
+
+}).call(this);
+
+(function() {
 
 
 }).call(this);
@@ -2812,155 +2973,6 @@
 
 (function() {
 
-
-}).call(this);
-
-(function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('galleries'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Folder', function($resource) {
-    return $resource(apiPath('folders'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      tree: {
-        method: 'POST',
-        url: apiPath('folders', 'tree'),
-        isArray: true
-      },
-      breadcrumbs: {
-        method: 'GET',
-        url: apiPath('folders', 'breadcrumbs'),
-        isArray: true
-      }
-    });
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('AllUser', function($resource) {
-    return $resource(apiPath('allusers'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Payment', function($resource) {
-    return $resource(apiPath('payments'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentSource', function($resource) {
-    return $resource(apiPath('payments/sources'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditure', function($resource) {
-    return $resource(apiPath('payments/expenditures'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditureGroup', function($resource) {
-    return $resource(apiPath('payments/expendituregroups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('tags', 'checkExistance')
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Menu', function($resource) {
-    return $resource(apiPath('menu'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Video', function($resource) {
-    return $resource(apiPath('videos'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
 
 }).call(this);
 

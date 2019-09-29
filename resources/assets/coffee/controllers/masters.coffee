@@ -13,10 +13,21 @@ angular
 
         $scope.selectedReviewIds = {} 
 
+        $scope.editingReviewId = null
+
         $scope.changeMasterId = null
 
         $scope.openChangeMasterDialog = ->
+            $scope.changeMasterId = null
             $('#change-master-dialog').modal('show')
+        
+        $scope.editReview = (reviewId) ->
+            $scope.editingReviewId = reviewId
+            $scope.openChangeMasterDialog()
+        
+        $scope.massReviewEdit = ->
+            $scope.editingReviewId = null
+            $scope.openChangeMasterDialog()
         
         $scope.getSelectedReviewIds = ->
             ids = []
@@ -27,19 +38,20 @@ angular
             return ids
         
         $scope.changeReviewMaster = ->
+            ids = if $scope.editingReviewId isnt null then [$scope.editingReviewId] else $scope.getSelectedReviewIds()
             $http.post('/api/reviews/mass-update', {
-                ids: $scope.getSelectedReviewIds(),
+                ids: ids,
                 payload: {
                     master_id: $scope.changeMasterId
                 }
             }).then (response) ->
-                notifySuccess $scope.getSelectedReviewIds().length + ' отзывов успешно обновлено'
+                notifySuccess ids.length + ' отзывов успешно обновлено'
                 $('#change-master-dialog').modal('hide')
-                $scope.getSelectedReviewIds().forEach (reviewId) ->
+                ids.forEach (reviewId) ->
                     index = $scope.FormService.model.reviews.findIndex((e) -> e.id is reviewId)
                     $scope.FormService.model.reviews.splice(index, 1)
-                $scope.FormService.model.reviews
                 $scope.selectedReviewIds = {}
+                $scope.editingReviewId = null
                 $scope.$apply()
 
         $scope.loadTags = (text) ->

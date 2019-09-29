@@ -42,12 +42,15 @@
                     <input type='checkbox' ng-model='selectedReviewIds[model.id]'>
                 </td>
                 @include('reviews/_item')
+                <td class='right'>
+                    <a class='link-like' ng-click='editReview(model.id)'>редактировать</a>
+                </td>
             </tr>
         </table>
         <button class='btn btn-primary'
             ng-disabled='getSelectedReviewIds().length === 0'
-            ng-click='openChangeMasterDialog()'>
-            изменить мастера
+            ng-click='massReviewEdit()'>
+            массовое редактирование
         </button>
     </div>
 </div>
