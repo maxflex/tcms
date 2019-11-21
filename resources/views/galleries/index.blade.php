@@ -12,7 +12,7 @@
     @include('modules.folders')
     <table class="table vertical-align-table">
         <tbody ui-sortable='FolderService.itemSortableOptions' ng-model="IndexService.page.data">
-            <tr ng-repeat="model in IndexService.page.data">
+            <tr ng-repeat="gallery in IndexService.page.data">
                 @include('galleries._item')
             </tr>
         </tbody>
