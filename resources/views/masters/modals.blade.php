@@ -11,7 +11,7 @@
           </div>
       </div>
       <div class="modal-footer center">
-        <button ng-disabled='!changeMasterId' type="button" class="btn btn-primary" ng-click="changeReviewMaster()">
+        <button ng-disabled='!changeMasterId' type="button" class="btn btn-primary" ng-click="massChangeMaster()">
             изменить мастера
         </button>
       </div>

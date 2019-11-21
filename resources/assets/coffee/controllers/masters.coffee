@@ -11,46 +11,44 @@ angular
             FormService.init(Master, $scope.id, $scope.model)
             PhotoService.init(FormService, 'Master', $scope.id)
 
-        $scope.selectedReviewIds = {} 
+        $scope.massMode = null
 
-        $scope.editingReviewId = null
+        $scope.selectedIds = {
+            videos: {}
+            reviews: {}
+            gallery: {}
+        }
 
         $scope.changeMasterId = null
 
-        $scope.openChangeMasterDialog = ->
+        $scope.openMassEditDialog = (massMode) ->
+            $scope.massMode = massMode
             $scope.changeMasterId = null
             $('#change-master-dialog').modal('show')
         
-        $scope.editReview = (reviewId) ->
-            $scope.editingReviewId = reviewId
-            $scope.openChangeMasterDialog()
-        
-        $scope.massReviewEdit = ->
-            $scope.editingReviewId = null
-            $scope.openChangeMasterDialog()
-        
-        $scope.getSelectedReviewIds = ->
+        $scope.getSelectedIds = (massMode = null) ->
+            massMode = $scope.massMode if massMode is null
+
             ids = []
 
-            Object.entries($scope.selectedReviewIds).forEach (entry) ->
+            Object.entries($scope.selectedIds[massMode]).forEach (entry) ->
                 ids.push(entry[0]) if entry[1] is true
             
-            return ids
+            return ids.map(Number)
         
-        $scope.changeReviewMaster = ->
-            ids = if $scope.editingReviewId isnt null then [$scope.editingReviewId] else $scope.getSelectedReviewIds()
-            $http.post('/api/reviews/mass-update', {
+        $scope.massChangeMaster = ->
+            ids = $scope.getSelectedIds()
+            $http.post("/api/#{$scope.massMode}/mass-update", {
                 ids: ids,
-                payload: {
+                payload:
                     master_id: $scope.changeMasterId
-                }
             }).then (response) ->
-                notifySuccess ids.length + ' отзывов успешно обновлено'
+                notifySuccess ids.length + ' успешно обновлено'
                 $('#change-master-dialog').modal('hide')
-                ids.forEach (reviewId) ->
-                    index = $scope.FormService.model.reviews.findIndex((e) -> e.id is reviewId)
-                    $scope.FormService.model.reviews.splice(index, 1)
-                $scope.selectedReviewIds = {}
+                ids.forEach (id) ->
+                    index = $scope.FormService.model[$scope.massMode].findIndex((e) -> e.id is id)
+                    $scope.FormService.model[$scope.massMode].splice(index, 1)
+                $scope.selectedIds[$scope.massMode] = {}
                 $scope.editingReviewId = null
                 $scope.$apply()
 

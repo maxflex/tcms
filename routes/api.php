@@ -35,6 +35,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('prices', 'PricesController');
     Route::resource('prices/positions', 'PricePositionsController');
 
+
+    Route::post('gallery/mass-update', 'GalleryController@massUpdate');
     Route::post('galleries/change', 'GalleryController@change');
     Route::resource('galleries', 'GalleryController');
 
@@ -43,6 +45,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::delete('tags/deleteByParams', 'TagsController@deleteByParams');
     Route::resource('tags', 'TagsController');
     Route::resource('users', 'UsersController');
+
+    Route::post('videos/mass-update', 'VideosController@massUpdate');
     Route::resource('videos', 'VideosController');
 
     Route::get('folders/breadcrumbs/{id}', 'FoldersController@breadcrumbs');
@@ -52,6 +56,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::post('reviews/mass-update', 'ReviewsController@massUpdate');
     Route::resource('reviews', 'ReviewsController');
+
     Route::resource('equipment', 'EquipmentController');
 
     Route::resource('logs', 'LogsController');

@@ -39,17 +39,53 @@
         <table class='table'>
             <tr ng-repeat='model in FormService.model.reviews'>
                 <td width='20'>
-                    <input type='checkbox' ng-model='selectedReviewIds[model.id]'>
+                    <input type='checkbox' ng-model='selectedIds.reviews[model.id]'>
                 </td>
                 @include('reviews/_item')
-                <td class='right'>
-                    <a class='link-like' ng-click='editReview(model.id)'>редактировать</a>
-                </td>
             </tr>
         </table>
         <button class='btn btn-primary'
-            ng-disabled='getSelectedReviewIds().length === 0'
-            ng-click='massReviewEdit()'>
+            ng-disabled="getSelectedIds('reviews').length === 0"
+            ng-click="openMassEditDialog('reviews')">
+            массовое редактирование
+        </button>
+    </div>
+</div>
+
+
+<div class='row' style='margin-top: 50px' ng-show='FormService.model.videos.length > 0'>
+    <div class='col-sm-12'>
+        <h4 class='mb'>Видео:</h4>
+        <table class='table'>
+            <tr ng-repeat='video in FormService.model.videos'>
+                <td width='20'>
+                    <input type='checkbox' ng-model='selectedIds.videos[video.id]'>
+                </td>
+                @include('videos/_item')
+            </tr>
+        </table>
+        <button class='btn btn-primary'
+            ng-disabled="getSelectedIds('videos').length === 0"
+            ng-click="openMassEditDialog('videos')">
+            массовое редактирование
+        </button>
+    </div>
+</div>
+
+<div class='row' style='margin-top: 50px' ng-show='FormService.model.gallery.length > 0'>
+    <div class='col-sm-12'>
+        <h4 class='mb'>Галерея:</h4>
+        <table class='table'>
+            <tr ng-repeat='gallery in FormService.model.gallery'>
+                <td width='20'>
+                    <input type='checkbox' ng-model='selectedIds.gallery[gallery.id]'>
+                </td>
+                @include('galleries/_item')
+            </tr>
+        </table>
+        <button class='btn btn-primary'
+            ng-disabled="getSelectedIds('gallery').length === 0"
+            ng-click="openMassEditDialog('gallery')">
             массовое редактирование
         </button>
     </div>

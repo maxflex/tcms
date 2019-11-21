@@ -95,4 +95,10 @@ class GalleryController extends Controller
     {
         return Gallery::changePrice((object)$request->all());
     }
+
+
+    public function massUpdate(Request $request)
+    {
+        Gallery::whereIn('id', $request->ids)->update($request->payload);
+    }
 }

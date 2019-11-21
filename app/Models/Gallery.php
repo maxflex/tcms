@@ -33,10 +33,17 @@ class Gallery extends Model
 
     protected $appends = ['file_size', 'has_photo', 'image_size', 'tags'];
 
+    protected $with = ['master'];
+
     protected $casts = [
         'watermark' => 'boolean',
         'before_and_after' => 'boolean',
     ];
+
+    public function master()
+    {
+        return $this->belongsTo(Master::class);
+    }
 
     public function setDateAttribute($value)
     {
@@ -133,17 +140,17 @@ class Gallery extends Model
 
 	            $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
 	            $thumb = public_path() . '/img/gallery/' . $model->id . '_thumb.jpg';
-	
+
 	            $image
 	                ->fromFile($source)
 	                ->resize(288 * 2, 144 * 2)
 	                ->toFile($thumb , 'image/jpeg', 90);
-	
+
 	            $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
 	            WebPConvert::convert($source, $destination);
-	
+
 	            $destination = public_path() . '/img/gallery/' . $model->id . '_thumb.webp';
-	            WebPConvert::convert($thumb, $destination);		        
+	            WebPConvert::convert($thumb, $destination);
 	        } catch (\Exception $e) {}
         });
     }

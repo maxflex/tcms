@@ -85,4 +85,9 @@ class VideosController extends Controller
     {
         Video::destroy($id);
     }
+
+    public function massUpdate(Request $request)
+    {
+        Video::whereIn('id', $request->ids)->update($request->payload);
+    }
 }

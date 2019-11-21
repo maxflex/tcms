@@ -822,50 +822,53 @@
       FormService.init(Master, $scope.id, $scope.model);
       return PhotoService.init(FormService, 'Master', $scope.id);
     });
-    $scope.selectedReviewIds = {};
-    $scope.editingReviewId = null;
+    $scope.massMode = null;
+    $scope.selectedIds = {
+      videos: {},
+      reviews: {},
+      gallery: {}
+    };
     $scope.changeMasterId = null;
-    $scope.openChangeMasterDialog = function() {
+    $scope.openMassEditDialog = function(massMode) {
+      $scope.massMode = massMode;
       $scope.changeMasterId = null;
       return $('#change-master-dialog').modal('show');
     };
-    $scope.editReview = function(reviewId) {
-      $scope.editingReviewId = reviewId;
-      return $scope.openChangeMasterDialog();
-    };
-    $scope.massReviewEdit = function() {
-      $scope.editingReviewId = null;
-      return $scope.openChangeMasterDialog();
-    };
-    $scope.getSelectedReviewIds = function() {
+    $scope.getSelectedIds = function(massMode) {
       var ids;
+      if (massMode == null) {
+        massMode = null;
+      }
+      if (massMode === null) {
+        massMode = $scope.massMode;
+      }
       ids = [];
-      Object.entries($scope.selectedReviewIds).forEach(function(entry) {
+      Object.entries($scope.selectedIds[massMode]).forEach(function(entry) {
         if (entry[1] === true) {
           return ids.push(entry[0]);
         }
       });
-      return ids;
+      return ids.map(Number);
     };
-    $scope.changeReviewMaster = function() {
+    $scope.massChangeMaster = function() {
       var ids;
-      ids = $scope.editingReviewId !== null ? [$scope.editingReviewId] : $scope.getSelectedReviewIds();
-      return $http.post('/api/reviews/mass-update', {
+      ids = $scope.getSelectedIds();
+      return $http.post("/api/" + $scope.massMode + "/mass-update", {
         ids: ids,
         payload: {
           master_id: $scope.changeMasterId
         }
       }).then(function(response) {
-        notifySuccess(ids.length + ' отзывов успешно обновлено');
+        notifySuccess(ids.length + ' успешно обновлено');
         $('#change-master-dialog').modal('hide');
-        ids.forEach(function(reviewId) {
+        ids.forEach(function(id) {
           var index;
-          index = $scope.FormService.model.reviews.findIndex(function(e) {
-            return e.id === reviewId;
+          index = $scope.FormService.model[$scope.massMode].findIndex(function(e) {
+            return e.id === id;
           });
-          return $scope.FormService.model.reviews.splice(index, 1);
+          return $scope.FormService.model[$scope.massMode].splice(index, 1);
         });
-        $scope.selectedReviewIds = {};
+        $scope.selectedIds[$scope.massMode] = {};
         $scope.editingReviewId = null;
         return $scope.$apply();
       });
@@ -2075,94 +2078,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
   var apiPath, countable, updatable;
 
   angular.module('Egecms').factory('Variable', function($resource) {
@@ -2973,6 +2888,94 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
 
 }).call(this);
 

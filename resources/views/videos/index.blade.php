@@ -9,16 +9,8 @@
 @section('content')
     <table class="table">
         <tbody ui-sortable='sortableOptions' ng-model="IndexService.page.data">
-            <tr ng-repeat="model in IndexService.page.data">
-                <td width='10'>
-                    @{{ model.id }}
-                </td>
-                <td>
-                    <a href='videos/@{{ model.id }}/edit'>@{{ model.title }}</a>
-                </td>
-                <td>
-                    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
-                </td>
+            <tr ng-repeat="video in IndexService.page.data">
+                @include('videos/_item')
             </tr>
         </tbody>
     </table>

@@ -49,7 +49,9 @@ class MastersController extends Controller
      */
     public function show($id)
     {
-        return Master::with('photos')->with('reviews')->find($id);
+        return Master::with('photos')
+            ->with(['reviews', 'videos', 'gallery'])
+            ->find($id);
     }
 
     /**
