@@ -10,13 +10,14 @@ class PricePosition extends Model
     use HasTags;
 
     protected $appends = ['tags'];
-    
+
     protected $fillable = [
         'name',
         'price',
         'unit',
         'price_section_id',
         'position',
-        'tags'
+        'tags',
+        'is_hidden'
     ];
 }

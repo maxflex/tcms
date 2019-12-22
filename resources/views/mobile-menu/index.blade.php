@@ -25,10 +25,18 @@
                         aria-hidden="true"
                     ></i>
                 </a>
-                <a ng-if="section.is_link" href="{{ config('app.web-url') }}@{{ section.extra }}" href="_blank">
+                <a class='menu-title'
+                    ng-class="{'menu-title_hidden': section.is_hidden}"
+                    ng-if="section.is_link"
+                    href="{{ config('app.web-url') }}@{{ section.extra }}" href="_blank"
+                >
                     @{{ section.title }}
                 </a>
-                <span ng-if="!section.is_link">
+                <span
+                    class='menu-title'
+                    ng-class="{'menu-title_hidden': section.is_hidden}"
+                    ng-if="!section.is_link"
+                >
                     @{{ section.title }}
                 </span>
                 <a class='pointer table-small show-on-hover'
@@ -41,6 +49,12 @@
                 <a class='pointer table-small show-on-hover'
                     style='margin-left: 8px; font-weight: normal'
                     ng-click='removeSection(section.id)'>удалить</a>
+
+                <a class='pointer table-small show-on-hover'
+                    style='margin-left: 8px; font-weight: normal'
+                    ng-click='hideSection(section)'>
+                    @{{ section.is_hidden ? 'показать' : 'скрыть' }}
+                </a>
             </h4>
             <div class="mobile-menu" ng-hide="isCollapsedSection(section)">
                 <ul ui-sortable='sortableOptions' ng-model="section.items">

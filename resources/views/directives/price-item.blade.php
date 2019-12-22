@@ -2,11 +2,17 @@
 <span ng-class="{'price-section': item.is_section, 'price-section-item': !item.is_section}">
     <span style='margin-right: 5px' ng-show='!item.is_section' class='link-like show-on-hover pointer copiable' data-clipboard-text="@{{ item.model.name }}"><i class="fa fa-clipboard" aria-hidden="true"></i></span>
     <span style='width: 41px; font-weight: normal; display: inline-block'>@{{ item.model.id }}</span>
-    <a href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'>@{{ (item.model.name || 'имя не указано') | cut:false:40 }}</a>
+    <a href='prices/@{{ item.is_section ? ""  : "positions/" }}@{{ item.model.id }}/edit'
+        class='menu-title'
+        ng-class="{'menu-title_hidden': item.is_hidden}"
+    >@{{ (item.model.name || 'имя не указано') | cut:false:40 }}</a>
 </span>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/positions/create' style='margin-left: 20px'>+ позиция</a>
 <a class='show-on-hover' ng-show='item.is_section' href='prices/@{{ item.model.id }}/create' style='margin-left: 5px'>+ раздел</a>
 <a class='show-on-hover pointer' ng-show='item.is_section' ng-click="controller_scope.changePriceDialog(item)" style='margin-left: 5px'>индексация</a>
+<a class='show-on-hover pointer' ng-show='item.is_section' ng-click="controller_scope.hide(item)" style='margin-left: 5px'>
+    @{{ item.is_hidden ? 'показать' : 'скрыть' }}
+</a>
 <span class="pull-right" ng-show="!item.is_section && item.model.price" style='width: 700px; white-space: nowrap'>
     <span style='display: inline-block; width: 175px; font-size: 10px'>от @{{ item.model.price | number }} руб.<span ng-show="item.model.unit">/@{{ findById(Units, item.model.unit).title }}</span></span>
     <span style='margin-left: 10px'>

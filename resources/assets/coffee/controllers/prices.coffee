@@ -26,6 +26,10 @@ angular
                 result += getRowsAffected(item)
             result
 
+        $scope.hide = (item) ->
+            item.is_hidden = !item.is_hidden
+            Resource = if item.is_section then PriceSection else PricePosition
+            Resource.update({id: item.model.id, is_hidden: item.is_hidden})
 
         $scope.changePriceDialog = (item) ->
             clearChangePrice(item.model.id)

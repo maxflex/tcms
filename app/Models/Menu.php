@@ -11,7 +11,7 @@ class Menu extends Model
     protected $with = ['children'];
 
     protected $fillable = [
-        'menu_id', 'title', 'extra', 'position', 'is_link', 'section_id'
+        'menu_id', 'title', 'extra', 'position', 'is_link', 'section_id', 'is_hidden'
     ];
 
     public function parent()

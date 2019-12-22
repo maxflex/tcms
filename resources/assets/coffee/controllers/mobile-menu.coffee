@@ -30,7 +30,15 @@ angular
             else
                 Menu.save($scope.dialogItem, (r) -> loadData()) 
             $('#menu-item-dialog').modal('hide')
+
+        $scope.hideSection = (item) ->
+            item.is_hidden = !item.is_hidden
+            $http.put('api/menu-sections/' + item.id, {is_hidden: item.is_hidden})
         
+        $scope.hide = (item) ->
+            item.is_hidden = !item.is_hidden
+            Menu.update({id: item.id, is_hidden: item.is_hidden})
+
         $scope.remove = (id) ->
             bootbox.confirm 'Вы уверены, что хотите удалить пункт меню?', (result) ->
                 Menu.remove({id: id}, (r) -> loadData()) if result is true

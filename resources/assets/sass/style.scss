@@ -2108,6 +2108,13 @@ border-bottom: 0 !important;
 opacity: .5;
 }
 
+.menu-title {
+    transition: opacity linear .3s;
+    &_hidden {
+        opacity: .25;
+    }
+}
+
 .half-opacity-color {
 color: rgba(51, 122, 184, 0.5);
 &:hover {

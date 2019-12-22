@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MenuSection extends Model
 {
-    protected $fillable = ['title', 'position', 'type', 'is_link', 'extra'];
+    protected $fillable = ['title', 'position', 'type', 'is_link', 'extra', 'is_hidden'];
 
     protected $with = ['items'];
 

@@ -10,7 +10,8 @@ class PriceSection extends Model
         'name',
         'price_section_id',
         'position',
-        'extra_column'
+        'extra_column',
+        'is_hidden',
     ];
 
     // protected $with = ['sections', 'positions'];
@@ -40,6 +41,7 @@ class PriceSection extends Model
                  'is_section'   => true,
                  'items'        => $section->item['items'],
                  'position'     => $section->position,
+                 'is_hidden' => $section->is_hidden,
              ];
          }
          foreach($this->positions as $position) {
@@ -58,7 +60,8 @@ class PriceSection extends Model
              'model' => $this,
              'is_section' => true,
              'items' => $items,
-             'position' => $this->position
+             'position' => $this->position,
+             'is_hidden' => $this->is_hidden,
          ];
      }
 

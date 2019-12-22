@@ -18404,6 +18404,15 @@ width: 14px;
   opacity: .5;
 }
 
+.menu-title {
+  -webkit-transition: opacity linear .3s;
+  transition: opacity linear .3s;
+}
+
+.menu-title_hidden {
+  opacity: .25;
+}
+
 .half-opacity-color {
   color: rgba(51, 122, 184, 0.5);
 }

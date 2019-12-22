@@ -11,8 +11,10 @@
                     aria-hidden="true"
                 ></i>
             </a>
-            <b ng-show='!item.is_link'>@{{ item.title }}</b>
-            <a ng-show='item.is_link' href='{{ config('app.web-url') }}@{{ item.extra }}' target="_blank" class='bold'>@{{ item.title }}</a>
+            <b ng-show='!item.is_link' class='menu-title' ng-class="{'menu-title_hidden': item.is_hidden}">@{{ item.title }}</b>
+            <a ng-show='item.is_link'
+                ng-class="{'menu-title_hidden': item.is_hidden}"
+                href='{{ config('app.web-url') }}@{{ item.extra }}' target="_blank" class='menu-title bold'>@{{ item.title }}</a>
             <a class='pointer table-small show-on-hover'
                 style='margin-left: 8px'
                 ng-click='controller_scope.openDialog({menu_id: item.id})'>добавить</a>
@@ -22,6 +24,11 @@
             <a class='pointer table-small show-on-hover'
                 style='margin-left: 8px'
                 ng-click='controller_scope.remove(item.id)'>удалить</a>
+            <a class='pointer table-small show-on-hover'
+                style='margin-left: 8px'
+                ng-click='controller_scope.hide(item)'>
+                @{{ item.is_hidden ? 'показать' : 'скрыть'}}
+            </a>
         </div>
         <div ng-if="item.extra && !item.is_link" class='mobile-menu-extra'>@{{ item.extra }}</div>
     </div>
