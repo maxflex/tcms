@@ -43,6 +43,11 @@
                 <button class="btn btn-primary" style='margin-bottom: 15px; width: 200px; box-sizing: border-box;' ng-click="PhotoService.closeModal()">закрыть</button>
                 <div style='width: 220px'>
                     <label style='color: black !important'>
+                        <input type="checkbox" name="checkbox" ng-model='PhotoService.watermark'> водный знак
+                    </label>
+                </div>
+                <div style='width: 220px'>
+                    <label style='color: black !important'>
                         <input type="checkbox" name="checkbox" value="value" ng-click="PhotoService.toggleAscpectRatio()"> фиксация пропорции
                     </label>
                 </div>

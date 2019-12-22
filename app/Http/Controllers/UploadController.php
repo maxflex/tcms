@@ -77,10 +77,26 @@ class UploadController extends Controller
     {
         $filename = uniqid() . '.jpg';
         $image = new \claviska\SimpleImage();
+
         $image
             ->fromFile($request->file('cropped_image'))
-            ->resize(2000, null)
-            ->toFile(Photo::getDir('cropped') . $filename, 'image/jpeg', 20);
+            ->resize(2000, null);
+
+        if ($request->watermark) {
+            $positionY = 250;
+            foreach(range(1, 2) as $i) {
+                $positionX = 100;
+                foreach(range(1, 4) as $j) {
+                    $image->overlay(public_path() . '/img/watermark/watermark.png', 'top left', .4, $positionX, $positionY);
+                    $positionX += 560;
+                }
+                $positionY += 500;
+            }
+        }
+
+        $image->toFile(Photo::getDir('cropped') . $filename, 'image/jpeg', 20);
+
+        // SMALL
 
         $image
             ->fromFile($request->file('cropped_image'))

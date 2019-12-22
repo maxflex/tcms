@@ -3,6 +3,7 @@ angular.module 'Egecms'
         this.image = ''
         this.cropped_image = ''
         this.cripping = false
+        this.watermark = false
         this.aspect_ratio = null
         this.FormService = null
         this.methods = {}
@@ -22,6 +23,7 @@ angular.module 'Egecms'
                 blob = dataURItoBlob(@cropped_image)
                 fd.append('cropped_image', blob)
                 fd.append('id', @getSelectedPhoto().id)
+                fd.append('watermark', @watermark)
 
                 # @methods.getResultImageDataBlob().then (blob) ->
                 console.log('blob', blob)
