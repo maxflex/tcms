@@ -73,7 +73,7 @@ angular
                 $timeout ->
                     $scope.sections.forEach (section, index) ->
                         $http.put 'api/menu-sections/' + section.id, {position: index}
-            items: '.menu-section'
+            items: '.mobile-menu-section'
             axis: 'y'
             cursor: "move"
             opacity: 0.9,
