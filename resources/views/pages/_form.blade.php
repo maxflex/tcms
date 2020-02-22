@@ -67,7 +67,7 @@
         ])
     </div>
 </div>
-<div class='row'>
+<div ng-show="FormService.model.items.length > 0" class='row'>
     <div class='col-sm-12'>
         <input type="checkbox" id="oneline" name="oneline"
             ng-model="FormService.model.no_icons"
