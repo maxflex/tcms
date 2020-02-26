@@ -1,9 +1,9 @@
 <td width='10'>
-    @{{ video.id }}
+    @{{ model.id }}
 </td>
 <td>
-    <a href='videos/@{{ video.id }}/edit'>@{{ video.title }}</a>
+    <a href='videos/@{{ model.id }}/edit'>@{{ model.title }}</a>
 </td>
 <td>
-    <span class="tag" ng-repeat="tag in video.tags">@{{ tag.text }}</span>
+    <span class="tag" ng-repeat="tag in model.tags">@{{ tag.text }}</span>
 </td>

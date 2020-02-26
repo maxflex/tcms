@@ -6,9 +6,21 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Models\{Video, Master};
+use App\Service\ControllerTemplate;
+use App\Traits\TagsMassEditable;
 
 class VideosController extends Controller
 {
+    use TagsMassEditable;
+
+    const CLASS_NAME = Video::class;
+    const ITEM_DIRECTIVE = 'review-item';
+
+    public function __construct()
+    {
+        $this->template = new ControllerTemplate(Video::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +29,9 @@ class VideosController extends Controller
     public function index(Request $request)
     {
         return view('videos.index')->with(ngInit([
-            'current_page' => $request->page
+            'current_page' => $request->page,
+            'folder'       => $request->folder,
+            'template'     => $this->template,
         ]));
     }
 
@@ -31,7 +45,8 @@ class VideosController extends Controller
         $masters = Master::light()->get();
         return view('videos.create')->with(ngInit([
             'model' => new Video,
-            'masters' => $masters
+            'masters' => $masters,
+            'template' => $this->template,
         ]));
     }
 
@@ -44,7 +59,8 @@ class VideosController extends Controller
     public function edit($id)
     {
         $masters = Master::light()->get();
-        return view('videos.edit')->with(ngInit(compact('id', 'masters')));
+        $template = $this->template;
+        return view('videos.edit')->with(ngInit(compact('id', 'masters', 'template')));
     }
 
     /**

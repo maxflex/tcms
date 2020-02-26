@@ -10,14 +10,9 @@ use App\Models\Video;
 
 class VideosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        return Video::orderBy('position', 'asc')->orderBy('id', 'asc')->paginate(9999);
+        return Video::searchByFolder($request->folder)->orderByPosition()->paginate(999);
     }
 
     /**

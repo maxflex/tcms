@@ -24,3 +24,7 @@
        </tags-input>
     </div>
 </div>
+
+<div class="mbb">
+    @include('modules.folder-select')
+</div>
