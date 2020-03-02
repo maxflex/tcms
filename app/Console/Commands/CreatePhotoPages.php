@@ -16,7 +16,7 @@ class CreatePhotoPages extends Command
      *
      * @var string
      */
-    protected $signature = 'create-photo-pages';
+    protected $signature = 'create-photo-pages {latest-id}';
 
     /**
      * The console command description.
@@ -42,7 +42,8 @@ class CreatePhotoPages extends Command
      */
     public function handle()
     {
-        \DB::table('pages')->where('id', '>', 970)->delete();
+        $latestId = $this->argument('latest-id');
+        \DB::table('pages')->where('id', '>', $latestId)->delete();
         $foldersToCopy = [
             10, 157, 644, 645, 649, 650, 646, 647, 648, 651, 652, 653, 716, 655, 717
         ];
@@ -111,6 +112,10 @@ EOT
 
             $bar->advance();
         }
+
+        Page::where('id', '>', $latestId)->update([
+            'seo_page_ids' => Page::where('id', '>', $latestId)->pluck('id')->join(',')
+        ]);
 
         $bar->finish();
     }
