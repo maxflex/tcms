@@ -114,7 +114,7 @@ EOT
         }
 
         Page::where('id', '>', $latestId)->update([
-            'seo_page_ids' => Page::where('id', '>', $latestId)->pluck('id')->join(',')
+            'seo_page_ids' => implode(',', Page::where('id', '>', $latestId)->pluck('id')->all())
         ]);
 
         $bar->finish();
