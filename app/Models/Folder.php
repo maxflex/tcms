@@ -44,7 +44,7 @@ class Folder extends Model
     public static function getLevel($class, $folder_id = null)
     {
         $folders = self::where('class', $class)->where('folder_id', $folder_id)->get()->all();
-        foreach($folders as $folder) {
+        foreach ($folders as $folder) {
             if (self::where('folder_id', $folder->id)->exists()) {
                 $folder->folders = self::getLevel($class, $folder->id);
             }
