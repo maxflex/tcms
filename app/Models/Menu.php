@@ -11,7 +11,8 @@ class Menu extends Model
     protected $with = ['children'];
 
     protected $fillable = [
-        'menu_id', 'title', 'extra', 'position', 'is_link', 'section_id', 'is_hidden'
+        'menu_id', 'title', 'extra', 'position', 'is_link',
+        'section_id', 'is_hidden', 'desc'
     ];
 
     public function parent()
@@ -28,7 +29,7 @@ class Menu extends Model
     {
         parent::boot();
 
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->position = self::where('menu_id', $model->menu_id)->max('position') + 1;
         });
     }

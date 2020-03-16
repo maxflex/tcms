@@ -11,8 +11,11 @@
               <div class="col-sm-12 mbs">
                 <input ng-model='dialogItem.title' class="form-control" placeholder="заголовок" />
               </div>
-              <div class="col-sm-12">
+              <div class="col-sm-12 mbs">
                   <input ng-model='dialogItem.extra' class="form-control" placeholder="@{{ dialogItem.is_link ? 'адрес ссылки' : 'описание' }}" />
+              </div>
+              <div class="col-sm-12 mbs" ng-show="dialogItem.is_link">
+                  <input maxlength="60" ng-model='dialogItem.desc' class="form-control" placeholder="описание" />
               </div>
           </div>
       </div>
