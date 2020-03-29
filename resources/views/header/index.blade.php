@@ -10,8 +10,9 @@
     <div class="row mbs">
         <div class="col-sm-12">
             <div class="field-container">
-              <input class="field form-control" placeholder="заголовок" ng-model="header" required
+              <textarea class="field form-control" placeholder="заголовок" ng-model="header" required
                 ng-model-options="{ allowInvalid: true }" type="text">
+                </textarea>
                 <label class="floating-label">заголовок</label>
             </div>
         </div>
