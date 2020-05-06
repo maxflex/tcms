@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Middleware\LogUrlOpen;
 use App\Service\Settings;
 
@@ -20,7 +21,7 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::resource('pages', 'PagesController');
     Route::get('search', 'PagesController@search');
 
-    Route::get('account', 'PaymentsController@account');
+    // Route::get('account', 'PaymentsController@account');
 
     Route::resource('logs', 'LogsController');
 
@@ -48,7 +49,7 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::get('galleries/tag/{id}', 'GalleryController@tag')->name('galleries.tag');
     Route::resource('galleries', 'GalleryController');
 
-    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
+    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function () {
         Route::resource('expenditures', 'ExpendituresController');
         Route::resource('sources', 'SourcesController');
     });
@@ -57,17 +58,17 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::post('payments/import', 'PaymentsController@import');
     Route::resource('payments', 'PaymentsController');
 
-    Route::get('header', function() {
+    Route::get('header', function () {
         return view('header.index')->with(ngInit(['header' => Settings::get('header')]));
     });
 
-    Route::get('menu/{type}', function($type) {
+    Route::get('menu/{type}', function ($type) {
         return view('mobile-menu.index')->with(compact('type'));
     });
 });
 
 # Templates for angular directives
-Route::get('directives/{directive}', function($directive) {
+Route::get('directives/{directive}', function ($directive) {
     return view("directives.{$directive}");
 });
 

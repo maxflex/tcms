@@ -4,6 +4,9 @@ namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @depricated
+ */
 class EgerepSourceRemainder extends Model
 {
     protected $connection = 'egerep';

@@ -22,9 +22,9 @@
 @if (allowed(\Rights::LOGS))
     <a href="logs" class="list-group-item">Логи</a>
 @endif
-@if (allowed(\Rights::ACCOUNT))
+{{-- @if (allowed(\Rights::ACCOUNT))
     <a href="account" class="list-group-item">Счёт</a>
-@endif
+@endif --}}
 @if (allowed(\Rights::PAYSTREAM))
     <a href="payments" class="list-group-item">Платежи</a>
 @endif
