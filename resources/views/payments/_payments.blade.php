@@ -39,7 +39,7 @@
             <td width='85'>
                 <i class="fa fa-star table-star" ng-class="{'active': model.checked}" aria-hidden="true" ng-click="toggleEnumServer(model, 'checked', Checked, Payment)"></i>
                 <img src="img/svg/copy-file.svg" class="pointer" style='width: 13px; margin-right: 5px; outline: none' ng-click="clonePayment(model)" />
-                <i class="fa fa-pencil pointer text--success" aria-hidden="true" ng-click="editPayment(model)"></i>
+                <i class="fa fa-pencil pointer text-success" aria-hidden="true" ng-click="editPayment(model)"></i>
             </td>
             <td ng-click="selectPayment(model)">
                 @{{ model.sum | number }}
