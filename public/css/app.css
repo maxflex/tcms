@@ -19998,6 +19998,10 @@ table.summary-table.left-align tr td {
 }
 
 .text-success {
+  color: #ce171f !important;
+}
+
+.text-success {
   color: #4caf50 !important;
 }
 

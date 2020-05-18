@@ -40,7 +40,7 @@
                         @{{ formatStatDate(d.date) }}
                     </td>
                     <td width='150'>
-                        <span ng-show="d.in != 0" class="text-success">+@{{ d.in | number }}</span>
+                        <span ng-show="d.in != 0" class="text--success">+@{{ d.in | number }}</span>
                     </td>
                     <td width='150'>
                         <span ng-show="d.out != 0" class="text-danger">-@{{ d.out | number }}</span>
@@ -57,7 +57,7 @@
 
                 </td>
                 <td width='150'>
-                    <b ng-show="totals.in != 0" class="text-success">+@{{ totals.in | number:2 }}</b>
+                    <b ng-show="totals.in != 0" class="text--success">+@{{ totals.in | number:2 }}</b>
                 </td>
                 <td width='150'>
                     <b ng-show="totals.out != 0" class="text-danger">-@{{ totals.out | number:2 }}</b>
@@ -74,7 +74,7 @@
                     @{{ expenditure_id ? getExpenditure(expenditure_id).name : 'не указано' }}
                 </td>
                 <td width='150'>
-                    <span ng-show="data.in != 0" class="text-success">+@{{ data.in | number }}</span>
+                    <span ng-show="data.in != 0" class="text--success">+@{{ data.in | number }}</span>
                 </td>
                 <td width='150'>
                     <span ng-show="data.out != 0" class="text-danger">-@{{ data.out | number }}</span>
@@ -90,7 +90,7 @@
 
                 </td>
                 <td width='150'>
-                    <b ng-show="totals.in != 0" class="text-success">+@{{ totals.in | number:2 }}</b>
+                    <b ng-show="totals.in != 0" class="text--success">+@{{ totals.in | number:2 }}</b>
                 </td>
                 <td width='150'>
                     <b ng-show="totals.out != 0" class="text-danger">-@{{ totals.out | number:2 }}</b>
