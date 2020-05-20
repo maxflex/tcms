@@ -52,7 +52,7 @@
     <div class="col-sm-3">
         <div class="mbl">
             @include('modules.input', ['title' => 'название работы', 'model' => 'name', 'attributes' => [
-                'maxlength' => 31
+                'maxlength' => 60
             ]])
         </div>
         <div class="mbb">
