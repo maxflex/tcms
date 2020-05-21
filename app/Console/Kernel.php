@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\AddFotoMeta;
 use App\Console\Commands\DeleteUrl;
 use App\Console\Commands\Sync;
 use App\Console\Commands\ConvertImages;
@@ -20,6 +21,7 @@ class Kernel extends ConsoleKernel
         Sync::class,
         ConvertImages::class,
         CreatePhotoPages::class,
+        AddFotoMeta::class,
     ];
 
     /**
