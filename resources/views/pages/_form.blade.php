@@ -67,6 +67,16 @@
         ])
     </div>
 </div>
+
+<div class="row mbs" ng-show="FormService.model.folder_id === 711" style="top: -24px; position: relative">
+    <div class="col-sm-6">
+        @include('modules.input', [
+            'title' => 'Координаты метки',
+            'model' => 'lat_lng'
+        ])
+    </div>
+</div>
+
 <div ng-show="FormService.model.items.length > 0" class='row'>
     <div class='col-sm-12'>
         <input type="checkbox" id="oneline" name="oneline"
@@ -81,6 +91,7 @@
         <label for="oneline" style='padding-left: 5px'>в одну строку</label>
     </div>
 </div>
+
 <div class="row mbs">
     <div class="col-sm-12">
         <input type="file" name="pageitem" id="fileupload" style='display: none' data-url="uploadPageitem">
@@ -113,6 +124,8 @@
         </div>
     </div>
 </div>
+
+
 
 <div class="row mbb">
     <div class="col-sm-12">
