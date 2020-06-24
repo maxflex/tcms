@@ -36,7 +36,8 @@ class Page extends Model
         'tags',
         'seo_page_ids',
         'no_icons',
-        'lat_lng'
+        'lat_lng',
+        'routing_mode'
     ];
 
     protected static $hidden_on_export = [

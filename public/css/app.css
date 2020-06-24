@@ -20988,6 +20988,22 @@ select[multiple] {
   cursor: move;
 }
 
+.routing-mode {
+  position: absolute;
+  top: 25px;
+  right: 26px;
+}
+
+.routing-mode img {
+  height: 24px;
+  margin-left: 8px;
+  opacity: 0.25;
+}
+
+.routing-mode img.active {
+  opacity: 1 !important;
+}
+
 .program-container h2 {
   margin: 5px 0px;
 }
