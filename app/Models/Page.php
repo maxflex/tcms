@@ -37,7 +37,8 @@ class Page extends Model
         'seo_page_ids',
         'no_icons',
         'lat_lng',
-        'routing_mode'
+        'routing_mode',
+        'panorama_link',
     ];
 
     protected static $hidden_on_export = [

@@ -124,6 +124,9 @@
             />
         </div>
     </div>
+    <div class="col-sm-6">
+        @include('modules.input', [ 'title' => 'ссылка на панораму', 'model' => 'panorama_link'])
+    </div>
 </div>
 
 <div ng-show="FormService.model.items.length > 0" class="row">
