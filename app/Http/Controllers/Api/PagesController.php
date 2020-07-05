@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Page;
 use App\Http\Requests\PageStoreRequest;
+use App\Models\PageItem;
 
 class PagesController extends Controller
 {
@@ -91,20 +92,20 @@ class PagesController extends Controller
     /**
      * Check page existance
      */
-     public function checkExistance(Request $request, $id = null)
-     {
-         $query = Page::query();
+    public function checkExistance(Request $request, $id = null)
+    {
+        $query = Page::query();
 
-         if ($id !== null) {
-             $query->where('id', '!=', $id);
-         }
+        if ($id !== null) {
+            $query->where('id', '!=', $id);
+        }
 
-         return ['exists' => $query->where($request->field, $request->value)->exists()];
-     }
+        return ['exists' => $query->where($request->field, $request->value)->exists()];
+    }
 
-     /**
-      * Search (used in Link Manager)
-      */
+    /**
+     * Search (used in Link Manager)
+     */
     public function search(Request $request)
     {
         return Page::where('keyphrase', 'like', '%' . $request->q . '%')->orWhere('id', $request->q)
@@ -120,6 +121,9 @@ class PagesController extends Controller
         $new->save();
         $new->url = "page-{$new->id}";
         $new->save();
+        foreach ($page->items as $item) {
+            $new->items()->create($item->toArray());
+        }
         return $new->id;
     }
 }
