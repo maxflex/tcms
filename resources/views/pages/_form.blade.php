@@ -91,7 +91,7 @@
 
 <div
     class="row mbs"
-    ng-show="FormService.model.folder_id === 711"
+    ng-show="[711, 752, 753, 754].includes(FormService.model.folder_id)"
     style="top: -24px; position: relative;"
 >
     <div class="col-sm-6">
