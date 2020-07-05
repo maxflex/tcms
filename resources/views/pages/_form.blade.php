@@ -210,9 +210,6 @@
                             ></textarea>
                             <label
                                 style="position: absolute; top: -18px;"
-                                ng-counter-dynamic
-                                min="110"
-                                max="500"
                                 ng-model="item.is_one_line"
                                 >описание</label
                             >
