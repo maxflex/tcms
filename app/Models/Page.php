@@ -15,6 +15,7 @@ class Page extends Model
 {
     use Exportable, SoftDeletes, HasTags, Folderable;
 
+    const ADDRESS_FOLDER_IDS = [711, 752, 753, 754];
     protected $hidden = ['html', 'html_mobile', 'seo_text'];
     protected $dates = ['deleted_at'];
     protected $commaSeparated = ['subjects'];
@@ -106,9 +107,43 @@ class Page extends Model
         return $query;
     }
 
+    /**
+     * Page is in /address folder
+     */
+    public function getIsInAddressFolderAttribute()
+    {
+        return in_array($this->folder_id, self::ADDRESS_FOLDER_IDS);
+    }
+
+    public function scopeInAddressFolder($query)
+    {
+        return $query->whereIn('folder_id', self::ADDRESS_FOLDER_IDS);
+    }
+
+    public static function updateSeoPageIds()
+    {
+        $seoPageIds = implode(',', self::inAddressFolder()->pluck('id')->all());
+        self::inAddressFolder()->update([
+            'seo_page_ids' => $seoPageIds
+        ]);
+    }
+
     protected static function boot()
     {
         parent::boot();
+
+        static::created(function ($page) {
+            if ($page->is_in_address_folder) {
+                self::updateSeoPageIds();
+            }
+        });
+
+        static::updated(function ($page) {
+            if ($page->is_in_address_folder) {
+                self::updateSeoPageIds();
+            }
+        });
+
         static::deleting(function ($model) {
             DB::table($model->getTable())->whereId($model->id)->update(['url' => null]);
         });
