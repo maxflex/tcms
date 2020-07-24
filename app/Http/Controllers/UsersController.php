@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\Models\Page;
 use App\Models\User;
 use App\Service\Rights;
 
@@ -17,7 +18,11 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        if (! allowed(Rights::EDIT_USERS)) {
+        $ids = Page::inAddressFolder()->pluck('id')->reject(function ($e) {
+            return $e === 371;
+        })->implode(',');
+        dd($ids);
+        if (!allowed(Rights::EDIT_USERS)) {
             return view('errors.not_allowed');
         }
         return view('users.index')->with(ngInit([
@@ -32,7 +37,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        if (! allowed(Rights::EDIT_USERS)) {
+        if (!allowed(Rights::EDIT_USERS)) {
             return view('errors.not_allowed');
         }
         return view('users.create')->with(ngInit([
@@ -70,7 +75,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        if (! allowed(Rights::EDIT_USERS)) {
+        if (!allowed(Rights::EDIT_USERS)) {
             return view('errors.not_allowed');
         }
         return view('users.edit')->with(ngInit(compact('id')));

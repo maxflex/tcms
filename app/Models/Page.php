@@ -122,10 +122,15 @@ class Page extends Model
 
     public static function updateSeoPageIds()
     {
-        $seoPageIds = implode(',', self::inAddressFolder()->pluck('id')->all());
-        self::inAddressFolder()->update([
-            'seo_page_ids' => $seoPageIds
-        ]);
+        $seoPageIds = self::inAddressFolder()->pluck('id');
+        $items = self::inAddressFolder()->get();
+        foreach ($items as $item) {
+            DB::table('pages')->whereId($item->id)->update([
+                'seo_page_ids' => $seoPageIds->reject(function ($e) use ($item) {
+                    return $e === $item->id;
+                })->implode(',')
+            ]);
+        }
     }
 
     protected static function boot()
