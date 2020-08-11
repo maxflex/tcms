@@ -91,7 +91,7 @@
 
 <div
     class="row mbs"
-    ng-show="[711, 752, 753, 754].includes(FormService.model.folder_id)"
+    ng-show="[{{ implode(',', \App\Models\Page::ADDRESS_FOLDER_IDS) }}].includes(FormService.model.folder_id)"
     style="top: -24px; position: relative;"
 >
     <div class="col-sm-6">

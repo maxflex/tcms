@@ -15,7 +15,7 @@ class Page extends Model
 {
     use Exportable, SoftDeletes, HasTags, Folderable;
 
-    const ADDRESS_FOLDER_IDS = [711, 752, 753, 754];
+    const ADDRESS_FOLDER_IDS = [711, 752, 753, 754, 756, 757, 758];
     protected $hidden = ['html', 'html_mobile', 'seo_text'];
     protected $dates = ['deleted_at'];
     protected $commaSeparated = ['subjects'];
