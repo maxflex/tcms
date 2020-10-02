@@ -18,10 +18,6 @@ class UsersController extends Controller
      */
     public function index(Request $request)
     {
-        $ids = Page::inAddressFolder()->pluck('id')->reject(function ($e) {
-            return $e === 371;
-        })->implode(',');
-        dd($ids);
         if (!allowed(Rights::EDIT_USERS)) {
             return view('errors.not_allowed');
         }
