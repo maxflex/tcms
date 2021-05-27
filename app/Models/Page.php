@@ -34,7 +34,6 @@ class Page extends Model
         'folder_id',
         'position',
         'seo_text',
-        'tags',
         'seo_page_ids',
         'no_icons',
         'lat_lng',

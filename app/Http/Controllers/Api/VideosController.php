@@ -33,7 +33,9 @@ class VideosController extends Controller
      */
     public function store(Request $request)
     {
-        return Video::create($request->input())->fresh();
+        $video = Video::create($request->input());
+        $video->handleTags($request);
+        return $video->fresh();
     }
 
     /**
@@ -67,7 +69,10 @@ class VideosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Video::find($id)->update($request->input());
+        $video = Video::find($id);
+        $video->handleTags($request);
+        $video->update($request->input());
+        return $video;
     }
 
     /**
@@ -78,7 +83,9 @@ class VideosController extends Controller
      */
     public function destroy($id)
     {
-        Video::destroy($id);
+        $video = Video::find($id);
+        $video->tagEntities()->delete();
+        return $video->delete();
     }
 
     public function massUpdate(Request $request)

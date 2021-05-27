@@ -23,7 +23,6 @@ class Gallery extends Model
         'component_1', 'component_2', 'component_3', 'component_4', 'component_5', 'component_6',
         'name',
         'master_id',
-        'tags',
         'count',
         'watermark',
         'before_and_after',
@@ -75,9 +74,9 @@ class Gallery extends Model
                 // $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
 
                 $positionY = 250;
-                foreach(range(1, 2) as $i) {
+                foreach (range(1, 2) as $i) {
                     $positionX = 100;
-                    foreach(range(1, 4) as $j) {
+                    foreach (range(1, 4) as $j) {
                         $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', .4, $positionX, $positionY);
                         $positionX += 560;
                     }
@@ -102,7 +101,7 @@ class Gallery extends Model
             //     }
             // }
 
-            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".jpg", 'image/jpeg' , Photo::QUALITY);
+            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".jpg", 'image/jpeg', Photo::QUALITY);
         }
     }
 
@@ -130,28 +129,29 @@ class Gallery extends Model
     {
         parent::boot();
 
-        static::saving(function($model) {
+        static::saving(function ($model) {
             $model->createImage();
         });
 
-        static::saved(function($model) {
-	        try {
-				$image = new \claviska\SimpleImage();
+        static::saved(function ($model) {
+            try {
+                $image = new \claviska\SimpleImage();
 
-	            $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
-	            $thumb = public_path() . '/img/gallery/' . $model->id . '_thumb.jpg';
+                $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
+                $thumb = public_path() . '/img/gallery/' . $model->id . '_thumb.jpg';
 
-	            $image
-	                ->fromFile($source)
-	                ->resize(288 * 2, 144 * 2)
-	                ->toFile($thumb , 'image/jpeg', 90);
+                $image
+                    ->fromFile($source)
+                    ->resize(288 * 2, 144 * 2)
+                    ->toFile($thumb, 'image/jpeg', 90);
 
-	            $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
-	            WebPConvert::convert($source, $destination);
+                $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
+                WebPConvert::convert($source, $destination);
 
-	            $destination = public_path() . '/img/gallery/' . $model->id . '_thumb.webp';
-	            WebPConvert::convert($thumb, $destination);
-	        } catch (\Exception $e) {}
+                $destination = public_path() . '/img/gallery/' . $model->id . '_thumb.webp';
+                WebPConvert::convert($thumb, $destination);
+            } catch (\Exception $e) {
+            }
         });
     }
 
@@ -166,10 +166,10 @@ class Gallery extends Model
 
         $rows_affected += count($items);
 
-        if (! $data->get_rows_affected) {
-            foreach($items as $item) {
+        if (!$data->get_rows_affected) {
+            foreach ($items as $item) {
                 $new_prices = [];
-                foreach(range(1, 6) as $i) {
+                foreach (range(1, 6) as $i) {
                     $price = $item->{"price_{$i}"};
                     if ($data->unit == 1) {
                         $coeff = $price * ($data->value / 100);
@@ -190,7 +190,7 @@ class Gallery extends Model
 
         $folder_ids = Folder::where('folder_id', $data->folder_id)->pluck('id');
 
-        foreach($folder_ids as $folder_id) {
+        foreach ($folder_ids as $folder_id) {
             $new_data = clone $data;
             $new_data->folder_id = $folder_id;
             $rows_affected += self::changePrice($new_data);

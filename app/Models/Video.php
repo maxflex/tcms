@@ -11,7 +11,7 @@ class Video extends Model
 {
     use HasTags, Folderable;
 
-    protected $fillable = ['code', 'title', 'tags', 'master_id', 'position', 'duration', 'folder_id'];
+    protected $fillable = ['code', 'title', 'master_id', 'position', 'duration', 'folder_id'];
     protected $appends = ['tags'];
 
     public static function boot()

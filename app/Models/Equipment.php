@@ -16,7 +16,6 @@ class Equipment extends Model
         'folder_id',
         'position',
         'color',
-        'tags'
     ];
 
     protected $appends = ['tags'];

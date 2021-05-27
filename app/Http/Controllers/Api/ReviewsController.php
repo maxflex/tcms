@@ -38,7 +38,9 @@ class ReviewsController extends Controller
      */
     public function store(Request $request)
     {
-        return Review::create($request->input())->fresh();
+        $review = Review::create($request->input());
+        $review->handleTags($request);
+        return $review->fresh();
     }
 
     /**
@@ -72,7 +74,10 @@ class ReviewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Review::find($id)->update($request->input());
+        $review = Review::find($id);
+        $review->handleTags($request);
+        $review->update($request->input());
+        return $review;
     }
 
     /**
@@ -83,7 +88,9 @@ class ReviewsController extends Controller
      */
     public function destroy($id)
     {
-        Review::destroy($id);
+        $review = Review::find($id);
+        $review->tagEntities()->delete();
+        return $review->delete();
     }
 
     public function massUpdate(Request $request)

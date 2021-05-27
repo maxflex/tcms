@@ -16,7 +16,6 @@ class Master extends Model
         'middle_name',
         'description',
         'video',
-        'tags'
     ];
 
     public $appends = ['tags'];

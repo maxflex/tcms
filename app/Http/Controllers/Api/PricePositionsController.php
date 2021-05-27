@@ -38,7 +38,9 @@ class PricePositionsController extends Controller
      */
     public function store(Request $request)
     {
-        return PricePosition::create($request->input())->fresh();
+        $pricePosition = PricePosition::create($request->input());
+        $pricePosition->handleTags($request);
+        return $pricePosition->fresh();
     }
 
     /**
@@ -72,7 +74,10 @@ class PricePositionsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        PricePosition::find($id)->update($request->input());
+        $pricePosition = PricePosition::find($id);
+        $pricePosition->handleTags($request);
+        $pricePosition->update($request->input());
+        return $pricePosition;
     }
 
     /**
@@ -83,6 +88,8 @@ class PricePositionsController extends Controller
      */
     public function destroy($id)
     {
-        PricePosition::destroy($id);
+        $pricePosition = PricePosition::find($id);
+        $pricePosition->tagEntities()->delete();
+        return $pricePosition->delete();
     }
 }

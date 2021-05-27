@@ -18,7 +18,7 @@ class Review extends Model
         'master_id',
         'folder_id',
         'position',
-        'tags'
+        // 'tags'
     ];
 
     public $appends = ['tags'];

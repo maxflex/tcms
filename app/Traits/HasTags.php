@@ -1,34 +1,34 @@
 <?php
 
 namespace App\Traits;
-use DB;
+
 use App\Models\Tag;
+use App\Models\TagEntity;
+use Illuminate\Http\Request;
 
 trait HasTags
 {
-    public function tags()
+    public function tagEntities()
     {
-        return DB::table('tag_entities')->where('entity_type', self::class)->where('entity_id', $this->id)->orderBy('id');
+        return $this->morphMany(TagEntity::class, 'entity');
     }
 
     public function getTagsAttribute()
     {
-        $tag_ids = $this->tags()->pluck('tag_id')->all();
-        if (count($tag_ids)) {
-            return Tag::whereIn('id', $tag_ids)->orderBy(DB::raw("FIELD(id, " . implode(",", $tag_ids) . ")"))->get();
+        $tagIds = $this->tagEntities()->orderBy('id')->pluck('tag_id')->all();
+        if (count($tagIds)) {
+            return Tag::whereIn('id', $tagIds)->orderByRaw("FIELD(id, " . implode(",", $tagIds) . ")")->get();
         }
         return [];
     }
 
-    public function setTagsAttribute($tags)
+    public function handleTags(Request $request)
     {
-        $this->tags()->delete();
-        foreach($tags as $tag) {
-            DB::table('tag_entities')->insert([
-                'entity_type' => self::class,
-                'entity_id' => $this->id,
-                'tag_id' => $tag['id'],
-            ]);
+        if ($request->has('tags')) {
+            $this->tagEntities()->delete();
+            foreach ($request->tags as $tag) {
+                $this->tagEntities()->create(['tag_id' => $tag['id']]);
+            }
         }
     }
 }

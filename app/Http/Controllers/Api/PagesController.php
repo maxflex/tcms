@@ -40,7 +40,9 @@ class PagesController extends Controller
      */
     public function store(PageStoreRequest $request)
     {
-        return Page::create($request->input())->fresh();
+        $page = Page::create($request->input());
+        $page->handleTags($request);
+        return $page->fresh();
     }
 
     /**
@@ -74,7 +76,10 @@ class PagesController extends Controller
      */
     public function update(PageStoreRequest $request, $id)
     {
-        Page::find($id)->update($request->input());
+        $page = Page::find($id);
+        $page->handleTags($request);
+        $page->update($request->input());
+        return $page;
     }
 
 
@@ -86,7 +91,9 @@ class PagesController extends Controller
      */
     public function destroy($id)
     {
-        Page::destroy($id);
+        $page = Page::find($id);
+        $page->tagEntities()->delete();
+        return $page->delete();
     }
 
     /**

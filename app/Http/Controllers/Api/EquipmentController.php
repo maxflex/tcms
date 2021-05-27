@@ -41,7 +41,9 @@ class EquipmentController extends Controller
      */
     public function store(Request $request)
     {
-        return Equipment::create($request->input())->fresh();
+        $equipment = Equipment::create($request->input());
+        $equipment->handleTags($request);
+        return $equipment->fresh();
     }
 
     /**
@@ -75,7 +77,10 @@ class EquipmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Equipment::find($id)->update($request->input());
+        $equipment = Equipment::find($id);
+        $equipment->handleTags($request);
+        $equipment->update($request->input());
+        return $equipment;
     }
 
     /**
@@ -86,6 +91,8 @@ class EquipmentController extends Controller
      */
     public function destroy($id)
     {
-        Equipment::destroy($id);
+        $equipment = Equipment::find($id);
+        $equipment->tagEntities()->delete();
+        return $equipment->delete();
     }
 }

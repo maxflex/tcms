@@ -38,7 +38,9 @@ class MastersController extends Controller
      */
     public function store(Request $request)
     {
-        return Master::create($request->input())->fresh();
+        $master = Master::create($request->input());
+        $master->handleTags($request);
+        return $master->fresh();
     }
 
     /**
@@ -74,7 +76,10 @@ class MastersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Master::find($id)->update($request->input());
+        $master = Master::find($id);
+        $master->handleTags($request);
+        $master->update($request->input());
+        return $master;
     }
 
     /**
@@ -85,6 +90,8 @@ class MastersController extends Controller
      */
     public function destroy($id)
     {
-        Master::destroy($id);
+        $master = Master::find($id);
+        $master->tagEntities()->delete();
+        return $master->delete();
     }
 }

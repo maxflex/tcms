@@ -40,7 +40,9 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        return Gallery::create($request->input())->fresh();
+        $gallery = Gallery::create($request->input());
+        $gallery->handleTags($request);
+        return $gallery->fresh();
     }
 
     /**
@@ -75,6 +77,7 @@ class GalleryController extends Controller
     public function update(Request $request, $id)
     {
         $gallery = Gallery::with('photos')->find($id);
+        $gallery->handleTags($request);
         $gallery->update($request->input());
         return $gallery;
     }
@@ -87,7 +90,9 @@ class GalleryController extends Controller
      */
     public function destroy($id)
     {
-        Gallery::destroy($id);
+        $gallery = Gallery::find($id);
+        $gallery->tagEntities()->delete();
+        return $gallery->delete();
     }
 
 
