@@ -93,7 +93,7 @@ class PagesController extends Controller
     {
         $page = Page::find($id);
         $page->tagEntities()->delete();
-        return $page->delete();
+        $page->delete();
     }
 
     /**

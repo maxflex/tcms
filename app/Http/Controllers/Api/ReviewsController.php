@@ -90,7 +90,7 @@ class ReviewsController extends Controller
     {
         $review = Review::find($id);
         $review->tagEntities()->delete();
-        return $review->delete();
+        $review->delete();
     }
 
     public function massUpdate(Request $request)

@@ -93,6 +93,6 @@ class EquipmentController extends Controller
     {
         $equipment = Equipment::find($id);
         $equipment->tagEntities()->delete();
-        return $equipment->delete();
+        $equipment->delete();
     }
 }

@@ -85,7 +85,7 @@ class VideosController extends Controller
     {
         $video = Video::find($id);
         $video->tagEntities()->delete();
-        return $video->delete();
+        $video->delete();
     }
 
     public function massUpdate(Request $request)

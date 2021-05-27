@@ -92,7 +92,7 @@ class GalleryController extends Controller
     {
         $gallery = Gallery::find($id);
         $gallery->tagEntities()->delete();
-        return $gallery->delete();
+        $gallery->delete();
     }
 
 

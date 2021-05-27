@@ -90,6 +90,6 @@ class PricePositionsController extends Controller
     {
         $pricePosition = PricePosition::find($id);
         $pricePosition->tagEntities()->delete();
-        return $pricePosition->delete();
+        $pricePosition->delete();
     }
 }

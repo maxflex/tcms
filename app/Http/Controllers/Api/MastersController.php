@@ -92,6 +92,6 @@ class MastersController extends Controller
     {
         $master = Master::find($id);
         $master->tagEntities()->delete();
-        return $master->delete();
+        $master->delete();
     }
 }
