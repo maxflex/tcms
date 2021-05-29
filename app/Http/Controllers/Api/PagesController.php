@@ -78,7 +78,7 @@ class PagesController extends Controller
     {
         $page = Page::find($id);
         $page->handleTags($request);
-        return $page->update($request->input());
+        $page->update($request->input());
     }
 
 
