@@ -79,7 +79,7 @@ class PagesController extends Controller
         $page = Page::find($id);
         $page->handleTags($request);
         $page->update($request->input());
-        return $page;
+        return $page->with('items');
     }
 
 
