@@ -14,10 +14,8 @@ class Video extends Model
     protected $fillable = ['code', 'title', 'master_id', 'position', 'duration', 'folder_id'];
     protected $appends = ['tags'];
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
-
         static::saved(function ($model) {
             $image = new \claviska\SimpleImage();
             $image

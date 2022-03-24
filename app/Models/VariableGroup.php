@@ -22,9 +22,9 @@ class VariableGroup extends Model
         return self::with('variable')->orderBy('position')->get()->all();
     }
 
-    public static function boot()
+    public static function booted()
     {
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->title = self::DEFAULT_TITLE;
             $model->position = static::max('position') + 1;
         });

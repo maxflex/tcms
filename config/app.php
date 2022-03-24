@@ -180,8 +180,6 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Custom
-        Collective\Html\HtmlServiceProvider::class,
-        'Maatwebsite\Excel\ExcelServiceProvider',
         Intervention\Image\ImageServiceProvider::class,
     ],
 
@@ -230,7 +228,6 @@ return [
         'View'         => Illuminate\Support\Facades\View::class,
         'Form'         => Collective\Html\FormFacade::class,
         'Html'         => Collective\Html\HtmlFacade::class,
-        'Excel'        => Maatwebsite\Excel\Facades\Excel::class,
         'Image'        => Intervention\Image\Facades\Image::class,
         'Rights'       => App\Service\Rights::class,
     ],

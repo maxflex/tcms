@@ -70,7 +70,7 @@ class Photo extends Model
     }
 
 
-    public static function boot()
+    public static function booted()
     {
         static::deleting(function ($model) {
             if ($model->entity_type == 'App\Models\Gallery') {

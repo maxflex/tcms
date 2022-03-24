@@ -18,11 +18,9 @@ class PageItem extends Model
         'is_one_line'
     ];
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
-
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->position = self::where('page_id', $model->page_id)->max('position') + 1;
         });
     }

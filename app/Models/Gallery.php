@@ -129,10 +129,8 @@ class Gallery extends Model
         }
     }
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
-
         static::saving(function ($model) {
             $model->createImage();
         });

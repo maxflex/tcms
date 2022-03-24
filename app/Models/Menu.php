@@ -25,10 +25,8 @@ class Menu extends Model
         return $this->hasMany(self::class)->orderBy('position', 'asc');
     }
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
-
         static::creating(function ($model) {
             $model->position = self::where('menu_id', $model->menu_id)->max('position') + 1;
         });

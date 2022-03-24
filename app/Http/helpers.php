@@ -121,7 +121,7 @@ function ngInit($array)
         // } else {
         // иначе кодируем объект в JSON
         // $var_value = htmlspecialchars(json_encode($var_value, JSON_NUMERIC_CHECK));
-        $var_value = htmlspecialchars(json_encode($var_value));
+        $var_value = json_encode($var_value);
         // }
         $return .= $var_name . " = " . $var_value . "; ";
     }
@@ -142,10 +142,10 @@ function userIdOrSystem()
     return \App\Models\User::loggedIn() ? \App\Models\User::fromSession()->id : 0;
 }
 
-function now($no_time = false)
-{
-    return date('Y-m-d' . ($no_time ? '' : ' H:i:s'));
-}
+// function now($no_time = false)
+// {
+//     return date('Y-m-d' . ($no_time ? '' : ' H:i:s'));
+// }
 
 function isBlank($value)
 {

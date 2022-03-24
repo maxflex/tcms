@@ -17,11 +17,9 @@ class MenuSection extends Model
         return $this->hasMany(Menu::class, 'section_id')->whereNull('menu_id')->orderBy('position', 'asc');
     }
 
-    public static function boot()
+    public static function booted()
     {
-        parent::boot();
-
-        static::creating(function($model) {
+        static::creating(function ($model) {
             $model->position = self::max('position') + 1;
         });
     }

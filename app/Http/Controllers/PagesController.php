@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Excel;
 use DB;
 use App\Http\Requests;
 use App\Models\Page;
@@ -64,7 +63,8 @@ class PagesController extends Controller
      * Экспорт данных в excel файл
      *
      */
-    public function export(Request $request) {
+    public function export(Request $request)
+    {
         return Page::export($request);
     }
 
@@ -72,17 +72,16 @@ class PagesController extends Controller
      * Импорт данных из excel файла
      *
      */
-    public function import(Request $request) {
+    public function import(Request $request)
+    {
         Page::import($request);
     }
 
     /**
      * Поиск из меню
      */
-     public function search(Request $request)
-     {
-         return $this->index($request, 'Search');
-     }
-	
-
+    public function search(Request $request)
+    {
+        return $this->index($request, 'Search');
+    }
 }

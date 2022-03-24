@@ -3,18 +3,17 @@
 use Illuminate\Http\Request;
 use App\Service\Settings;
 
-URL::forceSchema('https');
 
 Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     # Variables
     Route::post('variables/push', 'VariablesController@push');
     Route::post('variables/pull', 'VariablesController@pull');
     Route::resource('variables', 'VariablesController');
-    Route::group(['prefix' => 'variables'], function() {
+    Route::group(['prefix' => 'variables'], function () {
         Route::resource('groups', 'VariableGroupsController');
     });
 
-    Route::post('header', function(Request $request) {
+    Route::post('header', function (Request $request) {
         Settings::set('header', $request->header);
     });
 
@@ -62,7 +61,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
     Route::resource('logs', 'LogsController');
 
     # Sync
-    Route::group(['prefix' => 'sync'], function() {
+    Route::group(['prefix' => 'sync'], function () {
         Route::get('get/{table}', 'SyncController@get');
         Route::post('insert/{table}', 'SyncController@insert');
         Route::post('update/{table}', 'SyncController@update');
@@ -75,7 +74,7 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::delete('photos/{id}', 'PhotosController@destroy');
 
-    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function() {
+    Route::group(['namespace' => 'Payments', 'prefix' => 'payments'], function () {
         Route::resource('sources', 'SourcesController');
         Route::resource('expendituregroups', 'ExpenditureGroupsController');
         Route::resource('expenditures', 'ExpendituresController');
