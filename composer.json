@@ -4,17 +4,10 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "type": "project",
-    "repositories":[
-        {
-            "type":"git",
-            "url":"https://mkolyadin@bitbucket.org/mkolyadin/ege-shared.git"
-        }
-    ],
     "require": {
         "php": ">=5.6.4",
         "laravel/framework": "5.3.*",
         "laravelcollective/html": "5.3.*",
-        "ege-shared":"dev-master",
         "maatwebsite/excel": "^2.1",
         "doctrine/dbal": "^2.5",
         "guzzlehttp/guzzle": "^6.2",

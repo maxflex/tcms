@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use \Shared\Model;
 use App\Traits\{HasTags, Folderable};
 
 class Review extends Model

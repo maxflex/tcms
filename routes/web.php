@@ -3,7 +3,7 @@
 use App\Http\Middleware\LogUrlOpen;
 use App\Service\Settings;
 
-URL::forceSchema('https');
+// URL::forceSchema('https');
 
 # Login
 Route::post('login', 'LoginController@login');

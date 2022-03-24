@@ -6,13 +6,13 @@
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <meta charset="utf-8">
     <base href="{{ config('app.url') }}">
-    <link href="{{ asset('css/app.css', isProduction()) }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('css/app.css', true) }}" rel="stylesheet" type="text/css">
     {{-- <link href="https://fonts.googleapis.com/css?family=Roboto:700" rel="stylesheet"> --}}
     <link href="css/signin.css" rel="stylesheet" type="text/css">
     @yield('scripts')
 
-    <script src="{{ asset('/js/vendor.js', isProduction()) }}"></script>
-    <script src="{{ config('app.url') }}{{ elixir('js/app.js', isProduction()) }}"></script>
+    <script src="{{ asset('/js/vendor.js', true) }}"></script>
+    <script src="{{ config('app.url') }}{{ elixir('js/app.js', true) }}"></script>
   </head>
 
   <body class="content animated fadeIn" ng-app="Egecms" ng-controller="LoginCtrl"

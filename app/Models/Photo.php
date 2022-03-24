@@ -54,6 +54,9 @@ class Photo extends Model
     public function getImageSizeAttribute()
     {
         if (@$this->attributes['cropped']) {
+            if (!file_exists($this->getFullPath())) {
+                return '';
+            }
             list($width, $height) = getimagesize($this->getFullPath());
             return "{$width}×{$height}";
         }
@@ -67,12 +70,12 @@ class Photo extends Model
     }
 
 
-        public static function boot()
-        {
-            static::deleting(function($model) {
-                if ($model->entity_type == 'App\Models\Gallery') {
-                    unlink(public_path() . '/img/gallery/' . $model->entity_id . ".jpg");
-                }
-            });
-        }
+    public static function boot()
+    {
+        static::deleting(function ($model) {
+            if ($model->entity_type == 'App\Models\Gallery') {
+                unlink(public_path() . '/img/gallery/' . $model->entity_id . ".jpg");
+            }
+        });
+    }
 }

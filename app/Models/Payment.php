@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Shared\Model;
-
 class Payment extends Model
 {
     protected $fillable = [
@@ -51,14 +49,14 @@ class Payment extends Model
 
     protected static function boot()
     {
-        static::saving(function($model) {
-            if (! $model->source_id) {
+        static::saving(function ($model) {
+            if (!$model->source_id) {
                 $model->source_id = null;
             }
-            if (! $model->addressee_id) {
+            if (!$model->addressee_id) {
                 $model->addressee_id = null;
             }
-            if (! $model->expenditure_id) {
+            if (!$model->expenditure_id) {
                 $model->expenditure_id = null;
             }
         });
@@ -87,11 +85,11 @@ class Payment extends Model
             $query->whereIn('expenditure_id', $search->expenditure_ids);
         }
 
-        if (isset($search->purpose) && ! isBlank($search->purpose)) {
+        if (isset($search->purpose) && !isBlank($search->purpose)) {
             $query->whereRaw("purpose LIKE '%" . $search->purpose . "%'");
         }
 
-        if (isset($search->checked) && ! isBlank($search->checked)) {
+        if (isset($search->checked) && !isBlank($search->checked)) {
             $query->where('checked', $search->checked);
         }
 

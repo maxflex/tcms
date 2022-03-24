@@ -120,7 +120,11 @@ class Gallery extends Model
     public function getImageSizeAttribute()
     {
         if ($this->has_photo) {
-            list($width, $height) = getimagesize(public_path() . '/img/gallery/' . $this->id . ".jpg");
+            $file = public_path() . '/img/gallery/' . $this->id . ".jpg";
+            if (!file_exists($file)) {
+                return '';
+            }
+            list($width, $height) = getimagesize($file);
             return "{$width}×{$height}";
         }
     }

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use \Shared\Model;
 use App\Service\Rights;
 use App\Traits\HasPhotos;
 use App\Service\Log;
@@ -70,12 +69,12 @@ class User extends Model
     /*
 	 * Проверяем, залогинен ли пользователь
 	 */
-	public static function loggedIn()
-	{
-		return isset($_SESSION["user"]) // пользователь залогинен
-            && ! User::isBlocked()      // и не заблокирован
+    public static function loggedIn()
+    {
+        return isset($_SESSION["user"]) // пользователь залогинен
+            && !User::isBlocked()      // и не заблокирован
             && User::notChanged();      // и данные не изменились
-	}
+    }
 
     /**
      * Данные по пользователю не изменились
@@ -91,20 +90,20 @@ class User extends Model
 	 * @boolean $init – инициализировать ли соединение с БД пользователя
 	 * @boolean $update – обновлять данные из БД
 	 */
-	public static function fromSession($upadte = false)
-	{
-		// Если обновить данные из БД, то загружаем пользователя
-		if ($upadte) {
-			$User = User::find($_SESSION["user"]->id);
-			$User->toSession();
-		} else {
-			// Получаем пользователя из СЕССИИ
-			$User = $_SESSION['user'];
-		}
+    public static function fromSession($upadte = false)
+    {
+        // Если обновить данные из БД, то загружаем пользователя
+        if ($upadte) {
+            $User = User::find($_SESSION["user"]->id);
+            $User->toSession();
+        } else {
+            // Получаем пользователя из СЕССИИ
+            $User = $_SESSION['user'];
+        }
 
-		// Возвращаем пользователя
-		return $User;
-	}
+        // Возвращаем пользователя
+        return $User;
+    }
 
     /**
      * Текущего пользователя в сессию
@@ -123,16 +122,16 @@ class User extends Model
     }
 
     /**
-	 * Вернуть пароль, как в репетиторах
-	 *
-	 */
-	private static function _password($password)
-	{
-		$password = md5($password."_rM");
-        $password = md5($password."Mr");
+     * Вернуть пароль, как в репетиторах
+     *
+     */
+    private static function _password($password)
+    {
+        $password = md5($password . "_rM");
+        $password = md5($password . "Mr");
 
-		return $password;
-	}
+        return $password;
+    }
 
     /**
      * Get real users
@@ -151,8 +150,8 @@ class User extends Model
     public static function isBlocked()
     {
         return User::whereId(User::fromSession()->id)
-                ->whereRaw('FIND_IN_SET(' . Rights::BANNED . ', rights)')
-                ->exists();
+            ->whereRaw('FIND_IN_SET(' . Rights::BANNED . ', rights)')
+            ->exists();
     }
 
     /**

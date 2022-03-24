@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\Exportable;
 use DB;
 use Schema;
-use Shared\Model;
 use App\Service\VersionControl;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasTags;
