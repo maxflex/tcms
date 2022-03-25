@@ -12,7 +12,7 @@
     @yield('scripts')
 
     <script src="{{ asset('/js/vendor.js', true) }}"></script>
-    <script src="{{ config('app.url') }}{{ elixir('js/app.js', true) }}"></script>
+    <script src="{{ asset('js/app.js', true) }}"></script>
   </head>
 
   <body class="content animated fadeIn" ng-app="Egecms" ng-controller="LoginCtrl"
