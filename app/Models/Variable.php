@@ -21,13 +21,11 @@ class Variable extends Model
 
     protected $hidden = ['html'];
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         // @todo: присвоение группы перенести в интерфейс
-        static::creating(function($model) {
-            if (! isset($model->group_id)) {
+        static::creating(function ($model) {
+            if (!isset($model->group_id)) {
                 $model->group_id = VariableGroup::orderBy('position', 'desc')->value('id');
             }
 

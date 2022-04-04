@@ -47,7 +47,7 @@ class Payment extends Model
         $this->attributes['sum'] = str_replace(',', '.', $value);
     }
 
-    protected static function boot()
+    protected static function booted()
     {
         static::saving(function ($model) {
             if (!$model->source_id) {

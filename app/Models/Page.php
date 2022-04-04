@@ -131,10 +131,8 @@ class Page extends Model
         }
     }
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::created(function ($page) {
             if ($page->is_in_address_folder) {
                 self::updateSeoPageIds();
