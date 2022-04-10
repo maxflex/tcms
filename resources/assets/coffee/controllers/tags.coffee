@@ -50,6 +50,16 @@ angular
         $scope.isChecked = (item) ->
             tag = item.tags.find (t) -> t.id == $scope.tag.id
             return tag isnt undefined
+        
+        $scope.checkGroup = (item) ->
+            item.is_checked = if item.is_checked then false else true
+            for _, i of item.items
+                if not i.hasOwnProperty('items')
+                    i.tags = i.tags.filter (t) -> t.id != $scope.tag.id
+                    if item.is_checked then i.tags.push($scope.tag)
+                    Resource.update({id: i.id}, {tags: i.tags})
+                else
+                    $scope.checkGroup(i)
 
         $scope.check = (item) ->
             if $scope.isChecked(item)

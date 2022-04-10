@@ -7,4 +7,4 @@ angular.module 'Egecms'
             model: '='
             level: '='
         controller: ($scope) ->
-            $scope.controller_scope = scope
+            $scope.controller_scope = angular.element('[ng-app=Egecms]').scope()

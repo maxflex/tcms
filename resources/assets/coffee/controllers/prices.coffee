@@ -1,47 +1,46 @@
 angular
     .module 'Egecms'
-    .controller 'PricesIndex', ($scope, $attrs, $timeout, $http, PriceSection, PricePosition) ->
+    .controller 'PricesIndex', ($scope, $attrs, $timeout, $http, $rootScope, PriceSection, PricePosition, Units) ->
         bindArguments($scope, arguments)
-
+        $scope.Units = Units
+        $scope.findById = $rootScope.findById
         angular.element(document).ready ->
-            $http.get('api/prices').then (response) ->
-                $scope.items = response.data
-            $scope.collapsed_price_sections = if $.cookie("collapsed_price_sections") then JSON.parse($.cookie("collapsed_price_sections")) else []
+            params = if $scope.id then "?id=#{$scope.id}" else ""
+            $http.get("api/prices#{params}").then (response) ->
+                $scope.sections = response.data
+            $http.get("api/prices/positions#{params}").then (response) ->
+                $scope.positions = response.data
             $timeout ->
                 new Clipboard('.copiable')
             , 1000
 
-        clearChangePrice = (section_id) ->
+        clearChangePrice = ->
             $scope.change_price =
                 type: '1'
                 unit: '1'
-                section_id: section_id
+                section_id: $scope.id
                 value: null
             $timeout -> $('.selectpicker').selectpicker('refresh')
 
-        getRowsAffected = (item) ->
-            return 1 if not item.is_section
-            result = 0
-            item.items.forEach (item) ->
-                result += getRowsAffected(item)
-            result
+        # getRowsAffected = (item) ->
+        #     return 1 if not item.hasOwnProperty('sections_count')
+        #     result = 0
+        #     item.sections.forEach (item) ->
+        #         result += getRowsAffected(item)
+        #     result
 
         $scope.hide = (item) ->
             item.is_hidden = !item.is_hidden
-            Resource = if item.is_section then PriceSection else PricePosition
-            Resource.update({id: item.model.id, is_hidden: item.is_hidden})
+            Resource = if item.hasOwnProperty('sections_count') then PriceSection else PricePosition
+            Resource.update({id: item.id, is_hidden: item.is_hidden})
 
         $scope.changePriceDialog = (item) ->
-            clearChangePrice(item.model.id)
-            $scope.rows_affected = getRowsAffected(item)
+            clearChangePrice()
+            # $scope.rows_affected = getRowsAffected()
             $('#change-price-modal').modal('show')
 
         $scope.changePriceRootDialog = ->
-            item =
-                is_section: true
-                items: $scope.items
-                model: {id: -1}
-            $scope.changePriceDialog(item)
+            $scope.changePriceDialog()
 
         $scope.changePrice = ->
             ajaxStart()
@@ -60,13 +59,23 @@ angular
 
         $scope.isCollapsed = (item) -> item.model.id in $scope.collapsed_price_sections
 
-        $scope.sortableOptions =
+        $scope.sortableOptionsSections =
             update: (event, ui) ->
                 $timeout ->
-                    $scope.items.forEach (item, index) ->
-                        Resource = if item.is_section then PriceSection else PricePosition
-                        Resource.update({id: item.model.id, position: index})
-            items: '.price-item-' + $scope.$id
+                    $scope.sections.forEach (item, index) ->
+                        PriceSection.update({id: item.id, position: index})
+            items: '.price-section'
+            axis: 'y'
+            cursor: "move"
+            opacity: 0.9,
+            zIndex: 9999
+        
+         $scope.sortableOptionsPositions =
+            update: (event, ui) ->
+                $timeout ->
+                    $scope.positions.forEach (item, index) ->
+                        PricePosition.update({id: item.id, position: index})
+            items: '.price-position'
             axis: 'y'
             cursor: "move"
             opacity: 0.9,
@@ -77,11 +86,11 @@ angular
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             FormService.init(PriceSection, $scope.id, $scope.model)
-            FormService.redirect_url = 'prices'
+            FormService.redirect_url = 'prices?id=' + $scope.model.price_section_id
     .controller 'PricePositionForm', ($scope, $attrs, $timeout, $http, FormService, PricePosition, Units, Tag) ->
         bindArguments($scope, arguments)
         angular.element(document).ready ->
             FormService.init(PricePosition, $scope.id, $scope.model)
-            FormService.redirect_url = 'prices'
+            FormService.redirect_url = 'prices?id=' + $scope.model.price_section_id
         $scope.loadTags = (text) ->
             Tag.autocomplete({text: text}).$promise

@@ -3,12 +3,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-body">
-          <div class="row mb">
+          {{-- <div class="row mb">
               <div class="col-sm-12">
                   Будет <plural count="rows_affected" type="will_be_updated" text-only></plural> <b>@{{ rows_affected }}</b> <plural count="rows_affected" type="position" text-only></plural>
               </div>
-          </div>
-          <div class="row">
+          </div> --}}
+          <div class="row" style='padding-top: 10px'>
               <div class="col-sm-6">
                   <select class='selectpicker' ng-model='change_price.type'>
                       <option value='1' selected>понизить</option>

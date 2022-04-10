@@ -7,7 +7,7 @@ angular.module 'Egecms'
             item:   '='
         controller: ($scope, $timeout, $rootScope, Menu) ->
             $scope.findById = $rootScope.findById
-            $scope.controller_scope = scope
+            $scope.controller_scope = angular.element('[ng-app=Egecms]').scope()
             
             $scope.sortableOptions =
                 update: (event, ui) ->

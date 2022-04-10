@@ -39,6 +39,9 @@
                   <div class="col-sm-4 right">
                       @yield('title-right')
                   </div>
+                    <div class="title-custom">
+                        @yield('title-custom')
+                    </div>
               </div>
 
           </div>

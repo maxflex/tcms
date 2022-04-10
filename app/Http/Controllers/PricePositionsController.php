@@ -10,30 +10,21 @@ use App\Models\PriceSection;
 
 class PricePositionsController extends Controller
 {
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id)
+    public function create(Request $request)
     {
+        // $request->validate(['id' => ['required', 'exists:price_sections,id']]);
+        $priceSection = PriceSection::find($request->input('id'));
         $price_sections = PriceSection::select('id', 'name')->get();
         return view('prices.positions.create')->with(ngInit([
             'price_sections' => $price_sections,
             'model' => new PricePosition([
-                'price_section_id' => $id,
+                'price_section_id' => $priceSection->id,
             ]),
         ]))->with([
-            'section_name' => PriceSection::find($id)->name
+            'section_name' => $priceSection->name,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         //

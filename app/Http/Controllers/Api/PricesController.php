@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PriceSectionResource;
 use App\Models\PriceSection;
 
 class PricesController extends Controller
@@ -15,18 +16,14 @@ class PricesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // return PriceSection::whereNull('price_section_id')->paginate(30);
-        $items = [];
-
-        $top_level_price_sections = PriceSection::topLevel()->get();
-
-        foreach($top_level_price_sections as $section) {
-            $items[] = $section->item;
-        }
-
-        return $items;
+        $result =  PriceSection::query()
+            ->withCount(['positions', 'sections'])
+            ->where('price_section_id', $request->input('id') ?: null)
+            ->orderBy('position')
+            ->get();
+        return PriceSectionResource::collection($result);
     }
 
     /**

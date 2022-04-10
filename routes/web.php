@@ -41,10 +41,11 @@ Route::group(['middleware' => ['login', LogUrlOpen::class]], function () {
     Route::resource('videos', 'VideosController');
 
     Route::get('prices/tag/{id}', 'PricesController@tag')->name('prices.tag');
-    Route::get('prices/{id}/create', 'PricesController@create');
+    // Route::get('prices/{id}/create', 'PricesController@create');
+    // Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
+    // Route::resource('prices/{id}/positions', 'PricePositionsController');
+    Route::resource('prices/positions', 'PricePositionsController');
     Route::resource('prices', 'PricesController');
-    Route::get('prices/positions/{id}/edit', 'PricePositionsController@edit');
-    Route::resource('prices/{id}/positions', 'PricePositionsController');
 
     Route::get('galleries/tag/{id}', 'GalleryController@tag')->name('galleries.tag');
     Route::resource('galleries', 'GalleryController');

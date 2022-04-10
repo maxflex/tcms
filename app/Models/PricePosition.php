@@ -19,4 +19,16 @@ class PricePosition extends Model
         'position',
         'is_hidden'
     ];
+
+    public function thisLevel()
+    {
+        return $this->hasMany(self::class, 'price_section_id', 'price_section_id');
+    }
+
+    public static function booted()
+    {
+        static::creating(function ($model) {
+            $model->position = $model->thisLevel()->max('position') + 1;
+        });
+    }
 }

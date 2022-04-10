@@ -14585,7 +14585,7 @@ a:hover {
   margin-right: 10px;
 }
 
-.options-list span.link-like, .options-list .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .options-list span, .options-list .photos-table span.link-like-text, .photos-table .options-list span.link-like-text {
+.options-list span.link-like, .options-list .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .options-list span, .options-list .panel-heading-main .title-custom span, .panel-heading-main .title-custom .options-list span, .options-list .photos-table span.link-like-text, .photos-table .options-list span.link-like-text {
   font-weight: normal;
 }
 
@@ -15022,11 +15022,11 @@ span {
   margin-right: 20px;
 }
 
-.controls-line span.link-like, .controls-line .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .controls-line span, .controls-line .photos-table span.link-like-text, .photos-table .controls-line span.link-like-text {
+.controls-line span.link-like, .controls-line .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .controls-line span, .controls-line .panel-heading-main .title-custom span, .panel-heading-main .title-custom .controls-line span, .controls-line .photos-table span.link-like-text, .photos-table .controls-line span.link-like-text {
   font-weight: normal;
 }
 
-.controls-line span.link-like span, .controls-line .panel-heading-main .col-sm-4 span span, .panel-heading-main .col-sm-4 .controls-line span span, .controls-line .photos-table span.link-like-text span, .photos-table .controls-line span.link-like-text span {
+.controls-line span.link-like span, .controls-line .panel-heading-main .col-sm-4 span span, .panel-heading-main .col-sm-4 .controls-line span span, .controls-line .panel-heading-main .title-custom span span, .panel-heading-main .title-custom .controls-line span span, .controls-line .photos-table span.link-like-text span, .photos-table .controls-line span.link-like-text span {
   font-weight: normal;
 }
 
@@ -15094,8 +15094,16 @@ span {
 }
 
 .panel-heading-main .col-sm-4 a:not(:last-child),
-.panel-heading-main .col-sm-4 span:not(:last-child) {
+.panel-heading-main .col-sm-4 span:not(:last-child), .panel-heading-main .title-custom a:not(:last-child),
+.panel-heading-main .title-custom span:not(:last-child) {
   margin-right: 10px;
+}
+
+.title-custom {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  padding-right: 15px;
 }
 
 md-input-container label {
@@ -16071,6 +16079,8 @@ tr.ui-sortable-helper td {
 .top-links span.link-like,
 .top-links .panel-heading-main .col-sm-4 span,
 .panel-heading-main .col-sm-4 .top-links span,
+.top-links .panel-heading-main .title-custom span,
+.panel-heading-main .title-custom .top-links span,
 .top-links .photos-table span.link-like-text,
 .photos-table .top-links span.link-like-text {
   margin-right: 15px;
@@ -16705,7 +16715,7 @@ h4.row-header {
   text-decoration: none;
 }
 
-.link-white, .panel-heading-main .col-sm-4 span {
+.link-white, .panel-heading-main .col-sm-4 span, .panel-heading-main .title-custom span {
   color: white;
 }
 
@@ -17171,18 +17181,18 @@ fieldset[disabled] .form-control {
   margin: 0;
 }
 
-.link-like, .panel-heading-main .col-sm-4 span, .photos-table .link-like-text {
+.link-like, .panel-heading-main .col-sm-4 span, .panel-heading-main .title-custom span, .photos-table .link-like-text {
   color: #ce171f;
   text-decoration: none;
   cursor: pointer;
 }
 
-.link-like:hover, .panel-heading-main .col-sm-4 span:hover, .photos-table .link-like-text:hover {
+.link-like:hover, .panel-heading-main .col-sm-4 span:hover, .panel-heading-main .title-custom span:hover, .photos-table .link-like-text:hover {
   color: #a01218;
   text-decoration: underline;
 }
 
-.link-like.red, .panel-heading-main .col-sm-4 span.red, .photos-table .red.link-like-text {
+.link-like.red, .panel-heading-main .col-sm-4 span.red, .panel-heading-main .title-custom span.red, .photos-table .red.link-like-text {
   color: #a94442;
 }
 
@@ -17210,16 +17220,16 @@ fieldset[disabled] .form-control {
   outline: none !important;
 }
 
-.link-reverse, .panel-heading-main .col-sm-4 span {
+.link-reverse, .panel-heading-main .col-sm-4 span, .panel-heading-main .title-custom span {
   text-decoration: underline;
 }
 
-.link-reverse.small, .panel-heading-main .col-sm-4 span.small {
+.link-reverse.small, .panel-heading-main .col-sm-4 span.small, .panel-heading-main .title-custom span.small {
   margin-left: 5px;
   font-size: 12px;
 }
 
-.link-reverse:hover, .panel-heading-main .col-sm-4 span:hover {
+.link-reverse:hover, .panel-heading-main .col-sm-4 span:hover, .panel-heading-main .title-custom span:hover {
   text-decoration: none;
 }
 
@@ -17238,7 +17248,7 @@ fieldset[disabled] .form-control {
   color: #a94442;
 }
 
-.link-white, .panel-heading-main .col-sm-4 span {
+.link-white, .panel-heading-main .col-sm-4 span, .panel-heading-main .title-custom span {
   color: white !important;
 }
 
@@ -17280,7 +17290,7 @@ fieldset[disabled] .form-control {
   color: #ff809c;
 }
 
-.link-like.text-danger, .panel-heading-main .col-sm-4 span.text-danger, .photos-table .text-danger.link-like-text {
+.link-like.text-danger, .panel-heading-main .col-sm-4 span.text-danger, .panel-heading-main .title-custom span.text-danger, .photos-table .text-danger.link-like-text {
   color: #A94442;
 }
 
@@ -18096,6 +18106,7 @@ table.summary-table.left-align tr td {
   border-bottom: 1px solid #ddd;
   padding: 8px;
   line-height: 1.42857143;
+  position: relative;
 }
 
 .id-cell {
@@ -18116,7 +18127,7 @@ table.summary-table.left-align tr td {
 
 .list-group,
 .panel-heading,
-.controls-line a, .controls-line span.link-like, .controls-line .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .controls-line span, .controls-line .photos-table span.link-like-text, .photos-table .controls-line span.link-like-text,
+.controls-line a, .controls-line span.link-like, .controls-line .panel-heading-main .col-sm-4 span, .panel-heading-main .col-sm-4 .controls-line span, .controls-line .panel-heading-main .title-custom span, .panel-heading-main .title-custom .controls-line span, .controls-line .photos-table span.link-like-text, .photos-table .controls-line span.link-like-text,
 .top-links,
 .options-list,
 .nav-tabs-links {

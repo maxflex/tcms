@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PricePositionResource;
 use App\Models\PricePosition;
 
 class PricePositionsController extends Controller
@@ -15,27 +16,16 @@ class PricePositionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return PricePosition::paginate(30);
+        $items = PricePosition::query()
+            ->where('price_section_id', $request->input('id') ?: null)
+            ->orderBy('position')
+            ->get();
+        return PricePositionResource::collection($items);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $pricePosition = PricePosition::create($request->input());
@@ -43,27 +33,13 @@ class PricePositionsController extends Controller
         return $pricePosition->fresh();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function show($id)
     {
         return PricePosition::find($id)->append('tags');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

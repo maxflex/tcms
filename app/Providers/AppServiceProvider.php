@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Date;
@@ -31,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
         Date::serializeUsing(function ($date) {
             return $date->format('Y-m-d H:i:s');
         });
+        JsonResource::withoutWrapping();
     }
 
     /**

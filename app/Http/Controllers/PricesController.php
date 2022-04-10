@@ -17,20 +17,17 @@ class PricesController extends Controller
     public function index(Request $request)
     {
         return view('prices.index')->with(ngInit([
+            'id' => $request->id,
+            'tree' => $request->id ? PriceSection::find($request->id)->tree : null,
             'current_page' => $request->page
         ]));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create($id = null)
+    public function create()
     {
         $price_sections = PriceSection::select('id', 'name')->get();
         return view('prices.create')->with(ngInit([
-            'model' => new PriceSection(['price_section_id' => $id]),
+            'model' => new PriceSection(['price_section_id' => request()->input('id') ?: null]),
             'price_sections' => $price_sections
         ]));
     }
@@ -69,7 +66,7 @@ class PricesController extends Controller
         $folders = PriceSection::where('price_section_id', $folder_id)->orderBy('position')->get()->all();
 
         $items = [];
-        foreach($folders as $folder) {
+        foreach ($folders as $folder) {
             $folder->items = self::getFolderItems($folder->id);
             $items[] = $folder;
         }

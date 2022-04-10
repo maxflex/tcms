@@ -845,7 +845,7 @@ span {
   }
 }
 
-.panel-heading-main .col-sm-4 {
+.panel-heading-main .col-sm-4, .panel-heading-main .title-custom {
   & span {
     @extend .link-like;
     @extend .link-white;
@@ -855,6 +855,13 @@ span {
   span:not(:last-child) {
     margin-right: 10px;
   }
+}
+
+.title-custom {
+  position: absolute;
+  width: 100%;
+  text-align: right;
+  padding-right: 15px;
 }
 
 md-input-container {
@@ -4458,6 +4465,7 @@ table.summary-table.left-align tr td {
   border-bottom: 1px solid #ddd;
   padding: 8px;
   line-height: 1.42857143;
+  position: relative;
 }
 
 .id-cell {

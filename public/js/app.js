@@ -326,94 +326,6 @@
 }).call(this);
 
 (function() {
-  angular.module('Egecms').value('Published', [
-    {
-      id: 0,
-      title: 'не опубликовано'
-    }, {
-      id: 1,
-      title: 'опубликовано'
-    }
-  ]).value('Scores', [
-    {
-      id: 1,
-      title: '1'
-    }, {
-      id: 2,
-      title: '2'
-    }, {
-      id: 3,
-      title: '3'
-    }, {
-      id: 4,
-      title: '4'
-    }, {
-      id: 5,
-      title: '5'
-    }, {
-      id: 6,
-      title: '6'
-    }, {
-      id: 7,
-      title: '7'
-    }, {
-      id: 8,
-      title: '8'
-    }, {
-      id: 9,
-      title: '9'
-    }, {
-      id: 10,
-      title: '10'
-    }
-  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
-    {
-      id: 1,
-      title: 'вверху'
-    }, {
-      id: 2,
-      title: 'внизу'
-    }
-  ]).value('Units', [
-    {
-      id: 1,
-      title: 'изделие'
-    }, {
-      id: 2,
-      title: 'штука'
-    }, {
-      id: 3,
-      title: 'сантиметр'
-    }, {
-      id: 4,
-      title: 'пара'
-    }, {
-      id: 5,
-      title: 'метр'
-    }, {
-      id: 6,
-      title: 'дм²'
-    }, {
-      id: 7,
-      title: 'см²'
-    }, {
-      id: 8,
-      title: 'мм²'
-    }, {
-      id: 9,
-      title: 'элемент'
-    }
-  ]).value('LogTypes', {
-    create: 'создание',
-    update: 'обновление',
-    "delete": 'удаление',
-    authorization: 'авторизация',
-    url: 'просмотр URL'
-  });
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -1707,64 +1619,50 @@
 (function() {
   var indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, PriceSection, PricePosition) {
-    var clearChangePrice, getRowsAffected;
+  angular.module('Egecms').controller('PricesIndex', function($scope, $attrs, $timeout, $http, $rootScope, PriceSection, PricePosition, Units) {
+    var clearChangePrice;
     bindArguments($scope, arguments);
+    $scope.Units = Units;
+    $scope.findById = $rootScope.findById;
     angular.element(document).ready(function() {
-      $http.get('api/prices').then(function(response) {
-        return $scope.items = response.data;
+      var params;
+      params = $scope.id ? "?id=" + $scope.id : "";
+      $http.get("api/prices" + params).then(function(response) {
+        return $scope.sections = response.data;
       });
-      $scope.collapsed_price_sections = $.cookie("collapsed_price_sections") ? JSON.parse($.cookie("collapsed_price_sections")) : [];
+      $http.get("api/prices/positions" + params).then(function(response) {
+        return $scope.positions = response.data;
+      });
       return $timeout(function() {
         return new Clipboard('.copiable');
       }, 1000);
     });
-    clearChangePrice = function(section_id) {
+    clearChangePrice = function() {
       $scope.change_price = {
         type: '1',
         unit: '1',
-        section_id: section_id,
+        section_id: $scope.id,
         value: null
       };
       return $timeout(function() {
         return $('.selectpicker').selectpicker('refresh');
       });
     };
-    getRowsAffected = function(item) {
-      var result;
-      if (!item.is_section) {
-        return 1;
-      }
-      result = 0;
-      item.items.forEach(function(item) {
-        return result += getRowsAffected(item);
-      });
-      return result;
-    };
     $scope.hide = function(item) {
       var Resource;
       item.is_hidden = !item.is_hidden;
-      Resource = item.is_section ? PriceSection : PricePosition;
+      Resource = item.hasOwnProperty('sections_count') ? PriceSection : PricePosition;
       return Resource.update({
-        id: item.model.id,
+        id: item.id,
         is_hidden: item.is_hidden
       });
     };
     $scope.changePriceDialog = function(item) {
-      clearChangePrice(item.model.id);
-      $scope.rows_affected = getRowsAffected(item);
+      clearChangePrice();
       return $('#change-price-modal').modal('show');
     };
     $scope.changePriceRootDialog = function() {
-      var item;
-      item = {
-        is_section: true,
-        items: $scope.items,
-        model: {
-          id: -1
-        }
-      };
-      return $scope.changePriceDialog(item);
+      return $scope.changePriceDialog();
     };
     $scope.changePrice = function() {
       ajaxStart();
@@ -1790,20 +1688,35 @@
       var ref;
       return ref = item.model.id, indexOf.call($scope.collapsed_price_sections, ref) >= 0;
     };
-    return $scope.sortableOptions = {
+    $scope.sortableOptionsSections = {
       update: function(event, ui) {
         return $timeout(function() {
-          return $scope.items.forEach(function(item, index) {
-            var Resource;
-            Resource = item.is_section ? PriceSection : PricePosition;
-            return Resource.update({
-              id: item.model.id,
+          return $scope.sections.forEach(function(item, index) {
+            return PriceSection.update({
+              id: item.id,
               position: index
             });
           });
         });
       },
-      items: '.price-item-' + $scope.$id,
+      items: '.price-section',
+      axis: 'y',
+      cursor: "move",
+      opacity: 0.9,
+      zIndex: 9999
+    };
+    return $scope.sortableOptionsPositions = {
+      update: function(event, ui) {
+        return $timeout(function() {
+          return $scope.positions.forEach(function(item, index) {
+            return PricePosition.update({
+              id: item.id,
+              position: index
+            });
+          });
+        });
+      },
+      items: '.price-position',
       axis: 'y',
       cursor: "move",
       opacity: 0.9,
@@ -1813,13 +1726,13 @@
     bindArguments($scope, arguments);
     return angular.element(document).ready(function() {
       FormService.init(PriceSection, $scope.id, $scope.model);
-      return FormService.redirect_url = 'prices';
+      return FormService.redirect_url = 'prices?id=' + $scope.model.price_section_id;
     });
   }).controller('PricePositionForm', function($scope, $attrs, $timeout, $http, FormService, PricePosition, Units, Tag) {
     bindArguments($scope, arguments);
     angular.element(document).ready(function() {
       FormService.init(PricePosition, $scope.id, $scope.model);
-      return FormService.redirect_url = 'prices';
+      return FormService.redirect_url = 'prices?id=' + $scope.model.price_section_id;
     });
     return $scope.loadTags = function(text) {
       return Tag.autocomplete({
@@ -1935,6 +1848,31 @@
         return t.id === $scope.tag.id;
       });
       return tag !== void 0;
+    };
+    $scope.checkGroup = function(item) {
+      var _, i, ref, results;
+      item.is_checked = item.is_checked ? false : true;
+      ref = item.items;
+      results = [];
+      for (_ in ref) {
+        i = ref[_];
+        if (!i.hasOwnProperty('items')) {
+          i.tags = i.tags.filter(function(t) {
+            return t.id !== $scope.tag.id;
+          });
+          if (item.is_checked) {
+            i.tags.push($scope.tag);
+          }
+          results.push(Resource.update({
+            id: i.id
+          }, {
+            tags: i.tags
+          }));
+        } else {
+          results.push($scope.checkGroup(i));
+        }
+      }
+      return results;
     };
     return $scope.check = function(item) {
       if ($scope.isChecked(item)) {
@@ -2176,155 +2114,6 @@
 }).call(this);
 
 (function() {
-  var apiPath, countable, updatable;
-
-  angular.module('Egecms').factory('Variable', function($resource) {
-    return $resource(apiPath('variables'), {
-      id: '@id'
-    }, updatable());
-  }).factory('VariableGroup', function($resource) {
-    return $resource(apiPath('variables/groups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Page', function($resource) {
-    return $resource(apiPath('pages'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('pages', 'checkExistance')
-      }
-    });
-  }).factory('Equipment', function($resource) {
-    return $resource(apiPath('equipment'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PriceSection', function($resource) {
-    return $resource(apiPath('prices'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PricePosition', function($resource) {
-    return $resource(apiPath('prices/positions'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Gallery', function($resource) {
-    return $resource(apiPath('galleries'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Photo', function($resource) {
-    return $resource(apiPath('photos'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Folder', function($resource) {
-    return $resource(apiPath('folders'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      tree: {
-        method: 'POST',
-        url: apiPath('folders', 'tree'),
-        isArray: true
-      },
-      breadcrumbs: {
-        method: 'GET',
-        url: apiPath('folders', 'breadcrumbs'),
-        isArray: true
-      }
-    });
-  }).factory('PageItem', function($resource) {
-    return $resource(apiPath('pageitems'), {
-      id: '@id'
-    }, updatable());
-  }).factory('User', function($resource) {
-    return $resource(apiPath('users'), {
-      id: '@id'
-    }, updatable());
-  }).factory('AllUser', function($resource) {
-    return $resource(apiPath('allusers'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Payment', function($resource) {
-    return $resource(apiPath('payments'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentSource', function($resource) {
-    return $resource(apiPath('payments/sources'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditure', function($resource) {
-    return $resource(apiPath('payments/expenditures'), {
-      id: '@id'
-    }, updatable());
-  }).factory('PaymentExpenditureGroup', function($resource) {
-    return $resource(apiPath('payments/expendituregroups'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Tag', function($resource) {
-    return $resource(apiPath('tags'), {
-      id: '@id'
-    }, {
-      update: {
-        method: 'PUT'
-      },
-      autocomplete: {
-        method: 'GET',
-        url: apiPath('tags', 'autocomplete'),
-        isArray: true
-      },
-      checkExistance: {
-        method: 'POST',
-        url: apiPath('tags', 'checkExistance')
-      }
-    });
-  }).factory('Master', function($resource) {
-    return $resource(apiPath('masters'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Review', function($resource) {
-    return $resource(apiPath('reviews'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Menu', function($resource) {
-    return $resource(apiPath('menu'), {
-      id: '@id'
-    }, updatable());
-  }).factory('Video', function($resource) {
-    return $resource(apiPath('videos'), {
-      id: '@id'
-    }, updatable());
-  });
-
-  apiPath = function(entity, additional) {
-    if (additional == null) {
-      additional = '';
-    }
-    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
-  };
-
-  updatable = function() {
-    return {
-      update: {
-        method: 'PUT'
-      }
-    };
-  };
-
-  countable = function() {
-    return {
-      count: {
-        method: 'GET'
-      }
-    };
-  };
-
-}).call(this);
-
-(function() {
 
 
 }).call(this);
@@ -2478,7 +2267,7 @@
         level: '='
       },
       controller: function($scope) {
-        return $scope.controller_scope = scope;
+        return $scope.controller_scope = angular.element('[ng-app=Egecms]').scope();
       }
     };
   });
@@ -2528,7 +2317,7 @@
       },
       controller: function($scope, $timeout, $rootScope, Menu) {
         $scope.findById = $rootScope.findById;
-        $scope.controller_scope = scope;
+        $scope.controller_scope = angular.element('[ng-app=Egecms]').scope();
         return $scope.sortableOptions = {
           update: function(event, ui) {
             return $timeout(function() {
@@ -2671,6 +2460,7 @@
           'hour': ['час', 'часа', 'часов'],
           'photo': ['фотография', 'фотографии', 'фотографий'],
           'position': ['позиция', 'позиции', 'позиций'],
+          'section': ['секция', 'секции', 'секций'],
           'will_be_updated': ['обновлена', 'обновлено', 'обновлено']
         };
       }
@@ -2696,7 +2486,7 @@
       },
       controller: function($scope, $rootScope, Units) {
         $scope.Units = Units;
-        $scope.controller_scope = scope;
+        $scope.controller_scope = angular.element('[ng-app=Egecms]').scope();
         return $scope.findById = $rootScope.findById;
       }
     };
@@ -2715,7 +2505,7 @@
       controller: function($scope, $timeout, $rootScope, PriceSection, PricePosition, Units) {
         $scope.Units = Units;
         $scope.findById = $rootScope.findById;
-        $scope.controller_scope = scope;
+        $scope.controller_scope = angular.element('[ng-app=Egecms]').scope();
         return $scope.sortableOptions = {
           update: function(event, ui) {
             return $timeout(function() {
@@ -2742,6 +2532,19 @@
 }).call(this);
 
 (function() {
+  angular.module('Egecms').directive('priceSection', function() {
+    return {
+      restrict: 'E',
+      templateUrl: 'directives/price-section',
+      scope: {
+        item: '='
+      }
+    };
+  });
+
+}).call(this);
+
+(function() {
   angular.module('Egecms').directive('reviewItem', function() {
     return {
       restrict: 'E',
@@ -2752,7 +2555,7 @@
         level: '='
       },
       controller: function($scope) {
-        return $scope.controller_scope = scope;
+        return $scope.controller_scope = angular.element('[ng-app=Egecms]').scope();
       }
     };
   });
@@ -2986,6 +2789,243 @@
 
 (function() {
 
+
+}).call(this);
+
+(function() {
+  var apiPath, countable, updatable;
+
+  angular.module('Egecms').factory('Variable', function($resource) {
+    return $resource(apiPath('variables'), {
+      id: '@id'
+    }, updatable());
+  }).factory('VariableGroup', function($resource) {
+    return $resource(apiPath('variables/groups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Page', function($resource) {
+    return $resource(apiPath('pages'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('pages', 'checkExistance')
+      }
+    });
+  }).factory('Equipment', function($resource) {
+    return $resource(apiPath('equipment'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PriceSection', function($resource) {
+    return $resource(apiPath('prices'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PricePosition', function($resource) {
+    return $resource(apiPath('prices/positions'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Gallery', function($resource) {
+    return $resource(apiPath('galleries'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Photo', function($resource) {
+    return $resource(apiPath('photos'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Folder', function($resource) {
+    return $resource(apiPath('folders'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      tree: {
+        method: 'POST',
+        url: apiPath('folders', 'tree'),
+        isArray: true
+      },
+      breadcrumbs: {
+        method: 'GET',
+        url: apiPath('folders', 'breadcrumbs'),
+        isArray: true
+      }
+    });
+  }).factory('PageItem', function($resource) {
+    return $resource(apiPath('pageitems'), {
+      id: '@id'
+    }, updatable());
+  }).factory('User', function($resource) {
+    return $resource(apiPath('users'), {
+      id: '@id'
+    }, updatable());
+  }).factory('AllUser', function($resource) {
+    return $resource(apiPath('allusers'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Payment', function($resource) {
+    return $resource(apiPath('payments'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentSource', function($resource) {
+    return $resource(apiPath('payments/sources'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditure', function($resource) {
+    return $resource(apiPath('payments/expenditures'), {
+      id: '@id'
+    }, updatable());
+  }).factory('PaymentExpenditureGroup', function($resource) {
+    return $resource(apiPath('payments/expendituregroups'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Tag', function($resource) {
+    return $resource(apiPath('tags'), {
+      id: '@id'
+    }, {
+      update: {
+        method: 'PUT'
+      },
+      autocomplete: {
+        method: 'GET',
+        url: apiPath('tags', 'autocomplete'),
+        isArray: true
+      },
+      checkExistance: {
+        method: 'POST',
+        url: apiPath('tags', 'checkExistance')
+      }
+    });
+  }).factory('Master', function($resource) {
+    return $resource(apiPath('masters'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Review', function($resource) {
+    return $resource(apiPath('reviews'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Menu', function($resource) {
+    return $resource(apiPath('menu'), {
+      id: '@id'
+    }, updatable());
+  }).factory('Video', function($resource) {
+    return $resource(apiPath('videos'), {
+      id: '@id'
+    }, updatable());
+  });
+
+  apiPath = function(entity, additional) {
+    if (additional == null) {
+      additional = '';
+    }
+    return ("api/" + entity + "/") + (additional ? additional + '/' : '') + ":id";
+  };
+
+  updatable = function() {
+    return {
+      update: {
+        method: 'PUT'
+      }
+    };
+  };
+
+  countable = function() {
+    return {
+      count: {
+        method: 'GET'
+      }
+    };
+  };
+
+}).call(this);
+
+(function() {
+  angular.module('Egecms').value('Published', [
+    {
+      id: 0,
+      title: 'не опубликовано'
+    }, {
+      id: 1,
+      title: 'опубликовано'
+    }
+  ]).value('Scores', [
+    {
+      id: 1,
+      title: '1'
+    }, {
+      id: 2,
+      title: '2'
+    }, {
+      id: 3,
+      title: '3'
+    }, {
+      id: 4,
+      title: '4'
+    }, {
+      id: 5,
+      title: '5'
+    }, {
+      id: 6,
+      title: '6'
+    }, {
+      id: 7,
+      title: '7'
+    }, {
+      id: 8,
+      title: '8'
+    }, {
+      id: 9,
+      title: '9'
+    }, {
+      id: 10,
+      title: '10'
+    }
+  ]).value('Checked', ['не проверено', 'проверено']).value('UpDown', [
+    {
+      id: 1,
+      title: 'вверху'
+    }, {
+      id: 2,
+      title: 'внизу'
+    }
+  ]).value('Units', [
+    {
+      id: 1,
+      title: 'изделие'
+    }, {
+      id: 2,
+      title: 'штука'
+    }, {
+      id: 3,
+      title: 'сантиметр'
+    }, {
+      id: 4,
+      title: 'пара'
+    }, {
+      id: 5,
+      title: 'метр'
+    }, {
+      id: 6,
+      title: 'дм²'
+    }, {
+      id: 7,
+      title: 'см²'
+    }, {
+      id: 8,
+      title: 'мм²'
+    }, {
+      id: 9,
+      title: 'элемент'
+    }
+  ]).value('LogTypes', {
+    create: 'создание',
+    update: 'обновление',
+    "delete": 'удаление',
+    authorization: 'авторизация',
+    url: 'просмотр URL'
+  });
 
 }).call(this);
 

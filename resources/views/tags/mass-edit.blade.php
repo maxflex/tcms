@@ -1,5 +1,5 @@
 @extends('app')
-@section('title', 'Пакетное редактирование тега: ' . $tag->text)
+@section('title', 'Массовое редактирование тега: ' . $tag->text)
 @section('controller', 'TagsMassEdit')
 
 @section('content')

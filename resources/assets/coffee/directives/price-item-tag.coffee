@@ -8,5 +8,5 @@ angular.module 'Egecms'
             level: '='
         controller: ($scope, $rootScope, Units) ->
             $scope.Units = Units
-            $scope.controller_scope = scope
+            $scope.controller_scope = angular.element('[ng-app=Egecms]').scope()
             $scope.findById = $rootScope.findById

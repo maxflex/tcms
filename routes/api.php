@@ -31,8 +31,8 @@ Route::group(['namespace' => 'Api', 'as' => 'api.'], function () {
 
     Route::resource('masters', 'MastersController');
     Route::post('prices/change', 'PricesController@change');
+    Route::apiResource('prices/positions', 'PricePositionsController');
     Route::resource('prices', 'PricesController');
-    Route::resource('prices/positions', 'PricePositionsController');
 
 
     Route::post('gallery/mass-update', 'GalleryController@massUpdate');
