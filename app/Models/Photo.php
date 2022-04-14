@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Photo extends Model
 {
     const UPLOAD_DIR = '/photos/';
-    const QUALITY = 60;
 
     protected $fillable = [
         'original',

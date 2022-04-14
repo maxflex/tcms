@@ -7,7 +7,6 @@ use App\Traits\HasTags;
 use App\Traits\HasPhotos;
 use App\Traits\Folderable;
 use App\Models\Folder;
-use PHPImageWorkshop\ImageWorkshop;
 use claviska\SimpleImage;
 use WebPConvert\WebPConvert;
 
@@ -54,6 +53,16 @@ class Gallery extends Model
         return dateFormat($value, true);
     }
 
+    public function getIsBackgroundAttribute()
+    {
+        return (int) $this->folder_id === 770;
+    }
+
+    public function getIsAddressAttribute()
+    {
+        return in_array($this->folder_id, [713, 714, 718, 720]);
+    }
+
     public function createImage()
     {
         if (count($this->photos)) {
@@ -68,40 +77,77 @@ class Gallery extends Model
 
             // watermark, до и после
             $img = new SimpleImage;
-            $img->fromFile(public_path() . $this->photos[0]->original_url)->resize(2200, 1100);
+            $img->fromFile(public_path() . $this->photos[0]->original_url);
 
-            if ($this->watermark) {
-                // $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
 
-                $positionY = 250;
-                foreach (range(1, 2) as $i) {
-                    $positionX = 100;
-                    foreach (range(1, 4) as $j) {
-                        $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', .4, $positionX, $positionY);
-                        $positionX += 560;
+            // фон
+            if ($this->is_background) {
+                $img->resize(1800);
+            } else {
+                $img->resize(2200, 1100);
+
+                if ($this->before_and_after) {
+                    // x = 450 | 550 - (240/2)
+                    $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 760, 790);
+                    // x = 1550 | 1650 - (240/2)
+                    $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1165, 790);
+                }
+
+                if ($this->watermark) {
+                    // $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', 1);
+
+                    $positionY = 250;
+                    foreach (range(1, 2) as $i) {
+                        $positionX = 100;
+                        foreach (range(1, 4) as $j) {
+                            $img->overlay(public_path() . '/img/watermark/watermark.png', 'top left', .4, $positionX, $positionY);
+                            $positionX += 560;
+                        }
+                        $positionY += 500;
                     }
-                    $positionY += 500;
                 }
             }
 
-            if ($this->before_and_after) {
-                // x = 450 | 550 - (240/2)
-                $img->overlay(public_path() . '/img/watermark/before.png', 'top left', 1, 760, 790);
-                // x = 1550 | 1650 - (240/2)
-                $img->overlay(public_path() . '/img/watermark/after.png', 'top left', 1, 1165, 790);
+            if ($this->is_background) {
+                $quality = 70;
+            } else if ($this->is_address) {
+                $quality = 100;
+            } else {
+                $quality = 60;
             }
 
+            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".jpg", 'image/jpeg', $quality);
+        }
+    }
 
-            // if (count($this->photos) > 1) {
-            //     $step = round(2200 / count($this->photos));
-            //     $positionX = $step;
-            //     foreach(range(1, count($this->photos) - 1) as $i) {
-            //         $img->line($positionX - 2, 0, $positionX - 2, 1100, 'black', 4);
-            //         $positionX += $step;
-            //     }
-            // }
+    public function createThumb()
+    {
+        try {
+            $image = new \claviska\SimpleImage();
 
-            $img->toFile(public_path() . '/img/gallery/' . $this->id . ".jpg", 'image/jpeg', Photo::QUALITY);
+            $source = public_path() . '/img/gallery/' . $this->id . '.jpg';
+
+            if ($this->is_background) {
+                $thumb = public_path() . '/img/gallery/' . $this->id . '_mobile.jpg';
+                $image
+                    ->fromFile($source)
+                    ->resize(900)
+                    ->toFile($thumb, 'image/jpeg');
+            } else {
+                $thumb = public_path() . '/img/gallery/' . $this->id . '_thumb.jpg';
+                $image
+                    ->fromFile($source)
+                    ->resize(288 * 2, 144 * 2)
+                    ->toFile($thumb, 'image/jpeg', 90);
+            }
+
+            // Create WebP
+            // $destination = public_path() . '/img/gallery/' . $this->id . '.webp';
+            // WebPConvert::convert($source, $destination);
+
+            // $destination = public_path() . '/img/gallery/' . $this->id . '_thumb.webp';
+            // WebPConvert::convert($thumb, $destination);
+        } catch (\Exception $e) {
         }
     }
 
@@ -136,24 +182,7 @@ class Gallery extends Model
         });
 
         static::saved(function ($model) {
-            try {
-                $image = new \claviska\SimpleImage();
-
-                $source = public_path() . '/img/gallery/' . $model->id . '.jpg';
-                $thumb = public_path() . '/img/gallery/' . $model->id . '_thumb.jpg';
-
-                $image
-                    ->fromFile($source)
-                    ->resize(288 * 2, 144 * 2)
-                    ->toFile($thumb, 'image/jpeg', 90);
-
-                $destination = public_path() . '/img/gallery/' . $model->id . '.webp';
-                WebPConvert::convert($source, $destination);
-
-                $destination = public_path() . '/img/gallery/' . $model->id . '_thumb.webp';
-                WebPConvert::convert($thumb, $destination);
-            } catch (\Exception $e) {
-            }
+            $model->createThumb();
         });
     }
 

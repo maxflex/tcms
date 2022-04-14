@@ -10,7 +10,7 @@
             <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.loadNew()" ng-show="FormService.model.photos.length > 0" style='margin-right: 10px'>загрузить другое</a>
             <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.delete()" ng-show="FormService.model.photos.length > 0">удалить</a>
         </div>
-        <div class="flex-items" style='width: 100%'>
+        <div ng-if="FormService.model.folder_id != 770 && ![713,714,718,720].includes(FormService.model.folder_id)" class="flex-items" style='width: 100%'>
             <div style='width: 200px'>
                 Watermark
             </div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex-items" style='width: 100%; margin-bottom: 15px'>
+        <div ng-if="FormService.model.folder_id != 770 && ![713,714,718,720].includes(FormService.model.folder_id)" class="flex-items" style='width: 100%; margin-bottom: 15px'>
             <div style='width: 200px'>
                 До и после
             </div>
@@ -30,6 +30,40 @@
                     <input id="cmn-toggle-2" class="cmn-toggle cmn-toggle-round-flat" type="checkbox" ng-model="FormService.model.before_and_after" ng-checked="FormService.model.before_and_after == 1">
                     <label for="cmn-toggle-2"></label>
                 </div>
+            </div>
+        </div>
+        <div ng-if="FormService.model.folder_id == 770" style='width: 100%; margin: 30px 0 15px'>
+            <div class="flex-items">
+                <div style='width: 200px'>
+                    Фоновое изображение
+                </div>
+                <div>
+                    <div class="switch">
+                        <input id="cmn-toggle-2" class="cmn-toggle cmn-toggle-round-flat" type="checkbox" checked disabled>
+                        <label for="cmn-toggle-2"></label>
+                    </div>
+                </div>
+            </div>
+            <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
+                параметры фото будут определены автоматически<br />
+                будет создана мобильная версия фона "_mobile"<br />
+            </div>
+        </div>
+        <div ng-if="[713,714,718,720].includes(FormService.model.folder_id)" style='width: 100%; margin: 30px 0 15px'>
+            <div class="flex-items">
+                <div style='width: 200px'>
+                    Высокое разрешение
+                </div>
+                <div>
+                    <div class="switch">
+                        <input id="cmn-toggle-2" class="cmn-toggle cmn-toggle-round-flat" type="checkbox" checked disabled>
+                        <label for="cmn-toggle-2"></label>
+                    </div>
+                </div>
+            </div>
+            <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
+            фото для адресов будет автоматически<br />
+            загружено в высоком разрешении<br />
             </div>
         </div>
     </div>

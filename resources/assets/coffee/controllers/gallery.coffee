@@ -75,5 +75,6 @@ angular
             $('#fileupload').bind 'fileuploadsubmit', (e, data) =>
                 data.formData =
                     id: FormService.model.id
+                    folder_id: FormService.model.folder_id
                     type: 'Gallery'
                     count: FormService.model.count

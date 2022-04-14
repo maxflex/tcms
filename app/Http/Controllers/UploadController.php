@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Models\Gallery;
 use App\Models\Photo;
 
 class UploadController extends Controller
@@ -23,14 +24,18 @@ class UploadController extends Controller
             return response()->json(['error' => 'разрешенные форматы – jpg, png']);
         }
 
-        /** validations **/
-        $min_height = 2000;
-        $min_width  = 4000;
+        // на фон нет ограничения по размеру
+        $gallery = new Gallery($request->all());
+        if (!($gallery->is_background || $gallery->is_address)) {
+            /** validations **/
+            $min_height = 2000;
+            $min_width  = 4000;
 
-        list($width, $height) = getimagesize($request->file('photo'));
+            list($width, $height) = getimagesize($request->file('photo'));
 
-        if ($width != $min_width || $height != $min_height) {
-            return response()->json(['error' => 'не соответствует формату 4000x2000']);
+            if ($width != $min_width || $height != $min_height) {
+                return response()->json(['error' => 'не соответствует формату 4000x2000']);
+            }
         }
 
 
