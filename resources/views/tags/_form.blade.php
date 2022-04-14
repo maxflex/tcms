@@ -10,13 +10,13 @@
     <div class="col-sm-12">
         <p style='display: inline-block; font-weight: bold; margin-top: 30px'>Массовое редактирование:</p>
         <p>
-            <a href="{{ route('galleries.tag', compact('id')) }}">Галерея</a>
+            <a href="{{ route('prices.tag', compact('id')) }}">Прайс-лист</a>
         </p>
         <p>
             <a href="{{ route('reviews.tag', compact('id')) }}">Отзывы</a>
         </p>
         <p>
-            <a href="{{ route('prices.tag', compact('id')) }}">Прайс-лист</a>
+            <a href="{{ route('galleries.tag', compact('id')) }}">Галерея</a>
         </p>
     </div>
 </div>
