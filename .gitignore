@@ -4,6 +4,9 @@
 /public/img/gallery
 /public/img/video
 /vendor
+/public/js
+/public/css/app.css
+/public/css/app.css.map
 /.idea
 /resources/assets/bower
 Envoy.blade.php
