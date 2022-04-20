@@ -68,7 +68,7 @@
                 </td>
                 <td>
                     <a href="/prices/positions/@{{ p.id }}/edit">
-                        @{{ p.name }}
+                        @{{ p.name || 'название пусто' }}
                     </a>
                 </td>
                 <td>

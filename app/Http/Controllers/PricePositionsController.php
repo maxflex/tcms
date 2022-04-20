@@ -50,7 +50,8 @@ class PricePositionsController extends Controller
     public function edit($id)
     {
         $price_sections = PriceSection::select('id', 'name')->get();
-        return view('prices.positions.edit')->with(ngInit(compact('id', 'price_sections')));
+        $model = PricePosition::find($id);
+        return view('prices.positions.edit')->with(ngInit(compact('id', 'price_sections', 'model')));
     }
 
     /**
