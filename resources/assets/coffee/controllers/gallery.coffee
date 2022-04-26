@@ -43,10 +43,18 @@ angular
             FormService.init(Gallery, $scope.id, $scope.model)
             FormService.model.folder_id = $.cookie('gallery_folder_id') if not FormService.model.id && $.cookie('gallery_folder_id')
             # PhotoService.afterSave = $scope.edit
-            PhotoService.init(FormService, 'Gallery', $scope.id)
+            PhotoService.init FormService, 'Gallery', $scope.id, ->
+                $scope.edit()
 
         $scope.preview = ->
             window.open("/img/gallery/#{FormService.model.id}.jpg?v=" + makeId(), '_blank')
+        
+        $scope.copyLink = (mobile = false) ->
+            text = window.location.origin + "/img/gallery/" + FormService.model.id
+            if mobile then text += "_mobile"
+            text += ".jpg"
+            window.navigator.clipboard.writeText(text)
+            notifySuccess("Ссылка скопирована")
 
         $scope.edit = ->
             FormService.edit ->

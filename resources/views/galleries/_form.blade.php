@@ -1,7 +1,7 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
         <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
-            разрешение: 4000x2000<br />
+            @{{ FormService.model.folder_id == 770 ? 'любое разрешение' : 'разрешение: 4000x2000' }}<br />
             форматы: jpg, jpeg, png<br />
             максимальный размер: 7мб
         </div>
@@ -48,6 +48,11 @@
                 параметры фото будут определены автоматически<br />
                 будет создана мобильная версия фона "_mobile"<br />
             </div>
+            <div ng-if="FormService.model.photos.length" style='display: flex; margin-top: 10px'>
+                Скопировать ссылку:
+                <span class="link-like" style='margin: 0 10px' ng-click="copyLink()">десктоп</span>
+                <span class="link-like" ng-click="copyLink(true)">мобильная</span>
+            </div>
         </div>
         <div ng-if="[713,714,718,720].includes(FormService.model.folder_id)" style='width: 100%; margin: 30px 0 15px'>
             <div class="flex-items">
@@ -76,6 +81,7 @@
             <center>
                 @{{ FormService.model.file_size }}, @{{ FormService.model.image_size }}
             </center>
+
         </div>
         <div ng-show='!FormService.model.photos.length' class="no-photo">
             нет фото

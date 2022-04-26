@@ -9,10 +9,11 @@ angular.module 'Egecms'
         this.methods = {}
         this.selected_photo_index = null
 
-        this.init = (FormService, type, id) =>
+        this.init = (FormService, type, id, afterDone = null) =>
             @type = type
             @id = id
             @FormService = FormService
+            @afterDone = afterDone
             @bindFileUpload(type, id)
 
         this.crop = ->
@@ -74,7 +75,7 @@ angular.module 'Egecms'
                 else
                     @FormService.model.photos.push(response.result)
                     @edit(@FormService.model.photos.length - 1)
-                # @afterDone() if typeof @afterDone is 'function'
+                @afterDone(response.result) if typeof @afterDone is 'function'
                 $rootScope.$apply()
 
 
