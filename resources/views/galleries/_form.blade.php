@@ -50,7 +50,7 @@
             </div>
             <div ng-if="FormService.model.photos.length" style='display: flex; margin-top: 10px'>
                 Скопировать ссылку:
-                <span class="link-like" style='margin: 0 10px' ng-click="copyLink()">десктоп</span>
+                <span class="link-like" style='margin: 0 10px' ng-click="copyLink()">стационар</span>
                 <span class="link-like" ng-click="copyLink(true)">мобильная</span>
             </div>
         </div>
