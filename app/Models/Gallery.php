@@ -29,7 +29,9 @@ class Gallery extends Model
         'folder_id'
     ];
 
-    protected $appends = ['file_size', 'has_photo', 'image_size', 'tags'];
+    protected $appends = [
+        'is_background', 'is_address', 'file_size', 'has_photo', 'image_size', 'tags', 'version'
+    ];
 
     protected $with = ['master'];
 
@@ -53,14 +55,28 @@ class Gallery extends Model
         return dateFormat($value, true);
     }
 
+    public function getVersionAttribute()
+    {
+        return md5($this->updated_at);
+    }
+
     public function getIsBackgroundAttribute()
     {
-        return (int) $this->folder_id === 770;
+        return $this->getRootFolder()->id === 770;
     }
 
     public function getIsAddressAttribute()
     {
-        return in_array($this->folder_id, [713, 714, 718, 720]);
+        return $this->getRootFolder()->id === 712;
+    }
+
+    private function getRootFolder()
+    {
+        $folder = Folder::find($this->folder_id);
+        while ($folder->folder_id !== null) {
+            $folder = Folder::find($folder->folder_id);
+        }
+        return $folder;
     }
 
     public function createImage()

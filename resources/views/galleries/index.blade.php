@@ -5,7 +5,7 @@
 @section('title-right')
     @include('modules.folder-controls')
     <a class="pointer" ng-click="changePriceDialog()">индексация</a>
-    {{ link_to_route('galleries.create', 'добавить фото') }}
+    <a href="{{ route('galleries.create', request()->has('folder') ? ['folder' => request()->input('folder')] : []) }}">добавить фото</a>
 @endsection
 
 @section('content')

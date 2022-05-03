@@ -88,6 +88,7 @@ angular.module 'Egecms'
                     id: @id
                     type: @type
                     photo_id: @photo_id
+                    folder_id: @FormService.model.folder_id
                     count: @FormService.model.count
             $('#fileupload').click()
 

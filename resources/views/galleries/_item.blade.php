@@ -5,7 +5,7 @@
     <a href='galleries/@{{ model.id }}/edit'>@{{ model.name || 'имя не указано' }}</a>
 </td>
 <td width='200'>
-    <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg' style='height: 50px'>
+    <img ng-show='model.has_photo' src='/img/gallery/@{{model.id}}.jpg?version=@{{model.version}}' style='height: 50px'>
     <div ng-show='!model.has_photo' class="no-photo-small">нет фото</div>
 </td>
 <td width='300'>

@@ -1,7 +1,7 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
         <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
-            @{{ FormService.model.folder_id == 770 ? 'любое разрешение' : 'разрешение: 4000x2000' }}<br />
+            разрешение: @{{ FormService.model.is_background ? '1800x1100' : '4000x2000' }}<br />
             форматы: jpg, jpeg, png<br />
             максимальный размер: 7мб
         </div>
@@ -10,7 +10,7 @@
             <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.loadNew()" ng-show="FormService.model.photos.length > 0" style='margin-right: 10px'>загрузить другое</a>
             <a class="pointer" ng-click="PhotoService.selected_photo_index = 0; PhotoService.delete()" ng-show="FormService.model.photos.length > 0">удалить</a>
         </div>
-        <div ng-if="FormService.model.folder_id != 770 && ![713,714,718,720].includes(FormService.model.folder_id)" class="flex-items" style='width: 100%'>
+        <div ng-if="!FormService.model.is_background && !FormService.model.is_address" class="flex-items" style='width: 100%'>
             <div style='width: 200px'>
                 Watermark
             </div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if="FormService.model.folder_id != 770 && ![713,714,718,720].includes(FormService.model.folder_id)" class="flex-items" style='width: 100%; margin-bottom: 15px'>
+        <div ng-if="!FormService.model.is_background && !FormService.model.is_address" class="flex-items" style='width: 100%; margin-bottom: 15px'>
             <div style='width: 200px'>
                 До и после
             </div>
@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div ng-if="FormService.model.folder_id == 770" style='width: 100%; margin: 30px 0 15px'>
+        <div ng-if="FormService.model.is_background" style='width: 100%; margin: 30px 0 15px'>
             <div class="flex-items">
                 <div style='width: 200px'>
                     Фоновое изображение
@@ -54,7 +54,7 @@
                 <span class="link-like" ng-click="copyLink(true)">мобильная</span>
             </div>
         </div>
-        <div ng-if="[713,714,718,720].includes(FormService.model.folder_id)" style='width: 100%; margin: 30px 0 15px'>
+        <div ng-if="FormService.model.is_address" style='width: 100%; margin: 30px 0 15px'>
             <div class="flex-items">
                 <div style='width: 200px'>
                     Высокое разрешение

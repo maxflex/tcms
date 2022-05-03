@@ -43,7 +43,7 @@ class GalleryController extends Controller
     public function create()
     {
         return view($this->template->view('create'))->with(ngInit([
-            'model'     => new $this->template->class,
+            'model'     => new $this->template->class(['folder_id' => request()->input('folder') ?: null]),
             'masters'   => Master::light()->get(),
             'template'  => $this->template
         ]));
@@ -63,5 +63,4 @@ class GalleryController extends Controller
             'template'  => $this->template,
         ]));
     }
-
 }
