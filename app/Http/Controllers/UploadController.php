@@ -26,20 +26,14 @@ class UploadController extends Controller
 
         $gallery = new Gallery($request->all());
 
-        if ($gallery->is_background) {
-            $validWidth  = 1800;
-            $validHeight = 1100;
-        } else {
+        if (!$gallery->is_background) {
             $validWidth  = 4000;
             $validHeight = 2000;
+            list($width, $height) = getimagesize($request->file('photo'));
+            if ($width != $validWidth || $height != $validHeight) {
+                return response()->json(['error' => "не соответствует формату {$validWidth}x{$validHeight}"]);
+            }
         }
-
-        list($width, $height) = getimagesize($request->file('photo'));
-
-        if ($width != $validWidth || $height != $validHeight) {
-            return response()->json(['error' => "не соответствует формату {$validWidth}x{$validHeight}"]);
-        }
-
 
         $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
 

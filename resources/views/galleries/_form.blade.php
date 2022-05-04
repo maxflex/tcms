@@ -1,9 +1,15 @@
 <div class="row mb" ng-show="FormService.model.id">
     <div class="col-sm-4">
         <div style='margin-bottom: 6px; font-size: 12px; color: rgba(0, 0, 0, 0.3)'>
-            разрешение: @{{ FormService.model.is_background ? '1800x1100' : '4000x2000' }}<br />
-            форматы: jpg, jpeg, png<br />
-            максимальный размер: 7мб
+            <div ng-if="!FormService.model.is_background">
+                разрешение: 4000x2000
+            </div>
+            <div>
+                форматы: jpg, jpeg, png
+            </div>
+            <div>
+                максимальный размер: 7мб
+            </div>
         </div>
         <div style='margin-bottom: 12px'>
             <a class="pointer" ng-click="editOrUpload(1)" ng-show="FormService.model.photos.length == 0">загрузить</a>
