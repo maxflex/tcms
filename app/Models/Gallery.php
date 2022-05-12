@@ -8,6 +8,7 @@ use App\Traits\HasPhotos;
 use App\Traits\Folderable;
 use App\Models\Folder;
 use claviska\SimpleImage;
+use Illuminate\Support\Facades\DB;
 use WebPConvert\WebPConvert;
 
 class Gallery extends Model
@@ -191,6 +192,15 @@ class Gallery extends Model
         }
     }
 
+    // Новодобавленное изображение должно быть первым в папке
+    public function shiftPositions()
+    {
+        $this->position = 0;
+        DB::table('galleries')->where('folder_id', $this->folder_id)->update([
+            'position' => DB::raw('(position + 1)')
+        ]);
+    }
+
     public static function booted()
     {
         static::saving(function ($model) {
@@ -200,6 +210,8 @@ class Gallery extends Model
         static::saved(function ($model) {
             $model->createThumb();
         });
+
+        static::creating(fn ($model) => $model->shiftPositions());
     }
 
     /**
