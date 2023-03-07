@@ -16,7 +16,7 @@ class UploadController extends Controller
 
     public function galleryOriginal(Request $request)
     {
-        // if ($request->file('photo')->getClientSize() > 7654604) { // 7.3 mb с запасом
+        // if ($request->file('photo')->getSize() > 7654604) { // 7.3 mb с запасом
         //     return response()->json(['error' => 'максимальный объём файла – 7 Мб']);
         // }
 
@@ -55,7 +55,7 @@ class UploadController extends Controller
 
     public function original(Request $request)
     {
-        if ($request->file('photo')->getClientSize() > (1024 * 1024 * 15)) {
+        if ($request->file('photo')->getSize() > (1024 * 1024 * 15)) {
             return response()->json(['error' => 'максимальный объём файла – 15 Мб']);
         }
         $filename = uniqid() . '.' . $request->file('photo')->getClientOriginalExtension();
