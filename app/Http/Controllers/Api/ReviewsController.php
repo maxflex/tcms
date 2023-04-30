@@ -17,7 +17,7 @@ class ReviewsController extends Controller
      */
     public function index(Request $request)
     {
-        return Review::searchByFolder($request->folder)->orderByPosition()->paginate(999);
+        return Review::searchByFolder($request->folder)->orderBy('date', 'desc')->paginate(999);
     }
 
     /**
